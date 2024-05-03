@@ -17,7 +17,8 @@ import ProblemaDePago from '../PropertyBrokerage/MenuAyuda/ProblemaDePago';
 import ReportarFraude from '../PropertyBrokerage/MenuAyuda/ReportarFraude';
 import RepProblemaFuncionamiento from '../PropertyBrokerage/MenuAyuda/RepProblemaFuncionamiento';
 
-import pictureGallery from '../PropertyBrokerage/GalleryScreen/PictureGallery';
+import VideoGallery from '../PropertyBrokerage/GalleryScreen/VideoGallery';
+import PictureGallery from '../PropertyBrokerage/GalleryScreen/PictureGallery';
 
 
 
@@ -40,7 +41,8 @@ function MyStack() {
         <Stack.Screen name="Contactar soporte" component={ContactarSoporte} />
         <Stack.Screen name="Problema de pago" component={ProblemaDePago} />
         <Stack.Screen name="Enviar comentarios" component={EnviarComentarios} />
-        <Stack.Screen name="Galeria de Fotos" component={pictureGallery} />
+        <Stack.Screen name="Galeria de Fotos" component={PictureGallery} />
+        <Stack.Screen name="Galeria de videos" component={VideoGallery} />
     </Stack.Navigator>
   );
 }
