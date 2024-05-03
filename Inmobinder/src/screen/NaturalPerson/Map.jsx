@@ -9,69 +9,69 @@ import ArriendoYVentaImage from '../../../assets/images/ArriendoYVenta.png';
 import INMOBINDER from '../../../assets/images/INMOBINDER-03.png';
 import appFirebase from '../../utils/database';
 import { getFirestore, collection, getDocs, onSnapshot } from 'firebase/firestore';
+import Slider from '@react-native-community/slider';
 
 const db = getFirestore(appFirebase.appFirebase);
 
 const Map = () => {
   const [origin, setOrigin] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [filter, setFilter] = useState(null); // Estado para el filtro activo
   const [coords, setCoords] = useState([]);
+  const [originalCoords, setOriginalCoords] = useState([]); // Almacena las coordenadas originales
+  const [menuAnimation] = useState(new Animated.Value(0));
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [commonExpensesFilter, setCommonExpensesFilter] = useState(50); // Valor inicial de la barra deslizante
+  const [bedroomsFilter, setBedroomsFilter] = useState(null);
+  const [bathroomsFilter, setBathroomsFilter] = useState(null);
 
   const mapRef = useRef();
-  const menuAnimation = useRef(new Animated.Value(0)).current;
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    const toValue = menuOpen ? 0 : 1;
-    Animated.timing(menuAnimation, {
-      toValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const closeMenu = () => {
-    if (menuOpen) {
-      setMenuOpen(false);
-      Animated.timing(menuAnimation, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
-    }
-  };
-
-  const menuTranslateX = menuAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-200, 0], // Cambiar a 200 para que coincida con el ancho del menú
-  });
 
   useEffect(() => {
     getLocationPermission();
+    fetchOriginalCoords(); // Cargar coordenadas originales al montar el componente
   }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'coords'), (snapshot) => {
       const updatedCoords = [];
       snapshot.forEach((doc) => {
-        const { latitude, longitude, name, description } = doc.data();
+        const { 
+          nameProperty,
+          commonExpenses,
+          state,
+          metters,
+          address,
+          city,
+          region,
+          rooms,
+          bathrooms,
+          description,
+          location,
+        } = doc.data();
+
         updatedCoords.push({
           id: doc.id,
-          latitude,
-          longitude,
-          name,
+          nameProperty,
+          commonExpenses,
+          state,
+          metters,
+          address,
+          city,
+          region,
+          rooms,
+          bathrooms,
           description,
+          location,
         });
       });
       setCoords(updatedCoords);
     });
-
+  
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [setCoords]);
 
   const getLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -90,7 +90,6 @@ const Map = () => {
       longitude: location.coords.longitude,
     });
     
-    // Centra el mapa en la posición del usuario al inicio
     mapRef.current.animateToRegion({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
@@ -98,6 +97,25 @@ const Map = () => {
       longitudeDelta: 0.04,
     });
   };
+
+  const fetchOriginalCoords = async () => {
+    const snapshot = await getDocs(collection(db, 'coords'));
+    const initialCoords = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setOriginalCoords(initialCoords); // Almacenar las coordenadas originales
+  };
+
+  const menuTranslateX = menuAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-200, 0],
+  });
+
+  const menuTranslateY = menuAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [50, 0], // Ajustar según la altura del menú
+  });
 
   const goToOrigin = () => {
     if (origin && mapRef.current) {
@@ -114,25 +132,80 @@ const Map = () => {
     }
   };
 
+  const toggleMenuVisibility = () => {
+    setMenuVisible(!menuVisible);
+    // Anima el menú al cambiar
+    Animated.timing(menuAnimation, {
+      toValue: menuVisible ? 1 : 0,
+      duration: 200, // Ajusta la duración de la animación
+      useNativeDriver: true, // Mejora el rendimiento (opcional)
+    }).start();
+  };
+
+  const applyFilter = () => {
+    // Limpiar las coordenadas antes de aplicar un nuevo filtro
+    setCoords([]);
+    
+    // Copiar las coordenadas originales
+    let filteredCoords = [...originalCoords];
+  
+    // Aplicar filtro por gastos comunes iguales o mayores al valor seleccionado en la barra deslizante
+    filteredCoords = filteredCoords.filter(coord => 
+      parseInt(coord.commonExpenses) >= parseInt(commonExpensesFilter)
+    );
+  
+    // Aplicar filtro por número de habitaciones si se seleccionó algún valor
+  if (bedroomsFilter !== null) {
+    filteredCoords = filteredCoords.filter(coord =>
+      parseInt(coord.rooms) === bedroomsFilter
+    );
+  }
+
+  
+    // Aplicar filtro por cantidad de baños si se seleccionó algún valor
+    if (bathroomsFilter !== null) {
+      filteredCoords = filteredCoords.filter(coord =>
+        parseInt(coord.bathrooms) === bathroomsFilter
+      );
+    }
+  
+    // Actualizar las coordenadas con los filtros aplicados
+    setCoords(filteredCoords);
+  };
+  
+  
+  
+
+  const clearFilter = () => {
+    setCommonExpensesFilter(1); // Restaura el valor predeterminado de la barra deslizante
+    setCoords(originalCoords); // Restaura todas las coordenadas a su estado original
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <MapView
         ref={mapRef}
         initialRegion={{
-          latitude: origin ? origin.latitude : 0,
-          longitude: origin ? origin.longitude : 0,
+          latitude: origin && origin.latitude ? origin.latitude : 0,
+          longitude: origin && origin.longitude ? origin.longitude : 0,
           latitudeDelta: 0.09,
           longitudeDelta: 0.04,
         }}
         showsUserLocation
         showsMyLocationButton={false}
-        style={styles.map}>
+        style={styles.map}
+      >
         {coords.map((coord, index) => (
-          (!filter || coord.description === filter) ? (
+          (!filter || coord.state === filter || 
+            coord.bathrooms === filter || coord.rooms === filter 
+          ) ? (
             <Marker
               key={index}
-              coordinate={{ latitude: coord.latitude, longitude: coord.longitude }}
-              title={coord.name}
+              coordinate={{
+                latitude: coord.location && coord.location.latitude ? coord.location.latitude : 0,
+                longitude: coord.location && coord.location.longitude ? coord.location.longitude : 0
+              }}
+              title={coord.nameProperty}
               description={coord.description}
             />
           ) : null
@@ -147,34 +220,74 @@ const Map = () => {
         <FontAwesome name="map-marker" size={30} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.menubar} onPress={toggleMenu}>
-        <FontAwesome name="bars" size={30} color="black" />
+      <TouchableOpacity style={styles.filterButton} onPress={toggleMenuVisibility}>
+        <FontAwesome name="filter" size={30} color="black" />
       </TouchableOpacity>
 
-      <Animated.View style={[styles.menu, { transform: [{ translateX: menuTranslateX }] }]}>
-        <TouchableOpacity style={styles.closeButton} onPress={closeMenu}>
-          <FontAwesome name="arrow-right" size={30} color="black" rotation={180} /> 
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Inicio</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Perfil</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Configuración</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Text style={styles.menuText}>Cerrar sesión</Text>
-        </TouchableOpacity>
-      </Animated.View>
+      {menuVisible && (
+        <Animated.View style={[styles.filterMenu, { transform: [{ translateY: menuTranslateY }] }]}>
+          {/* Componente de barra deslizante para Gastos Comunes */}
+          <View style={styles.filterMenuItem}>
+            <Text style={styles.filterMenuText}>Seleccione Gastos Comunes: {commonExpensesFilter}</Text>
+            <Slider
+              style={{ width: '100%' }}
+              minimumValue={1}
+              maximumValue={100}
+              step={1}
+              value={commonExpensesFilter}
+              onValueChange={(value) => {
+                console.log('Value changed:', value);
+                setCommonExpensesFilter(value);
+              }}
+            />
+           <View style={styles.filterMenuItem}>
+            <Text style={styles.filterMenuText}>Seleccione número de habitaciones:</Text>
+            <TouchableOpacity onPress={() => setBedroomsFilter(1)}>
+              <Text style={styles.filterMenuText}>1 habitación</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setBedroomsFilter(2)}>
+              <Text style={styles.filterMenuText}>2 habitaciones</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              setBedroomsFilter(3);
+              console.log("Bedrooms filter selected:", bedroomsFilter);
+            }}>
+              <Text style={styles.filterMenuText}>3 habitaciones</Text>
+            </TouchableOpacity>
+            {/* Agrega más opciones según sea necesario */}
+          </View>
+          <View style={styles.filterMenuItem}>
+            <Text style={styles.filterMenuText}>Seleccione cantidad de baños:</Text>
+            <TouchableOpacity onPress={() => setBathroomsFilter(1)}>
+              <Text style={styles.filterMenuText}>1 baño</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setBathroomsFilter(2)}>
+              <Text style={styles.filterMenuText}>2 baños</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setBathroomsFilter(3)}>
+              <Text style={styles.filterMenuText}>3 baños</Text>
+            </TouchableOpacity>
+            {/* Agrega más opciones según sea necesario */}
+          </View>
+          <TouchableOpacity onPress={applyFilter}>
+              <Text style={styles.filterMenuText}>Aplicar filtro</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={clearFilter}>
+              <Text style={styles.filterMenuText}>Eliminar filtro</Text>
+            </TouchableOpacity>
+            
+          </View>
+         
+          
+        </Animated.View>
+      )}
 
       <TouchableOpacity style={styles.legend} onPress={() => setFilter('Vende')}>
         <Image source={VentaImage} style={{ height: 30, width: 30 }} />
         <Text style={styles.legendText}>Propiedad en venta</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.legend, { bottom: 70 }]} onPress={() => setFilter('Arrienda')}>
+      <TouchableOpacity style={[styles.legend, { bottom: 70 }]} onPress={() => setFilter('Arriendo')}>
         <Image source={ArriendoImage} style={{ height: 30, width: 30 }} />
         <Text style={styles.legendText}>Propiedad en arriendo</Text>
       </TouchableOpacity>
@@ -183,6 +296,7 @@ const Map = () => {
         <Image source={ArriendoYVentaImage} style={{ height: 30, width: 30 }} />
         <Text style={styles.legendText}>En venta y arriendo</Text>
       </TouchableOpacity>
+
     </View>
   );
 };
@@ -201,39 +315,32 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  menubar: {
+  filterButton: {
     position: 'absolute',
     top: 20,
-    left: 20,
-    backgroundColor: '#fff',
+    right: 20,
+    backgroundColor: '#D7DBDD',
     padding: 10,
     borderRadius: 8,
   },
-  menu: {
+  filterMenu: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    width: 200,
-    height: '100%',
+    top: 60,
+    right: 20,
     backgroundColor: '#fff',
-    borderRightWidth: 1,
-    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 8,
+    elevation: 5,
   },
-  menuItem: {
+  filterMenuItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderColor: '#ccc',
   },
-  menuText: {
+  filterMenuText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-  },
-  closeButton: {
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
   },
   legend: {
     position: 'absolute',
@@ -255,7 +362,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    top: 20,
+    top: 10,
   },
   image: {
     width: 100, 
