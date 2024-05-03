@@ -1,25 +1,20 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage';
-import { GoogleAuthProvider } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+//import {getAuth, onAuthStateChanged} from 'firebase/auth';
+import {getFirestore} from 'firebase/firestore';
 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDNu2t52GgXHdOupTmYH3zDWwK7Jt0mhJs",
-  authDomain: "agartha-marketing-agency.firebaseapp.com",
-  databaseURL: "https://agartha-marketing-agency-default-rtdb.firebaseio.com",
-  projectId: "agartha-marketing-agency",
-  storageBucket: "agartha-marketing-agency.appspot.com",
-  messagingSenderId: "122797123050",
-  appId: "1:122797123050:web:3142f05845de544cbebe93",
-  measurementId: "G-1EWNYSNECN"
+  apiKey: "AIzaSyBsaXnpyCKYyAu_kGn3QmP_eWdqgftpMyU",
+  authDomain: "proyecto-7c294.firebaseapp.com",
+  projectId: "proyecto-7c294",
+  storageBucket: "proyecto-7c294.appspot.com",
+  messagingSenderId: "459690733295",
+  appId: "1:459690733295:web:14de4edbd197cdf2df751a"
 };
 
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig);}
-  export {firebase}
-  export const auth = firebase.auth();
-  export const db = firebase.firestore();
-  export const provider = new GoogleAuthProvider();
+// Initialize Firebase
+export const FIREBASE_APP = initializeApp(firebaseConfig);
+export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
+//export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+
