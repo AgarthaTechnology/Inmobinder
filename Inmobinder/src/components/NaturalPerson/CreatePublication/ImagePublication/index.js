@@ -1,1 +1,1 @@
-export * from "./ImagePublication"
+export * from "./UploadImage"

@@ -4,10 +4,10 @@ import { Picker } from '@react-native-picker/picker';
 import { Input } from "react-native-elements";
 import { MapForm } from "../MapForm";
 import { styles } from "./InfoForm.styles";
-import { ImagePublication } from "../ImagePublication";
+import { UploadImage } from "../ImagePublication/UploadImage";
 
 export function InfoForm(props) {
-    const { formik } = props;
+    const { formik, image } = props;
     const [showMap, setShowMap] = useState(false);
 
     const onOpenCloseMap = () => setShowMap((prevState) => !prevState);
@@ -36,8 +36,9 @@ export function InfoForm(props) {
                     {formik.errors.nameProperty && <Text style={styles.error}>{formik.errors.nameProperty}</Text>}
 
                 </View>
-                    <ImagePublication formik={formik}/>
-
+                <View style={styles.container}>
+                    <UploadImage formik={formik} imagen={image}/>
+                </View>
                 <View style={styles.Expenses}>
                     <Text>Gastos Comunes:</Text>
                     <TextInput
@@ -58,14 +59,24 @@ export function InfoForm(props) {
                         mode="dropdown"
                     >
                         <Picker.Item label="Estado" value="" />
-                        <Picker.Item label="Disponible" value="Disponible" />
-                        <Picker.Item label="No Disponible" value="No Disponible" />
+                        <Picker.Item label="Venta" value="Venta" />
+                        <Picker.Item label="Arriendo" value="Venta" />
                     </Picker>
                 </View>
                     {formik.errors.state && <Text style={styles.error}>{formik.errors.state}</Text>}
 
                 <View style={[styles.container, styles.row]}>
-                    <Text style={styles.label}>Metros Cuadrados:</Text>
+                    <Text style={styles.label}>Metros Cuadrados Totales:</Text>
+                    <TextInput
+                        style={styles.input}
+                        keyboardType="numeric"
+                        onChangeText={(text) => formik.setFieldValue("metters", text)}
+                    />
+                    {formik.errors.metters && <Text style={styles.error}>{formik.errors.metters}</Text>}
+                </View>
+
+                <View style={[styles.container, styles.row]}>
+                    <Text style={styles.label}>Metros Cuadrados Propiedad:</Text>
                     <TextInput
                         style={styles.input}
                         keyboardType="numeric"
@@ -97,7 +108,7 @@ export function InfoForm(props) {
                             style={styles.picker}
                         >
                             <Picker.Item label="Comuna" value="" />
-                            <Picker.Item label="Nose" value="Nose" />
+                            <Picker.Item label="null" value="null" />
                         </Picker>
                         {formik.errors.city && <Text style={styles.error}>{formik.errors.city}</Text>}
                     </View>
@@ -109,14 +120,14 @@ export function InfoForm(props) {
                             style={styles.picker}
                         >
                             <Picker.Item label="Region" value="" />
-                            <Picker.Item label="Nose" value="Nose" />
+                            <Picker.Item label="null" value="null" />
                         </Picker>
                         {formik.errors.region && <Text style={styles.error}>{formik.errors.region}</Text>}
                     </View>
                 </View>
 
                 <View style={styles.container}>
-                    <Text>Disponible por:</Text>
+                    <Text>Precio:</Text>
                     <TextInput
                         style={styles.input}
                     />

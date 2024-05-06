@@ -6,14 +6,17 @@ export function initialValues() {
     commonExpenses: "",
     state: "",
     metters: "",
+    mettersProperty: "",
     address: "",
     city: "",
     region: "",
+    price:"",
     rooms: "",
     bathrooms: "",
     description: "",
     location:null,
-    //gallery:[]
+    gallery:[],
+    video:[],
   };
 }
 
@@ -31,8 +34,13 @@ export function validationSchema() {
           .oneOf(['Disponible', 'No disponible'], 'La disponibilidad debe ser "Disponible" o "No disponible"')
           .required('Campo obligatorio'),
     metters: Yup.number()
-      .integer('Los metros cuadrados deben ser un número entero')
+      .integer('Los metros cuadrados totales deben ser un número entero')
       .min(140, 'Debe tener al menos 140 metros cuadrados')
+      .positive('No se permiten valores menores a 0')
+      .required('Campo obligatorio'),
+    mettersProperty: Yup.number()
+      .integer('Los metros cuadrados deben ser un número entero')
+      .min(0, 'No se permiten valores menores a 0')
       .positive('No se permiten valores menores a 0')
       .required('Campo obligatorio'),
     address: Yup.string()
@@ -40,6 +48,10 @@ export function validationSchema() {
       .required('Campo obligatorio'),
     city: Yup.string().required('Campo obligatorio'),
     region: Yup.string().required('Campo obligatorio'),
+    price: Yup.number()
+      .min(1, 'El precio debe ser mayor a 0')
+      .positive('No se permiten valores menores a 0')
+      .required('Campo obligatorio'),
     rooms: Yup.number()
       .min(1, 'Debe tener al menos 1 habitación')
       .positive('No se permiten valores menores a 0')
@@ -51,7 +63,8 @@ export function validationSchema() {
     description: Yup.string()
       .min(10, 'La descripción debe tener al menos 10 caracteres')
       .required('Campo obligatorio'),
-    //gallery: Yup.array().min(2, 'Debe subir al menos una imagen'),
+    gallery: Yup.array().min(2, 'Debe subir al menos una imagen'),
+    video: Yup.array().max(1, 'Solo puede subir un video'),
     location: Yup.object().required('La ubicación es requerida'),
 
   });

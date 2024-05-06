@@ -6,26 +6,31 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 as uuid } from 'uuid'
 import { map, filter } from 'lodash'
 import { LoadingModal } from '../../../Shared/LoadingModal/LoadingModal';
-import { styles } from './UploadImagesForm.styles';
+import { styles } from './UploadVideo.styles';
 
-export  function UploadImagesForm(props) {
+/**
+ * Este componente lo hice despues de mostrar el avance funcional del viernes 
+ */
+
+
+export  function UploadVideo(props) {
   const { formik } = props;
 
-  const [isLoading, setShowUploadImage] = useState(false);
+  const [isLoading, setShowUploadVideo] = useState(false);
 
-  const openGallery = async () => {
+  const openvGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if(!result.canceled) uploadImage(result.uri)
+    if(!result.canceled) uploadVideo(result.uri)
 
   };
 
-  const uploadImage = async (uri) =>{
+  const uploadVideo = async (uri) =>{
     const response = await fetch(uri);
     const blob = await response.blob();
   
@@ -34,28 +39,28 @@ export  function UploadImagesForm(props) {
 
   
     uploadBytes(storageRef, blob).then((snapshot) => {
-      updatePhotosPublication(snapshot.metadata.fullPath);
+      updateVideoPublication(snapshot.metadata.fullPath);
     });
     
   };
 
-  const updatePhotosPublication = async (imagePath) => {
+  const updateVideoPublication = async (VideoPath) => {
 
-    setShowUploadImage(true);
+    setShowUploadVideo(true);
 
     const storage = getStorage();
-    const imageRef = ref(storage, imagePath);
-    const imageUrl = await getDownloadURL(imageRef);
+    const videoRef = ref(storage, VideoPath);
+    const videoUrl = await getDownloadURL(videoRef);
 
-    formik.setFieldValue("gallery", [...formik.values.gallery, imageUrl]);
+    formik.setFieldValue("video", [...formik.values.video, videoUrl]);
 
-    setShowUploadImage(false);
+    setShowUploadVideo(false);
   }
 
-  const removeImage= (img) => {
+  const removeVideo= (img) => {
     Alert.alert(
-      "Eliminar imagen",
-      "¿Estás seguro de eliminar la imagen?",
+      "Eliminar video",
+      "¿Estás seguro de eliminar la video?",
       [
         {
           text: "Cancelar",
@@ -64,8 +69,8 @@ export  function UploadImagesForm(props) {
         {
           text: "Eliminar",
           onPress: () => {
-            const result = filter(formik.values.gallery, (image) => image !== img )
-            formik.setFieldValue("gallery", result)
+            const result = filter(formik.values.video, (video) => video !== vd )
+            formik.setFieldValue("video", result)
           },
         },
       ],
@@ -77,30 +82,30 @@ export  function UploadImagesForm(props) {
   return (
     <>
       <ScrollView
-        style={styles.viewImage}
+        style={styles.viewVideo}
         horizontal
         showsHorizontalScrollIndicator={false}
       >
         <Icon
           type="material-community"
-          name="camera"
+          name="video"
           color="#a7a7a7"
           containerStyle={styles.containerIcon}
-          onPress={openGallery}
+          onPress={openvGallery}
         />
 
-        {map(formik.values.gallery, (image) => (
+        {map(formik.values.video, (video) => (
           <Avatar
-            key={image}
-            source={{ uri: image }}
-            containerStyle={styles.imageStyle}
-            onPress={() => removeImage(image)}
+            key={video}
+            source={{ uri: video }}
+            containerStyle={styles.videoStyle}
+            onPress={() => removeVideo(video)}
           />
         ))}
       </ScrollView>
-      <Text style={styles.error}>{formik.errors.images}</Text>
+      <Text style={styles.error}>{formik.errors.video}</Text>
 
-      <LoadingModal show={isLoading} text="Subiendo imagen" />
+      <LoadingModal show={isLoading} text="Subiendo Video" />
     </>
   )
 }

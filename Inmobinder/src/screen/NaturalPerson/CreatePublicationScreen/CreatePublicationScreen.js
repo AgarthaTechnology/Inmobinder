@@ -1,14 +1,14 @@
 import React from "react";
-import { ScrollView } from "react-native";
-import { Button } from "react-native-elements";
+import { ScrollView, Button } from "react-native";
 import { useFormik } from "formik";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { InfoForm } from "../../../components/NaturalPerson/CreatePublication/InfoForm";
 import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
+import { UploadVideo } from "../../../components/NaturalPerson/CreatePublication/UploadVideo";
 import { db } from "../../../utils/firebase";
-import { initialValues, validationSchema } from "./CreatePublicationScreen.data";
+import { initialValues } from "./CreatePublicationScreen.data";
 import { styles } from "./CreatePublication.styles";
 
 export function CreatePublicationScreen() {
@@ -24,10 +24,9 @@ export function CreatePublicationScreen() {
         newData.createdAt = new Date();
 
         const myDB = doc(db, "publications", newData.id);
-        await setDoc(myDB, newData); 
+        await setDoc(myDB, newData);
 
       } catch (error) {
-        console.log(error);
         console.error("Error adding document: ", error);
       }
     },
@@ -35,13 +34,14 @@ export function CreatePublicationScreen() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <InfoForm formik={formik} />
-
+      <InfoForm formik={formik} image={formik.values.gallery[0]}/>
+      <UploadImagesForm formik={formik}/>
+      <UploadVideo formik={formik}/>
       <Button
-        title="Crear publicacion"
+        title="Crear publicación"
         buttonStyle={styles.addPublication}
         onPress={formik.handleSubmit}
-        loading={formik.isSubmitting}
+        disabled={formik.isSubmitting}
       />
     </ScrollView>
   );
