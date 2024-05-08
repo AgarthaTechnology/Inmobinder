@@ -9,6 +9,7 @@
     NavigationContainer,
   } from '@react-navigation/native';
   import { useNavigation } from '@react-navigation/native';
+  import CRUD from "./property";
  
 
 
@@ -16,14 +17,14 @@
     const navigation = useNavigation();
   
     const handlePress = () => {
-      navigation.navigate('Casa', { itemId: tuItemId, navigation: navigation });
+      navigation.navigate('CRUD', { itemId: tuItemId, navigation: navigation });
     };
 
     return (
       <View >
         <View style={styles.iconContainer} >
           
-          <TouchableOpacity onPress={()=> navigation.push('Casa')}>
+          <TouchableOpacity onPress={()=> navigation.push('CRUD')}>
             <Entypo name="menu" size={30} color="grey" />
           </TouchableOpacity>
         </View>

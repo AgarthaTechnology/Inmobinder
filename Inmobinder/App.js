@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./src/screen/PropertyBrokerage/HomeScreen";
 import Casa from "./src/screen/PropertyBrokerage/AddProperty";
 import DeleteP from "./src/screen/PropertyBrokerage/deleteP";
+import CRUD from "./src/screen/PropertyBrokerage/property";
 import UpdateProp from "./src/screen/PropertyBrokerage/updateProp";
 import { Dimensions } from 'react-native';
 import { AppRegistry } from 'react-native';
@@ -30,7 +31,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Casa" component={Casa} />
+        <Stack.Screen name="CRUD" component={CRUD} />
         <Stack.Screen name="DeleteP" component={DeleteP} />
         <Stack.Screen name="UpdateProp" component={UpdateProp} />
       </Stack.Navigator>

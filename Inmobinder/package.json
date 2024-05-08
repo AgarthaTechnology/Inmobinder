@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^19.2.2",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "axios": "^1.6.8",
@@ -26,5 +27,10 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
+    "rules": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+  
   "private": true
 }

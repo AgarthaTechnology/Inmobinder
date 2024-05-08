@@ -1,18 +1,10 @@
-import React, { createElement, useEffect, useState } from 'react';
-import {
-    View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Image, Picker, ImageBackground, SafeAreaView,
-    StatusBar, ScrollView
-} from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, View, Text, TextInput, Button, ImageBackground, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import RNPickerSelect from 'react-native-picker-select';
+import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../../utils/firebase';
-import { addDoc, collection } from 'firebase/firestore';
-import updateProp from "./updateProp";
-import DeleteP from "./deleteP";
-import { NavigationContainer } from '@react-navigation/native';
-
 
 
 
@@ -88,6 +80,7 @@ const Casa = () => {
     const [estacionamiento, setEstacionamiento] = useState('');
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedComuna, setSelectedComuna] = useState('');
+    const [precio, setprecio] = useState('');
     const [direc, setDirec] = useState('');
     const [descrip, setDescrip] = useState('');
 
@@ -100,55 +93,54 @@ const Casa = () => {
 
     const addProperty = async () => {
         try {
-            // Verifica si falta algún campo obligatorio
-            if (!tipo) {
-                // Si falta algún campo, muestra un mensaje de alerta
-                alert('Por favor, complete todos los campos.');
-            } else {
-                // Si todos los campos están completos, guarda el documento en Firestore
-                await addDoc(collection(FIRESTORE_DB, 'propiedades'), {
-                    nombre: nombre,
-                    imagen: imagen,
-                    gcomun: gcomun,
-                    tipo: tipo,
-                    metros: metros,
-                    dormitorios: dorm,
-                    baños: baños,
-                    estacionamiento: estacionamiento,
-                    region: selectedRegion,
-                    comuna: selectedComuna,
-                    direccion: direc,
-                    descripcion: descrip,
-                    done: false
-                });
-                // Limpia los estados después de guardar
-                setNombre('');
-                setImagen('');
-                setGcomun('');
-                setTipo('');
-                setMetro('');
-                setDorm('');
-                setBaños('');
-                setEstacionamiento('');
-                setSelectedRegion('');
-                setSelectedComuna('');
-                setDirec('');
-                setDescrip('');
+            const db = getFirestore();
+            const docRef = await addDoc(collection(db, 'propiedades'), {
+                nombre,
+                imagen,
+                gcomun,
+                tipo,
+                metros,
+                dorm,
+                baños,
+                estacionamiento,
+                region: selectedRegion,
+                comuna: selectedComuna,
+                precio,
+                direc,
+                descrip
+            });
+            console.log('Document written with ID: ', docRef.id);
 
-                alert('Datos guardados correctamente.');
-            }
+            // Limpia los campos después de guardar
+            setNombre('');
+            setImagen('');
+            setGcomun('');
+            setTipo('');
+            setMetro('');
+            setDorm('');
+            setBaños('');
+            setEstacionamiento('');
+            setSelectedRegion('');
+            setSelectedComuna('');
+            setprecio('');
+            setDirec('');
+            setDescrip('');
+            alert('Datos guardados correctamente.');
         } catch (error) {
             console.error('Error al guardar los datos:', error);
             alert('No se pudo guardar los datos. Por favor, inténtelo de nuevo.');
         }
     };
 
-
-
     const handleRegionChange = (region) => {
         setSelectedRegion(region);
         const regionData = RegionesYcomunas.regiones.find(item => item.NombreRegion === region);
-        setComunas(regionData.comunas);
+        if (regionData) {
+            setComunas(regionData.comunas);
+        } else {
+            console.error(`No se encontró ninguna información para la región ${region}`);
+            // Aquí podrías manejar el caso en el que no se encuentra la región
+        }
     };
 
 
@@ -203,33 +195,27 @@ const Casa = () => {
     }
 
     return (
-
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
-
                 <ImageBackground source={require('../../../assets/images/Group.png')} style={styles.imageBackground}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Image source={require('../../../assets/images/volver.png')} />
                     </TouchableOpacity>
-
                     <View style={styles.formContainer}>
                         <Text style={styles.todoText}>Agregar Propiedades</Text>
                         <TextInput
                             style={styles.input}
                             placeholder='nombre'
-                            onChangeText={(nombre) => {
-                                setNombre(nombre); // Actualiza el estado del componente con el nuevo valor del texto
-                                console.log(nombre); // Imprime el nuevo valor del texto en la consola
-                            }}
+                            onChangeText={(nombre) => setNombre(nombre)}
+                            value={nombre}
                         />
-                        <TouchableOpacity onPress={pickImage} value={imagen}>
+                        <TouchableOpacity onPress={pickImage}>
                             {imagen ? (
                                 <Image source={{ uri: imagen }} style={styles.image} />
                             ) : (
                                 <Image source={require('../../../assets/images/Camera.png')} style={styles.cameraImage} />
                             )}
                         </TouchableOpacity>
-
                         <View style={styles.inputContainer}>
                             <Text>Incluye gastos comunes por</Text>
                             <TextInput
@@ -238,13 +224,13 @@ const Casa = () => {
                                 onChangeText={(gcomun) => setGcomun(gcomun)}
                                 value={gcomun}
                             />
-
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Tipo</Text>
-                            <RNPickerSelect style={styles.input1}
-                                onValueChange={(tipo) => console.log(tipo)} value={tipo}
+                            <RNPickerSelect
+                                style={styles.input1}
+                                onValueChange={(tipo) => setTipo(tipo)}
+                                value={tipo}
                                 items={[
                                     { label: 'Venta', value: 'Venta' },
                                     { label: 'Arriendo', value: 'Arriendo' },
@@ -252,7 +238,6 @@ const Casa = () => {
                                 ]}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Metros cuadrados construidos</Text>
                             <TextInput
@@ -262,11 +247,11 @@ const Casa = () => {
                                 value={metros}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Dormitorios</Text>
-                            <RNPickerSelect value={dorm}
-                                onValueChange={(dorm) => console.log(dorm)}
+                            <RNPickerSelect
+                                value={dorm}
+                                onValueChange={(dorm) => setDorm(dorm)}
                                 items={[
                                     { label: '1', value: '1' },
                                     { label: '2', value: '2' },
@@ -277,11 +262,11 @@ const Casa = () => {
                                 ]}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Baños</Text>
-                            <RNPickerSelect value={baños}
-                                onValueChange={(baños) => console.log(baños)}
+                            <RNPickerSelect
+                                value={baños}
+                                onValueChange={(baños) => setBaños(baños)}
                                 items={[
                                     { label: '1', value: '1' },
                                     { label: '2', value: '2' },
@@ -292,58 +277,60 @@ const Casa = () => {
                                 ]}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Estacionamiento</Text>
-                            <RNPickerSelect value={estacionamiento}
-                                onValueChange={(estacionamiento) => console.log(estacionamiento)}
+                            <RNPickerSelect
+                                value={estacionamiento}
+                                onValueChange={(estacionamiento) => setEstacionamiento(estacionamiento)}
                                 items={[
                                     { label: 'Con estacionamiento', value: 'Con estacionamiento' },
                                     { label: 'Sin estacionamiento', value: 'Sin estacionamiento' },
                                 ]}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Región</Text>
-                            <RNPickerSelect value={selectedRegion}
-                                onValueChange={(selectedRegion) => {
-                                    handleRegionChange(selectedRegion);
-                                }}
+                            <RNPickerSelect
+                                value={selectedRegion}
+                                onValueChange={(region) => handleRegionChange(region)}
                                 items={regiones.map(region => ({ label: region, value: region }))}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Comuna</Text>
-                            <RNPickerSelect value={selectedComuna}
-                                onValueChange={(selectedComuna) => {
-                                    handleComunaChange(selectedComuna);
-                                }}
+                            <RNPickerSelect
+                                value={selectedComuna}
+                                onValueChange={(comuna) => handleComunaChange(comuna)}
                                 items={comunas.map(comuna => ({ label: comuna, value: comuna }))}
                             />
                         </View>
-
+                        <View style={styles.inputContainer}>
+                            <Text>Disponible por: $</Text>
+                            <TextInput
+                                style={styles.input1}
+                                placeholder='precio'
+                                onChangeText={(precio) => setprecio(precio)}
+                                value={precio}
+                            />
+                        </View>
                         <View style={styles.inputContainer}>
                             <Text>Dirección</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder='ej: Av. Siempreviva #313'
-                                onChangeText={(g) => setMetro(direc)}
+                                onChangeText={(direc) => setDirec(direc)}
                                 value={direc}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Text>Descripción</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Descripción'
-                                onChangeText={(text) => setDescrip(descrip)}
+                                onChangeText={(descrip) => setDescrip(descrip)}
                                 value={descrip}
                             />
                         </View>
-
                         <View style={styles.buttonContainer}>
                             <Button title="Guardar" onPress={addProperty} />
                         </View>
@@ -354,13 +341,10 @@ const Casa = () => {
                             <Button title="modificar" onPress={() => navigation.push('UpdateProp')} />
                         </View>
                     </View>
-
                 </ImageBackground>
             </ScrollView>
-
-
         </SafeAreaView>
-    )
+    );
 
 };
 export default Casa;
@@ -403,11 +387,11 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 5,
         top: -35,
-        left:'58%',
+        left: '58%',
     },
-    select1:{
-         top: -35,
-        left:'58%',
+    select1: {
+        top: -35,
+        left: '58%',
 
     },
     todoText: {
