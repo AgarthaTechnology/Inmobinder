@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Alert, TouchableOpacity, Text, Animated, Image } from 'react-native';
+import { StyleSheet, View, Alert, TouchableOpacity, Text, Animated, Image, TextInput } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { FontAwesome } from '@expo/vector-icons';
@@ -11,27 +11,30 @@ import appFirebase from '../../utils/database';
 import { getFirestore, collection, getDocs, onSnapshot } from 'firebase/firestore';
 import Slider from '@react-native-community/slider';
 
+// Inicializar la base de datos de Firestore
 const db = getFirestore(appFirebase.appFirebase);
 
 const Map = () => {
-  const [origin, setOrigin] = useState(null);
-  const [markerPosition, setMarkerPosition] = useState(null);
+  const [origin, setOrigin] = useState(null); // Estado para la ubicación actual
+  const [markerPosition, setMarkerPosition] = useState(null); // Estado para la posición del marcador
   const [filter, setFilter] = useState(null); // Estado para el filtro activo
-  const [coords, setCoords] = useState([]);
+  const [coords, setCoords] = useState([]); // Almacena las coordenadas de las propiedades
   const [originalCoords, setOriginalCoords] = useState([]); // Almacena las coordenadas originales
-  const [menuAnimation] = useState(new Animated.Value(0));
-  const [menuVisible, setMenuVisible] = useState(false);
+  const [menuAnimation] = useState(new Animated.Value(0)); // Animación para el menú
+  const [menuVisible, setMenuVisible] = useState(false); // Estado para la visibilidad del menú
   const [commonExpensesFilter, setCommonExpensesFilter] = useState(50); // Valor inicial de la barra deslizante
-  const [bedroomsFilter, setBedroomsFilter] = useState(null);
-  const [bathroomsFilter, setBathroomsFilter] = useState(null);
+  const [bedroomsFilter, setBedroomsFilter] = useState(null); // Estado para el filtro de habitaciones
+  const [bathroomsFilter, setBathroomsFilter] = useState(null); // Estado para el filtro de baños
+  const [squareMetersFilter, setSquareMetersFilter] = useState(null); // Estado para el filtro de metros cuadrados
 
-  const mapRef = useRef();
+  const mapRef = useRef(); 
 
   useEffect(() => {
-    getLocationPermission();
+    getLocationPermission(); // Obtener permiso de ubicación al montar el componente
     fetchOriginalCoords(); // Cargar coordenadas originales al montar el componente
   }, []);
 
+  // Escuchar cambios en la colección de coordenadas
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'coords'), (snapshot) => {
       const updatedCoords = [];
@@ -73,6 +76,7 @@ const Map = () => {
     };
   }, [setCoords]);
 
+  // Obtener permiso de ubicación
   const getLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -80,17 +84,17 @@ const Map = () => {
       Alert.alert('Permission denied');
       return;
     }
-    const location = await Location.getCurrentPositionAsync({});
-    setOrigin({
+    // Obtener la ubicación actual
+    const location = await Location.getCurrentPositionAsync({}); 
+    setOrigin({ // Almacenar la ubicación actual
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
-    setMarkerPosition({
+    setMarkerPosition({ // Almacenar la posición del marcador
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
-    
-    mapRef.current.animateToRegion({
+    mapRef.current.animateToRegion({ // Animar el mapa a la ubicación actual
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
       latitudeDelta: 0.09,
@@ -98,6 +102,7 @@ const Map = () => {
     });
   };
 
+  // Cargar las coordenadas originales de la base de datos
   const fetchOriginalCoords = async () => {
     const snapshot = await getDocs(collection(db, 'coords'));
     const initialCoords = snapshot.docs.map(doc => ({
@@ -107,6 +112,7 @@ const Map = () => {
     setOriginalCoords(initialCoords); // Almacenar las coordenadas originales
   };
 
+  // Animaciones para el menú 
   const menuTranslateX = menuAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [-200, 0],
@@ -117,21 +123,23 @@ const Map = () => {
     outputRange: [50, 0], // Ajustar según la altura del menú
   });
 
-  const goToOrigin = () => {
+  // Función para ir a la ubicación actual
+  const goToOrigin = () => { 
     if (origin && mapRef.current) {
-      mapRef.current.animateToRegion({
+      mapRef.current.animateToRegion({ 
         latitude: origin.latitude,
         longitude: origin.longitude,
         latitudeDelta: 0.09,
         longitudeDelta: 0.04,
       });
-      setMarkerPosition({
+      setMarkerPosition({ // Actualizar la posición del marcador
         latitude: origin.latitude,
         longitude: origin.longitude,
       });
     }
   };
 
+  // Función para mostrar u ocultar el menú
   const toggleMenuVisibility = () => {
     setMenuVisible(!menuVisible);
     // Anima el menú al cambiar
@@ -155,17 +163,23 @@ const Map = () => {
     );
   
     // Aplicar filtro por número de habitaciones si se seleccionó algún valor
-  if (bedroomsFilter !== null) {
-    filteredCoords = filteredCoords.filter(coord =>
-      parseInt(coord.rooms) === bedroomsFilter
-    );
-  }
-
+    if (bedroomsFilter !== null) {
+      filteredCoords = filteredCoords.filter(coord =>
+        parseInt(coord.rooms) >= bedroomsFilter
+      );
+    }
   
     // Aplicar filtro por cantidad de baños si se seleccionó algún valor
     if (bathroomsFilter !== null) {
       filteredCoords = filteredCoords.filter(coord =>
-        parseInt(coord.bathrooms) === bathroomsFilter
+        parseInt(coord.bathrooms) >= bathroomsFilter
+      );
+    }
+  
+    // Aplicar filtro por metros cuadrados de la propiedad
+    if (squareMetersFilter !== null) {
+      filteredCoords = filteredCoords.filter(coord =>
+        parseInt(coord.metters) >= squareMetersFilter
       );
     }
   
@@ -182,19 +196,21 @@ const Map = () => {
   };
 
   return (
+    // Vista principal
     <View style={{ flex: 1 }}>
-      <MapView
+      <MapView 
         ref={mapRef}
-        initialRegion={{
+        initialRegion={{ // Región inicial del mapa
           latitude: origin && origin.latitude ? origin.latitude : 0,
           longitude: origin && origin.longitude ? origin.longitude : 0,
           latitudeDelta: 0.09,
           longitudeDelta: 0.04,
         }}
-        showsUserLocation
-        showsMyLocationButton={false}
+        showsUserLocation // Muestra la ubicación del usuario
+        showsMyLocationButton={false} // Oculta el botón de ubicación
         style={styles.map}
       >
+        {/* aplica filtros a las coordenadas guardadas en la bd */}
         {coords.map((coord, index) => (
           (!filter || coord.state === filter || 
             coord.bathrooms === filter || coord.rooms === filter 
@@ -212,35 +228,55 @@ const Map = () => {
         ))}
       </MapView>
 
+       {/* filtro propiedad en venta */}
+      <TouchableOpacity style={styles.legend} onPress={() => setFilter('Venta')}>
+        <Image source={VentaImage} style={{ height: 30, width: 30 }} />
+        <Text style={styles.legendText}>Propiedad en venta</Text>
+      </TouchableOpacity>
+
+      {/* filtro propiedad en arriendo */}
+      <TouchableOpacity style={[styles.legend, { bottom: 70 }]} onPress={() => setFilter('Arriendo')}>
+        <Image source={ArriendoImage} style={{ height: 30, width: 30 }} />
+        <Text style={styles.legendText}>Propiedad en arriendo</Text>
+      </TouchableOpacity>
+
+      {/* elimina los 2 filtros anteriores (venta y arriendo) */}
+      <TouchableOpacity style={[styles.legend, { bottom: 125 }]} onPress={() => setFilter(null)}>
+        <Image source={ArriendoYVentaImage} style={{ height: 30, width: 30 }} />
+        <Text style={styles.legendText}>En venta y arriendo</Text>
+      </TouchableOpacity>
+
+      {/* Logo de Inmobinder */}
       <View style={styles.container}>
         <Image source={INMOBINDER} style={styles.image} />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={goToOrigin}>
+      {/* Botón para ir a la ubicación actual */}
+      <TouchableOpacity style={styles.button} onPress={goToOrigin}> 
         <FontAwesome name="map-marker" size={30} color="black" />
       </TouchableOpacity>
 
+      {/* Botón para mostrar u ocultar el menú */}
       <TouchableOpacity style={styles.filterButton} onPress={toggleMenuVisibility}>
         <FontAwesome name="filter" size={30} color="black" />
       </TouchableOpacity>
 
+        {/* Menú de filtros */}
       {menuVisible && (
-        <Animated.View style={[styles.filterMenu, { transform: [{ translateY: menuTranslateY }] }]}>
-          {/* Componente de barra deslizante para Gastos Comunes */}
+            <Animated.View style={[styles.filterMenu, { transform: [{ translateY: menuTranslateY }] }]}>
+          {/* Componente de entrada de texto para Gastos Comunes */}
           <View style={styles.filterMenuItem}>
-            <Text style={styles.filterMenuText}>Seleccione Gastos Comunes: {commonExpensesFilter}</Text>
-            <Slider
-              style={{ width: '100%' }}
-              minimumValue={1}
-              maximumValue={100}
-              step={1}
-              value={commonExpensesFilter}
-              onValueChange={(value) => {
-                console.log('Value changed:', value);
-                setCommonExpensesFilter(value);
-              }}
+            <Text style={styles.filterMenuText}>Ingrese Gastos Comunes Mínimos:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Gastos comunes mínimos"
+              keyboardType="numeric"
+              value={`${commonExpensesFilter}`} // Convertir a cadena de texto usando interpolación de cadenas
+              onChangeText={(text) => setCommonExpensesFilter(text)}
             />
-           <View style={styles.filterMenuItem}>
+          </View>
+          {/* filtro por numeros de habitaciones */}
+          <View style={styles.filterMenuItem}>
             <Text style={styles.filterMenuText}>Seleccione número de habitaciones:</Text>
             <TouchableOpacity onPress={() => setBedroomsFilter(1)}>
               <Text style={styles.filterMenuText}>1 habitación</Text>
@@ -254,8 +290,8 @@ const Map = () => {
             }}>
               <Text style={styles.filterMenuText}>3 habitaciones</Text>
             </TouchableOpacity>
-            {/* Agrega más opciones según sea necesario */}
           </View>
+          {/* filtro por numeros de baños */}
           <View style={styles.filterMenuItem}>
             <Text style={styles.filterMenuText}>Seleccione cantidad de baños:</Text>
             <TouchableOpacity onPress={() => setBathroomsFilter(1)}>
@@ -267,35 +303,27 @@ const Map = () => {
             <TouchableOpacity onPress={() => setBathroomsFilter(3)}>
               <Text style={styles.filterMenuText}>3 baños</Text>
             </TouchableOpacity>
-            {/* Agrega más opciones según sea necesario */}
           </View>
+          {/* filtro por metro cuadrado*/}
+          <View style={styles.filterMenuItem}>
+            <Text style={styles.filterMenuText}>Ingrese metros cuadrados mínimos:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Metros cuadrados mínimos"
+              keyboardType="numeric"
+              value={`${squareMetersFilter}`} // Convertir a cadena de texto usando interpolación de cadenas
+              onChangeText={(text) => setSquareMetersFilter(text)}
+            />
+          </View>
+          {/* Botones para aplicar o eliminar filtros */}
           <TouchableOpacity onPress={applyFilter}>
-              <Text style={styles.filterMenuText}>Aplicar filtro</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={clearFilter}>
-              <Text style={styles.filterMenuText}>Eliminar filtro</Text>
-            </TouchableOpacity>
-            
-          </View>
-         
-          
+            <Text style={styles.filterMenuText}>Aplicar filtro</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={clearFilter}>
+            <Text style={styles.filterMenuText}>Eliminar filtro</Text>
+          </TouchableOpacity>
         </Animated.View>
       )}
-
-      <TouchableOpacity style={styles.legend} onPress={() => setFilter('Vende')}>
-        <Image source={VentaImage} style={{ height: 30, width: 30 }} />
-        <Text style={styles.legendText}>Propiedad en venta</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={[styles.legend, { bottom: 70 }]} onPress={() => setFilter('Arriendo')}>
-        <Image source={ArriendoImage} style={{ height: 30, width: 30 }} />
-        <Text style={styles.legendText}>Propiedad en arriendo</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={[styles.legend, { bottom: 125 }]} onPress={() => setFilter(null)}>
-        <Image source={ArriendoYVentaImage} style={{ height: 30, width: 30 }} />
-        <Text style={styles.legendText}>En venta y arriendo</Text>
-      </TouchableOpacity>
 
     </View>
   );
@@ -369,6 +397,14 @@ const styles = StyleSheet.create({
     height: 100, 
     left: 150, 
   },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+  }
+  
+
 });
 
 export default Map;
