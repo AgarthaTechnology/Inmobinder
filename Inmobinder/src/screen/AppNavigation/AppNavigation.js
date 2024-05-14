@@ -2,7 +2,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 // import HomeScreen from "./HomeScreen";
 import { CreatePublicationScreen } from "../NaturalPerson/CreatePublicationScreen/CreatePublicationScreen";
-import Map from "../NaturalPerson/Map.jsx";
+import Map from "../NaturalPerson/MapScreen/Map";
 
 const Drawer = createDrawerNavigator();
 
