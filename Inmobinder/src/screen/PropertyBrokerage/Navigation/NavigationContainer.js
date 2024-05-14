@@ -3,25 +3,30 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { DrawerNavigation } from './DashboardCorredor';
 
-import InicioSesion from '../PropertyBrokerage/MenuConfiguracion/InicioSesion';
-import PagosYcobros from '../PropertyBrokerage/MenuConfiguracion/PagosYcobros';
-import Accesibilidad from '../PropertyBrokerage/MenuConfiguracion/Accesibilidad';
-import Notificaciones from '../PropertyBrokerage/MenuConfiguracion/Notificaciones';
-import TerminosDeServicio from '../PropertyBrokerage/MenuConfiguracion/TerminosDeServicio';
-import PoliticaDePrivacidad from '../PropertyBrokerage/MenuConfiguracion/PoliticaDePrivacidad';
+import InicioSesion from '../MenuConfiguracion/InicioSesion';
+import PagosYcobros from '../MenuConfiguracion/PagosYcobros';
+import Accesibilidad from '../MenuConfiguracion/Accesibilidad';
+import Notificaciones from '../MenuConfiguracion/Notificaciones';
+import TerminosDeServicio from '../MenuConfiguracion/TerminosDeServicio';
+import PoliticaDePrivacidad from '../MenuConfiguracion/PoliticaDePrivacidad';
 
-import AyudaProblemasSeguridad from '../PropertyBrokerage/MenuAyuda/AyudaProblemasSeguridad';
-import ContactarSoporte from '../PropertyBrokerage/MenuAyuda/ContactarSoporte';
-import EnviarComentarios from '../PropertyBrokerage/MenuAyuda/EnviarComentarios';
-import ProblemaDePago from '../PropertyBrokerage/MenuAyuda/ProblemaDePago';
-import ReportarFraude from '../PropertyBrokerage/MenuAyuda/ReportarFraude';
-import RepProblemaFuncionamiento from '../PropertyBrokerage/MenuAyuda/RepProblemaFuncionamiento';
+import AyudaProblemasSeguridad from '../MenuAyuda/AyudaProblemasSeguridad';
+import ContactarSoporte from '../MenuAyuda/ContactarSoporte';
+import EnviarComentarios from '../MenuAyuda/EnviarComentarios';
+import ProblemaDePago from '../MenuAyuda/ProblemaDePago';
+import ReportarFraude from '../MenuAyuda/ReportarFraude';
+import RepProblemaFuncionamiento from '../MenuAyuda/RepProblemaFuncionamiento';
 
-import VideoGallery from '../PropertyBrokerage/GalleryScreen/VideoGallery';
-import PictureGallery from '../PropertyBrokerage/GalleryScreen/PictureGallery';
-import ProfileProperty from '../PropertyBrokerage/PerfilPropiedad/ProfileProperty';
-import PictureGalleryBroker from '../PropertyBrokerage/GalleryScreen/PictureGalleryBroker';
-import AddProperty from "../PropertyBrokerage/GalleryScreen/AddProperty";
+import VideoGallery from '../GalleryScreen/VideoGallery';
+import PictureGallery from '../GalleryScreen/PictureGallery';
+import ProfileProperty from '../PerfilPropiedad/ProfileProperty';
+import PictureGalleryBroker from '../GalleryScreen/PictureGalleryBroker';
+import AddProperty from "../GalleryScreen/AddProperty";
+
+import HomeScreen from '../HomeScreen';
+import CRUD from '../property';
+import DeleteP from '../deleteP';
+import UpdateProp from '../updateProp';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,3 +64,17 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
+
+// export function Maps(){
+
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator screenOptions={{ headerShown: false }}>
+//         <Stack.Screen name="Home" component={HomeScreen} />
+//         <Stack.Screen name="CRUD" component={CRUD} />
+//         <Stack.Screen name="DeleteP" component={DeleteP} />
+//         <Stack.Screen name="UpdateProp" component={UpdateProp} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }

@@ -2,22 +2,22 @@ import React from "react";
 import { DrawerContentScrollView, createDrawerNavigator } from "@react-navigation/drawer";
 import {StyleSheet, Text, Image} from "react-native";
 
-import ConfiguracionScreen from '../PropertyBrokerage/MenuDrawerCorredor/ConfiguracionCorredor';
-import AgendaScreen from '../PropertyBrokerage/MenuDrawerCorredor/Agenda';
-import MisClientesScreen from '../PropertyBrokerage/MenuDrawerCorredor/MisClientes';
-import CentroAyudaScreen from '../PropertyBrokerage/MenuDrawerCorredor/AyudaCorredor';
-import AgregaPublicacionesScreen from '../PropertyBrokerage/MenuDrawerCorredor/AgregaPublicaciones'
-import MisPublicacionesScreen from '../PropertyBrokerage/MenuDrawerCorredor/Publicaciones';
-import AgenciaScreen from '../PropertyBrokerage/MenuDrawerCorredor/Agencia';
-import CerrarSesionScreen from '../PropertyBrokerage/MenuDrawerCorredor/CerrarSesion';
+import ConfiguracionScreen from '../MenuDrawerCorredor/ConfiguracionCorredor';
+import AgendaScreen from '../MenuDrawerCorredor/Agenda';
+import MisClientesScreen from '../MenuDrawerCorredor/MisClientes';
+import CentroAyudaScreen from '../MenuDrawerCorredor/AyudaCorredor';
+import AgregaPublicacionesScreen from '../MenuDrawerCorredor/AgregaPublicaciones'
+import MisPublicacionesScreen from '../MenuDrawerCorredor/Publicaciones';
+import AgenciaScreen from '../MenuDrawerCorredor/Agencia';
+import CerrarSesionScreen from '../MenuDrawerCorredor/CerrarSesion';
 
-import HomeScreen from "../PropertyBrokerage/HomeScreen";
-import BotonMenu from "../../components/PropertyBrokerage/BotonMenu";
+import HomeScreen from "../HomeScreen";
+import BotonMenu from "../../../components/PropertyBrokerage/BotonMenu";
 import { View } from "react-native";
-import PictureGallery from "../PropertyBrokerage/GalleryScreen/PictureGallery";
-import VideoGallery from "../PropertyBrokerage/GalleryScreen/VideoGallery";
-import PictureGalleryBroker from "../PropertyBrokerage/GalleryScreen/PictureGalleryBroker";
-import AddProperty from "../PropertyBrokerage/GalleryScreen/AddProperty";
+import PictureGallery from "../GalleryScreen/PictureGallery";
+import VideoGallery from "../GalleryScreen/VideoGallery";
+import PictureGalleryBroker from "../GalleryScreen/PictureGalleryBroker";
+import AddProperty from "../GalleryScreen/AddProperty";
 
 const Drawer = createDrawerNavigator()
 
@@ -47,7 +47,7 @@ const MenuItems= ({ navigation}) =>{
         <DrawerContentScrollView style = {styles.container}>
              
              <View style={styles.profileContainer}>
-            <Image source={require('../../../assets/favicon.png')} style={styles.profile}/>   
+            {/* <Image source={require('../../../assets/favicon.png')} style={styles.profile}/>    */}
             <Text style = {styles.titulo}>11.111.111-1</Text>
             <Text style = {styles.titulo}>Nombre Nombre Apellido Apellido</Text>
             </View>

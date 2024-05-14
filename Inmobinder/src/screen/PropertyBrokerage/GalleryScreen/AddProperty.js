@@ -208,9 +208,9 @@ export default function AddProperty({ navigation }) {
 
                         <View style={styles.Group363}>
                             <Text style={styles.subtitle}> Titulo </Text>
-                            <View style={styles.images1}>
+                            {/* <View style={styles.images1}>
                                 <Image source={require('../../../../assets/camera.png')} />
-                            </View>
+                            </View> */}
                         </View>
 
                         <View style={styles.inputContainer}>
