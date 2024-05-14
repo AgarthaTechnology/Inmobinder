@@ -4,13 +4,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native'; // Importa useNavigation desde @react-navigation/native
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../utils/config';
-import { styles } from '../../styles/style';
+import { styles } from '../../styles/styleProfile';
 import { useUserData } from '../../components/PropertyBrokerage/declaredata';
 import { useLoadUserData } from '../../components/PropertyBrokerage/readdata';
 import { pickImage } from '../../components/PropertyBrokerage/imagepicker';
 import { updateData } from '../../components/PropertyBrokerage/updatedata';
-import { uploadImageToStorage } from '../../utils/firebaseStorage';
-import { updateProfileImage } from '../../utils/firebaseFirestore';
 
 
 export default function App() {
@@ -63,62 +61,67 @@ export default function App() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Perfil</Text>
-            <TouchableOpacity onPress={() => pickImage(setImage)}>
-                {image ? <Image source={{ uri: image }} style={{ width: 200, height: 200, marginBottom: 20 }} /> : <Text>Elegir Imagen</Text>}
-            </TouchableOpacity>
-
-            <Text style={styles.joinDate}>Fecha de unión: 10 de abril de 2024</Text>
-            <Text style={styles.verified}>[Cuenta Verificada]</Text>
-
-        
-            
-            
-                <TextInput
-                    style={styles.input}
-                    placeholder="Correo electrónico"
-                    value={correo}
-                    onChangeText={setCorreo}
-                />
-                <Text style={styles.label}>Correo electrónico</Text>
-            
-            
-
-                
-                
-                
-                <TextInput
-                    style={styles.input}
-                    placeholder="Teléfono"
-                    value={telefono}
-                    onChangeText={setTelefono}
-                />
-                <Text style={styles.label}>Teléfono</Text>
-
-            
-        
-                <TextInput
-                    style={styles.input}
-                    placeholder="Dirección Agencia"
-                    value={direccion}
-                    onChangeText={setDireccion}
-                />
-                <Text style={styles.label}>Dirección Agencia</Text>
-  
-            
-            <Text style={styles.registeredAs}>Registrado como:</Text>
-            <Text style={styles.agency}>[CORREDOR]</Text>
-        
+        <ImageBackground source={require('../../img/fondo.jpeg')} style={styles.background}>
             <View style={styles.container}>
-                <View style={styles.row}>
-                    <Button title="Editar contraseña" onPress={ircambiarContra} />
-                    <View style={styles.buttonContainer}>
-                        <Button title="Guardar cambios" onPress={handleUpdate} />
+                <View style={styles.imageContainer}>
+                    <TouchableOpacity onPress={() => pickImage(setImage)}>
+                        {image ? (
+                            <Image source={{ uri: image }} style={styles.profileImage} />
+                        ) : (
+                            <Text>Elegir Imagen</Text>
+                        )}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => pickImage(setImage)} style={styles.editButton}>
+                        <MaterialIcons name="photo-camera" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
+
+        
+                
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Correo electrónico"
+                        value={correo}
+                        onChangeText={setCorreo}
+                    />
+                    <Text style={styles.label}>Correo electrónico</Text>
+                
+                
+
+                    
+                    
+                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Teléfono"
+                        value={telefono}
+                        onChangeText={setTelefono}
+                    />
+                    <Text style={styles.label}>Teléfono</Text>
+
+                
+            
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Dirección Agencia"
+                        value={direccion}
+                        onChangeText={setDireccion}
+                    />
+                    <Text style={styles.label}>Dirección Agencia</Text>
+    
+                
+                <Text style={styles.registeredAs}>Registrado como:</Text>
+                <Text style={styles.corredor}>[CORREDOR]</Text>
+            
+                <View style={styles.container}>
+                    <View style={styles.row}>
+                        <Button title="Editar contraseña" onPress={ircambiarContra} />
+                        <View style={styles.buttonContainer}>
+                            <Button title="Guardar cambios" onPress={handleUpdate} />
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </ImageBackground>
     );
-
 }
