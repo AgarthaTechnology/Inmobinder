@@ -10,16 +10,10 @@ import { Dimensions } from 'react-native';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
 
-
-
-
 const Stack = createNativeStackNavigator();
-
 const { width, height } = Dimensions.get('window');
-
 const guidelineBaseWidth = 375;
 const guidelineBaseHeight = 812;
-
 const horizontalScale = (size) => (width / guidelineBaseWidth) * size;
 const verticalScale = (size) => (height / guidelineBaseHeight) * size;
 const moderateScale = (size, factor = 0.5) => size + (horizontalScale(size) - size) * factor;
@@ -38,3 +32,15 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+// import 'react-native-gesture-handler';
+// import react from 'react';
+// import { StatusBar } from 'expo-status-bar';
+// import { StyleSheet, Text, View } from 'react-native';
+// import Navigation  from './src/screen/AppNavigation/NavigationContainer';
+
+// export default function App() {
+//   return (
+//     <Navigation/>
+//   );
+// }
