@@ -1,42 +1,39 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-const MisClientesScreen = () => {
+const MisClientesScreen = ({ navigation }) => {
     return (
         <View >
             <View style={Styles.buttonContainer}>
                 <Image source={require('../../../../assets/favicon.png')} style={Styles.profile} />
                 <View style={Styles.buttonContainer2}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileProperty')}>
                         <Text style={Styles.text}>Nombre Nombre Apellido Apellido</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
 
+            <View style={Styles.buttonContainer}>
+                <Image source={require('../../../../assets/favicon.png')} style={Styles.profile} />
+                <View style={Styles.buttonContainer2}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileProperty')}>
+                        <Text style={Styles.text}>Nombre Nombre Apellido Apellido</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={Styles.buttonContainer}>
                 <Image source={require('../../../../assets/favicon.png')} style={Styles.profile} />
                 <View style={Styles.buttonContainer2}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileProperty')}>
                         <Text style={Styles.text}>Nombre Nombre Apellido Apellido</Text>
-
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={Styles.buttonContainer}>
                 <Image source={require('../../../../assets/favicon.png')} style={Styles.profile} />
                 <View style={Styles.buttonContainer2}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileProperty')}>
                         <Text style={Styles.text}>Nombre Nombre Apellido Apellido</Text>
-
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={Styles.buttonContainer}>
-                <Image source={require('../../../../assets/favicon.png')} style={Styles.profile} />
-                <View style={Styles.buttonContainer2}>
-                    <TouchableOpacity >
-                        <Text style={Styles.text}>Nombre Nombre Apellido Apellido</Text>
-
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,7 +73,7 @@ const Styles = StyleSheet.create({
         borderRadius: 30,
         backgroundColor: '#d9d9d9',
         flex: 1,
-        top: 10 ,
+        top: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },

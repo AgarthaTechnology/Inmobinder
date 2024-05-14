@@ -16,6 +16,8 @@ import BotonMenu from "../../components/PropertyBrokerage/BotonMenu";
 import { View } from "react-native";
 import PictureGallery from "../PropertyBrokerage/GalleryScreen/PictureGallery";
 import VideoGallery from "../PropertyBrokerage/GalleryScreen/VideoGallery";
+import PictureGalleryBroker from "../PropertyBrokerage/GalleryScreen/PictureGalleryBroker";
+import AddProperty from "../PropertyBrokerage/GalleryScreen/AddProperty";
 
 const Drawer = createDrawerNavigator()
 
@@ -31,8 +33,10 @@ export function DrawerNavigation(){
             <Drawer.Screen name ="Centro de Ayuda" component ={CentroAyudaScreen}/>
             <Drawer.Screen name ="Agencia" component ={AgenciaScreen}/>
             <Drawer.Screen name ="Cerrar Sesión" component ={CerrarSesionScreen}/>
+            <Drawer.Screen name ="PictureGalleryBroker" component ={PictureGalleryBroker}/>
             <Drawer.Screen name ="PictureGallery" component ={PictureGallery}/>
             <Drawer.Screen name ="VideoGallery" component ={VideoGallery}/>
+            <Drawer.Screen name ="AddProperty" component ={AddProperty}/>
         </Drawer.Navigator>
     )
 
@@ -56,9 +60,10 @@ const MenuItems= ({ navigation}) =>{
             <BotonMenu text ="Centro de Ayuda" onPress={ () => navigation.navigate('Centro de Ayuda') }/>
             <BotonMenu text ="Agencia" onPress={ () => navigation.navigate('Agencia') }/>
             <BotonMenu text ="Cerrar Sesión" onPress={ () => navigation.navigate('Cerrar Sesión') }/>
-            
+            <BotonMenu text ="Picture Gallery Broker" onPress={ () => navigation.navigate('PictureGalleryBroker') }/>
             <BotonMenu text ="Picture Gallery" onPress={ () => navigation.navigate('PictureGallery') }/>
             <BotonMenu text ="Video Gallery" onPress={ () => navigation.navigate('VideoGallery') }/>
+            <BotonMenu text ="Agregar Propiedad" onPress={ () => navigation.navigate('AddProperty') }/>
             </View>
         </DrawerContentScrollView>
     )

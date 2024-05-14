@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 import { GoogleAuthProvider } from "firebase/auth";
@@ -7,14 +8,13 @@ import { GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDNu2t52GgXHdOupTmYH3zDWwK7Jt0mhJs",
-  authDomain: "agartha-marketing-agency.firebaseapp.com",
-  databaseURL: "https://agartha-marketing-agency-default-rtdb.firebaseio.com",
-  projectId: "agartha-marketing-agency",
-  storageBucket: "agartha-marketing-agency.appspot.com",
-  messagingSenderId: "122797123050",
-  appId: "1:122797123050:web:3142f05845de544cbebe93",
-  measurementId: "G-1EWNYSNECN"
+  apiKey: "AIzaSyDEo3WrSAduDCatnQGqyjGemHvX-7FA0X8",
+  authDomain: "inmobinderleo.firebaseapp.com",
+  projectId: "inmobinderleo",
+  storageBucket: "inmobinderleo.appspot.com",
+  messagingSenderId: "361921354486",
+  appId: "1:361921354486:web:ae11ea749af2574c5d2ad7",
+  measurementId: "G-599Y3S2686"
 };
 
 if(!firebase.apps.length){

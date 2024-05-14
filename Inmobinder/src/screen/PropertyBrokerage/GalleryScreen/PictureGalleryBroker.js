@@ -1,13 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image,TouchableOpacity } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 
-export default function VideoGallery() {
-    const video = React.useRef(null);
-    const [status, setStatus] = React.useState({});
+export default function PictureGalleryBroker({navigation}) {
     return (
         <View style={styles.layout}>
-            
             {/* Imagen de fondo */}
             <Image
                 source={require('../../../../assets/Pantalla-de-fondo.png')}
@@ -16,60 +12,39 @@ export default function VideoGallery() {
 
             {/* Contenido de la galería */}
             <View style={styles.container}>
+
                 <View style={styles.containerTitle}>
-                    <Text style={styles.title}>Galería de videos </Text>
+                    <Text style={styles.title}>Galería de fotos </Text>
                 </View>
                 <View style={styles.line}></View>
-                <Text style={styles.subtitle}>Propiedad 1 </Text>
+                <Text style={styles.subtitle}>Propiedad 1 Corredor </Text>
                 <View style={styles.galeria1}>
-                    <Video
-                        ref={video}
-                        style={styles.videoContainer}
-                        source={{
-                            uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                        }}
-                        useNativeControls
-                        resizeMode={ResizeMode.CONTAIN}
-                        isLooping
-                        onPlaybackStatusUpdate={status => setStatus(() => status)}
-                    />
-                    <Video
-                        ref={video}
-                        style={styles.videoContainer}
-                        source={{
-                            uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                        }}
-                        useNativeControls
-                        resizeMode={ResizeMode.CONTAIN}
-                        isLooping
-                        onPlaybackStatusUpdate={status => setStatus(() => status)}
-                    />
+                    <View >
+                        <Image source={require('../../../../assets/Rectangle_6.png')}
+                            style={styles.images1} />
+                    </View>
+                    <View >
+                        <Image source={require('../../../../assets/Rectangle_7.png')}
+                            style={styles.images1} />
+                    </View>
                 </View>
-                <Video
-                    ref={video}
-                    style={styles.videoContainer2}
-                    source={{
-                        uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                    }}
-                    useNativeControls
-                    resizeMode={ResizeMode.CONTAIN}
-                    isLooping
-                    onPlaybackStatusUpdate={status => setStatus(() => status)}
-                />
+                <View >
+                    <Image source={require('../../../../assets/Rectangle_8.png')}
+                        style={styles.images2} />
+                </View>
 
-                    <View style={styles.document}>
+                <View style={styles.document}>
                     <TouchableOpacity style={styles.DownloadDoc}>
                         <Image source={require('../../../../assets/+.png')} style={styles.vector} />
-                        <Text style={styles.textDoc}>Añadir Video</Text>
+                        <Text style={styles.textDoc}>Añadir Fotos</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.DownloadDoc} onPress={() => navigation.navigate('DelletePicture')}>
                         <Image source={require('../../../../assets/Trash.png')} style={styles.vector} />
-                        <Text style={styles.textDoc}>Eliminar Video</Text>
+                        <Text style={styles.textDoc}>Eliminar Fotos</Text>
                     </TouchableOpacity>
+                </View>
             </View>
-            </View>
-
         </View>
     );
 }
@@ -95,58 +70,60 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 20,
         Bottom: 15,
+
     },
     containerTitle: {
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center', // Centra verticalmente
         marginTop: 30,
         marginBottom: 15,
     },
+
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: 10,
     },
     subtitle: {
         marginTop: 20,
-        marginBottom: 40,
+        marginBottom: 20,
         fontWeight: 'bold',
+
     },
     line: {
         width: '80%',
         borderBottomColor: 'black',
         borderBottomWidth: 1,
-        marginBottom: 20,
+        marginBottom: 15,
     },
     galeria1: {
         flexDirection: 'row',
         justifyContent: 'center',
-
-    },
-    videoContainer: {
         marginBottom: 20,
-        height: 178,
-        width: 128,
+    },
+    images1: {
+        marginBottom: 20,
+        height: 130,
+        width: 130,
         backgroundColor: '#d9d9d9',
         margin: 5,
-        justifyContent: 'center',
+        justifyContent: 'center', //centrar vertical
         alignItems: 'center',
     },
-    videoContainer2: {
+    images2: {
+        marginBottom: 20,
         height: 138,
         width: 251,
         backgroundColor: '#d9d9d9',
         margin: 5,
-        justifyContent: 'center',
+        justifyContent: 'center', //centrar vertical
         alignItems: 'center',
     },
-
     document: {
         alignItems: 'flex-end',
         width: 251,
         height: 141,
         justifyContent: 'flex-end',
-
     },
 
     DownloadDoc: {
@@ -169,5 +146,4 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
     },
-
 });

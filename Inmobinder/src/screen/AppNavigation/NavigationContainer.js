@@ -19,8 +19,9 @@ import RepProblemaFuncionamiento from '../PropertyBrokerage/MenuAyuda/RepProblem
 
 import VideoGallery from '../PropertyBrokerage/GalleryScreen/VideoGallery';
 import PictureGallery from '../PropertyBrokerage/GalleryScreen/PictureGallery';
-
-
+import ProfileProperty from '../PropertyBrokerage/PerfilPropiedad/ProfileProperty';
+import PictureGalleryBroker from '../PropertyBrokerage/GalleryScreen/PictureGalleryBroker';
+import AddProperty from "../PropertyBrokerage/GalleryScreen/AddProperty";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,8 +42,12 @@ function MyStack() {
         <Stack.Screen name="Contactar soporte" component={ContactarSoporte} />
         <Stack.Screen name="Problema de pago" component={ProblemaDePago} />
         <Stack.Screen name="Enviar comentarios" component={EnviarComentarios} />
+
         <Stack.Screen name="Galeria de Fotos" component={PictureGallery} />
         <Stack.Screen name="Galeria de videos" component={VideoGallery} />
+        <Stack.Screen name="ProfileProperty" component={ProfileProperty} />
+        <Stack.Screen name="PictureCalleryBroker" component={PictureGalleryBroker}/>  
+        <Stack.Screen name="Agregar Propiedad" component={AddProperty} /> 
     </Stack.Navigator>
   );
 }

@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     subtitle:{
         marginTop:20,
         marginBottom: 15,
+        fontWeight: 'bold',
 
     },
     line: {
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     },
     images1: {
         marginBottom: 20,
-        height:130,
+        height:123,
         width:130,
         backgroundColor: '#d9d9d9',
         margin:5,
