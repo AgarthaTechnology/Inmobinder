@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
-import { ScrollView, Alert} from 'react-native'
-import { Icon, Avatar, Text } from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { v4 as uuid } from 'uuid'
-import { map, filter } from 'lodash'
-import { LoadingModal } from '../../../Shared/LoadingModal/LoadingModal';
-import { styles } from './UploadImagesForm.styles';
+import React, { useState } from "react";
+import { ScrollView, Alert } from "react-native";
+import { Icon, Avatar, Text } from "react-native-elements";
+import * as ImagePicker from "expo-image-picker";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 as uuid } from "uuid";
+import { map } from "lodash";
+import { styles } from "./UploadImagesForm.styles";
+import { LoadingModal } from "../../../Shared/LoadingModal/LoadingModal";
 
-export  function UploadImagesForm(props) {
-  const { formik } = props;
-
-  const [isLoading, setShowUploadImage] = useState(false);
+export function UploadImagesForm({ formik, id }) {
+  const [showUploadImage, setShowUploadImage] = useState(false);
+  const imageID = uuid();
 
   const openGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -21,26 +26,25 @@ export  function UploadImagesForm(props) {
       quality: 1,
     });
 
-    if(!result.canceled) uploadImage(result.uri)
-
+    if (!result.cancelled) uploadImage(result.assets[0].uri);
   };
 
-  const uploadImage = async (uri) =>{
-    const response = await fetch(uri);
-    const blob = await response.blob();
-  
-    const storage = getStorage();
-    const storageRef = ref(storage, `property/${uuid()}`);
+  const uploadImage = async (uri) => {
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storage = getStorage();
+      const imagePath = `property/${id}/${imageID}`;
+      const storageRef = ref(storage, imagePath);
 
-  
-    uploadBytes(storageRef, blob).then((snapshot) => {
-      updatePhotosPublication(snapshot.metadata.fullPath);
-    });
-    
+      await uploadBytes(storageRef, blob);
+      updatePhotosPublication(imagePath);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   const updatePhotosPublication = async (imagePath) => {
-
     setShowUploadImage(true);
 
     const storage = getStorage();
@@ -50,42 +54,50 @@ export  function UploadImagesForm(props) {
     formik.setFieldValue("gallery", [...formik.values.gallery, imageUrl]);
 
     setShowUploadImage(false);
-  }
+  };
 
-  const removeImage= (img) => {
+  const removeImage = async (img) => {
     Alert.alert(
       "Eliminar imagen",
       "¿Estás seguro de eliminar la imagen?",
       [
         {
           text: "Cancelar",
-          style: "cancel"
+          style: "cancel",
         },
         {
           text: "Eliminar",
-          onPress: () => {
-            const result = filter(formik.values.gallery, (image) => image !== img )
-            formik.setFieldValue("gallery", result)
+          onPress: async () => {
+            try {
+              const result = formik.values.gallery.filter(
+                (image) => image !== img
+              );
+              formik.setFieldValue("gallery", result);
+
+              const storage = getStorage();
+              const imageRef = ref(storage, `property/${id}/${imageID}`);
+              await deleteObject(imageRef);
+            } catch (error) {
+              console.error(`Failed to remove image: ${error}`);
+            }
           },
         },
       ],
-      {cancelable: false}
-      );
-  }
-
+      { cancelable: false }
+    );
+  };
 
   return (
     <>
       <ScrollView
-        style={styles.viewImage}
+        style={styles.containerImage}
         horizontal
         showsHorizontalScrollIndicator={false}
       >
         <Icon
           type="material-community"
-          name="camera"
-          color="#a7a7a7"
-          containerStyle={styles.containerIcon}
+          name="camera-plus"
+          containerStyle={styles.Icon}
           onPress={openGallery}
         />
 
@@ -93,14 +105,15 @@ export  function UploadImagesForm(props) {
           <Avatar
             key={image}
             source={{ uri: image }}
-            containerStyle={styles.imageStyle}
+            containerStyle={styles.image}
             onPress={() => removeImage(image)}
           />
         ))}
-      </ScrollView>
-      <Text style={styles.error}>{formik.errors.images}</Text>
 
-      <LoadingModal show={isLoading} text="Subiendo imagen" />
+        <LoadingModal show={showUploadImage} text="Subiendo imagen." />
+      </ScrollView>
+
+      <Text style={styles.error}> {formik.errors.gallery} </Text>
     </>
-  )
+  );
 }

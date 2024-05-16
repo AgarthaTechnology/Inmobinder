@@ -1,24 +1,25 @@
-import React, { useState } from 'react'
-import { ScrollView, Alert} from 'react-native'
-import { Icon, Avatar, Text } from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
-import { v4 as uuid } from 'uuid'
-import { map, filter } from 'lodash'
-import { LoadingModal } from '../../../Shared/LoadingModal/LoadingModal';
-import { styles } from './UploadVideo.styles';
+import React, { useState } from "react";
+import { ScrollView, Alert } from "react-native";
+import { Icon, Avatar, Text } from "react-native-elements";
+import * as ImagePicker from "expo-image-picker";
+import * as VideoThumbnails from "expo-video-thumbnails";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 as uuid } from "uuid";
+import { styles } from "./UploadVideo.styles";
+import { LoadingModal } from "../../../Shared/LoadingModal/LoadingModal";
+import { map } from "lodash";
 
-/**
- * Este componente lo hice despues de mostrar el avance funcional del viernes 
- */
+export function UploadVideo({ formik, id }) {
+  // Se cambia formId por id
+  const [showUploadVideo, setShowUploadVideo] = useState(false);
 
-
-export  function UploadVideo(props) {
-  const { formik } = props;
-
-  const [isLoading, setShowUploadVideo] = useState(false);
-
-  const openvGallery = async () => {
+  const openGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       allowsEditing: true,
@@ -26,86 +27,105 @@ export  function UploadVideo(props) {
       quality: 1,
     });
 
-    if(!result.canceled) uploadVideo(result.uri)
-
+    if (!result.canceled) uploadVideo(result.assets[0].uri);
   };
 
-  const uploadVideo = async (uri) =>{
-    const response = await fetch(uri);
-    const blob = await response.blob();
-  
-    const storage = getStorage();
-    const storageRef = ref(storage, `property/${uuid()}`);
+  const uploadVideo = async (uri) => {
+    try {
+      const { uri: thumbnailUri } = await VideoThumbnails.getThumbnailAsync(
+        uri,
+        {
+          time: 15000,
+        }
+      );
 
-  
-    uploadBytes(storageRef, blob).then((snapshot) => {
-      updateVideoPublication(snapshot.metadata.fullPath);
-    });
-    
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storage = getStorage();
+      const videoPath = `property/${id}/${uuid()}`;
+      const storageRef = ref(storage, videoPath);
+
+      uploadBytes(storageRef, blob).then((snapshot) => {
+        updateVideoPublication(snapshot.metadata.fullPath, thumbnailUri);
+      });
+    } catch (error) {
+      console.error("Error uploading video:", error);
+    }
   };
 
-  const updateVideoPublication = async (VideoPath) => {
-
+  const updateVideoPublication = async (videoPath, thumbnailUri) => {
     setShowUploadVideo(true);
 
     const storage = getStorage();
-    const videoRef = ref(storage, VideoPath);
+    const videoRef = ref(storage, videoPath);
     const videoUrl = await getDownloadURL(videoRef);
 
-    formik.setFieldValue("video", [...formik.values.video, videoUrl]);
+    formik.setFieldValue("video", [
+      ...formik.values.video,
+      { videoUrl, thumbnailUri },
+    ]);
 
     setShowUploadVideo(false);
-  }
+  };
 
-  const removeVideo= (img) => {
+  const removeVideo = async (videoUrl) => {
     Alert.alert(
       "Eliminar video",
-      "¿Estás seguro de eliminar la video?",
+      "¿Estás seguro de eliminar el video?",
       [
         {
           text: "Cancelar",
-          style: "cancel"
+          style: "cancel",
         },
         {
           text: "Eliminar",
-          onPress: () => {
-            const result = filter(formik.values.video, (video) => video !== vd )
-            formik.setFieldValue("video", result)
+          onPress: async () => {
+            try {
+              const updatedVideos = formik.values.video.filter(
+                (video) => video.videoUrl !== videoUrl
+              );
+              formik.setFieldValue("video", updatedVideos);
+
+              const storage = getStorage();
+              const videoRef = ref(storage, videoUrl);
+              await deleteObject(videoRef);
+            } catch (error) {
+              console.error(`Failed to remove video: ${error}`);
+            }
           },
         },
       ],
-      {cancelable: false}
-      );
-  }
-
+      { cancelable: false }
+    );
+  };
 
   return (
     <>
       <ScrollView
-        style={styles.viewVideo}
+        style={styles.containerImage}
         horizontal
         showsHorizontalScrollIndicator={false}
       >
         <Icon
           type="material-community"
           name="video"
-          color="#a7a7a7"
-          containerStyle={styles.containerIcon}
-          onPress={openvGallery}
+          containerStyle={styles.Icon}
+          onPress={openGallery}
         />
 
-        {map(formik.values.video, (video) => (
+        {map(formik.values.video, ({ videoUrl, thumbnailUri }) => (
           <Avatar
-            key={video}
-            source={{ uri: video }}
-            containerStyle={styles.videoStyle}
-            onPress={() => removeVideo(video)}
+            key={videoUrl}
+            source={{ uri: thumbnailUri }}
+            containerStyle={styles.video}
+            onPress={() => removeVideo(videoUrl)}
           />
         ))}
-      </ScrollView>
-      <Text style={styles.error}>{formik.errors.video}</Text>
 
-      <LoadingModal show={isLoading} text="Subiendo Video" />
+        <LoadingModal show={showUploadVideo} text="Subiendo video." />
+      </ScrollView>
+
+      <Text style={styles.error}>{formik.errors.video}</Text>
     </>
-  )
+  );
 }
