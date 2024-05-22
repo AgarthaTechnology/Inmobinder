@@ -3,6 +3,7 @@ import { ScrollView, Button } from "react-native";
 import { useFormik } from "formik";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import { InfoForm } from "../../../components/NaturalPerson/CreatePublication/InfoForm";
 import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
@@ -16,16 +17,33 @@ export function CreatePublicationScreen() {
   const [newPublicationId] = useState(uuid());
 
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: {
+      ...initialValues(),
+      gallery: [],
+    },
     validateOnChange: false,
     onSubmit: async (formValue) => {
       try {
-        console.log(formValue);
+        const storage = getStorage();
+        const uploadedImages = await Promise.all(
+          formValue.gallery.map(async (uri) => {
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const imageID = uuid();
+            const imagePath = `property/${newPublicationId}/${imageID}`;
+            const storageRef = ref(storage, imagePath);
+            await uploadBytes(storageRef, blob);
+            return getDownloadURL(storageRef);
+          })
+        );
+
         const newData = {
           ...formValue,
+          gallery: uploadedImages,
           id: newPublicationId,
           createdAt: new Date(),
         };
+
         const myDB = doc(db, "publications", newPublicationId);
         await setDoc(myDB, newData);
       } catch (error) {
@@ -37,7 +55,7 @@ export function CreatePublicationScreen() {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <InfoForm formik={formik} image={formik.values.gallery[0]} />
-      <UploadImagesForm formik={formik} id={newPublicationId} />
+      <UploadImagesForm formik={formik} />
       <UploadVideo formik={formik} id={newPublicationId} />
       <Button
         title="Crear publicación"
