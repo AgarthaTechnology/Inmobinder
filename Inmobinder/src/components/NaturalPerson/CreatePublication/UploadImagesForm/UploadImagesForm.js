@@ -7,13 +7,12 @@ import { styles } from "./UploadImagesForm.styles";
 import { LoadingModal } from "../../../Shared/LoadingModal/LoadingModal";
 
 export function UploadImagesForm({ formik }) {
-  const [showUploadImage, setShowUploadImage] = useState(false);
+  const [showUploadImage] = useState(false);
 
   const openGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
