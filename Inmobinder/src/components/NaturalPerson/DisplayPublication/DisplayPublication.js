@@ -1,39 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
-import { styles } from './DisplayPublication.styles';
-import { db } from '../../../utils/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import React from "react";
+import { View, FlatList, TouchableOpacity, ImageBackground } from "react-native";
+import { Text, Image } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { styles } from "./DisplayPublication.styles";
 
-export const DisplayPublication = () => {
-    const [publications, setPublications] = useState([]);
+export function DisplayPublication(props) {
+  const { publications } = props;
+  const navigation = useNavigation();
 
-    useEffect(() => {
-        const fetchPublications = async () => {
-            const querySnapshot = await getDocs(collection(db, 'publications'));
-            const loadedPublications = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setPublications(loadedPublications);
-        };
+  const goTo = (publication) => {
+    // Implementa la navegación a la pantalla deseada
+  };
 
-        fetchPublications();
-    }, []);
+  return (
+    
+      <FlatList
+        data={publications}
+        renderItem={({ item }) => {
+          const publication = item;
 
-    return (
-        <View style={styles.container}>
-
-        <Text>HOLA VIEJOOOOS</Text>
-            <FlatList
-                data={publications}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <Text style={styles.title}>{item.title}</Text>
-                        <Text>{item.description}</Text>
-                    </View>
-                )}
-            />
-        </View>
-    );
-};
+          return (
+              <TouchableOpacity onPress={() => goTo(publication)}>
+              {publication && (
+                <View style={styles.publication}>
+                  {publication.gallery && publication.gallery[0] && (
+                    <Image
+                      source={{ uri: publication.gallery[0] }}
+                      style={styles.gallery}
+                    />
+                  )}
+                  <View>
+                      <Text>{publication.nameProperty}</Text>
+                      <Text>{publication.commonExpenses}</Text>
+                      <Text>{publication.state}</Text>
+                      <Text>{publication.metters}</Text>
+                      <Text>{publication.mettersProperty}</Text>
+                      <Text>{publication.address}</Text>
+                      <Text>{publication.city}</Text>
+                      <Text>{publication.region}</Text>
+                      <Text>{publication.price}</Text>
+                      <Text>{publication.rooms}</Text>
+                      <Text>{publication.bathrooms}</Text>
+                      <Text>{publication.description}</Text>
+                  </View>
+                </View>
+              )}
+            </TouchableOpacity>
+            
+          );
+      }}
+      />
+    
+  );
+}
