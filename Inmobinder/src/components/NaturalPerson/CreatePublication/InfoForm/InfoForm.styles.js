@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  Expenses: {
+    alignItems: "center",
+  },
   container: {
     marginHorizontal: 10,
   },

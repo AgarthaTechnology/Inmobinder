@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Image } from "react-native";
+import { View, TextInput, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Input } from "react-native-elements";
 import { MapForm } from "../MapForm";
@@ -389,7 +389,7 @@ const regionesYComunas = {
 };
 
 export function InfoForm(props) {
-  const { formik, image } = props;
+  const { formik, images } = props;
   const [showMap, setShowMap] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [comunas, setComunas] = useState([]);
@@ -434,7 +434,7 @@ export function InfoForm(props) {
           )}
         </View>
         <View style={styles.container}>
-          <UploadImage formik={formik} imagen={image} />
+          <UploadImage formik={formik} images={images} />
         </View>
         <View style={styles.Expenses}>
           <Text>Gastos Comunes:</Text>

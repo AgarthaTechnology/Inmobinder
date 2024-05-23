@@ -76,7 +76,7 @@ export function CreatePublicationScreen() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <InfoForm formik={formik} image={formik.values.gallery[0]} />
+      <InfoForm formik={formik} image={formik.values.gallery[1]} />
       <UploadImagesForm formik={formik} />
       <UploadVideo formik={formik} />
       <Button

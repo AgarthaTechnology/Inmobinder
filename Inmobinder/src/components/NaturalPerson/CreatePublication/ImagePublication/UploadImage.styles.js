@@ -6,8 +6,18 @@ export const styles = StyleSheet.create({
   content: {
     marginBottom: 20,
   },
-  image: {
-    height: 400,
+  mainImage: {
+    height: 250,
     width: widthScreen,
+  },
+  modalContent: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  modalImage: {
+    width: 100,
+    height: 100,
+    margin: 10,
   },
 });
