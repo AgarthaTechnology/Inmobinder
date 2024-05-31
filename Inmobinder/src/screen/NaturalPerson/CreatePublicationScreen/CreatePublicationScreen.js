@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, Button } from "react-native";
 import { useFormik } from "formik";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as VideoThumbnails from "expo-video-thumbnails";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { InfoForm } from "../../../components/NaturalPerson/CreatePublication/InfoForm";
 import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
 import { UploadVideo } from "../../../components/NaturalPerson/CreatePublication/UploadVideo";
@@ -15,13 +15,17 @@ import { styles } from "./CreatePublication.styles";
 
 export function CreatePublicationScreen() {
   const navigation = useNavigation();
+  const route = useRoute();
   const newPublicationId = uuid();
+
+  const { propertyType } = route.params;
 
   const formik = useFormik({
     initialValues: {
-      ...initialValues(),
+      ...initialValues(propertyType),
       gallery: [],
       video: [],
+      propertyType: propertyType,
     },
     validateOnChange: false,
     onSubmit: async (formValue) => {
@@ -76,7 +80,11 @@ export function CreatePublicationScreen() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <InfoForm formik={formik} image={formik.values.gallery[1]} />
+      <InfoForm
+        formik={formik}
+        images={formik.values.gallery}
+        propertyType={propertyType}
+      />
       <UploadImagesForm formik={formik} />
       <UploadVideo formik={formik} />
       <Button

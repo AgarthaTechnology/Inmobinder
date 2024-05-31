@@ -11,7 +11,9 @@ export function UploadImage(props) {
   );
 
   const openModal = () => {
-    setModalVisible(true);
+    if (formik.values.gallery.length > 0) {
+      setModalVisible(true);
+    }
   };
 
   const closeModal = () => {

@@ -1,18 +1,17 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import HomeScreen from "./HomeScreen";
-import { CreatePublicationScreen } from "../NaturalPerson/CreatePublicationScreen/CreatePublicationScreen";
+import { PublicationStack } from "./PublicationStack";
 
 const Drawer = createDrawerNavigator();
 
 export function AppNavigation() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen 
-        name="Añadir Propiedad" 
-        component={CreatePublicationScreen} 
-        options={{ title: 'Agregar Propiedad' }}
-      />
+    <Drawer.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+      }}
+    >
+      <Drawer.Screen name="Crear Publicacion" component={PublicationStack} />
     </Drawer.Navigator>
   );
 }

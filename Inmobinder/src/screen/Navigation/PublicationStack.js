@@ -1,16 +1,27 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CreatePublicationScreen } from "../NaturalPerson/CreatePublicationScreen/CreatePublication/CreatePublicationScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import { FormSelectionScreen } from "../NaturalPerson/CreatePublicationScreen/FormSelectionScreen";
+import { CreatePublicationScreen } from "../NaturalPerson/CreatePublicationScreen";
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export function PublicationStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: "#f5f5f5",
+        },
+      }}
+    >
       <Stack.Screen
-        name="añadir-propiedad"
+        name="¿Qué tipo de Propiedad?"
+        component={FormSelectionScreen}
+      />
+      <Stack.Screen
+        name="CreatePublicationScreen"
         component={CreatePublicationScreen}
-        options={{ headerShown: false }}
+        options={{ title: "Añadir Propiedad", headerLeft: null }}
       />
     </Stack.Navigator>
   );

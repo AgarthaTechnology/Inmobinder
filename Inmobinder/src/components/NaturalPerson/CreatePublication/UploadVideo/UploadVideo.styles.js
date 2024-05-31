@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  containerVideo: {
+  containerImage: {
     flexDirection: "row",
     marginHorizontal: 20,
     marginTop: 1,
