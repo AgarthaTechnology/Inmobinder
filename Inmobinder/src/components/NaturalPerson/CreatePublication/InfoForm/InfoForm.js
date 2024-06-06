@@ -6,7 +6,7 @@ import { MapForm } from "../MapForm";
 import { styles } from "./InfoForm.styles";
 import { UploadImage } from "../ImagePublication/UploadImage";
 import { RoomsPicker, BathroomsPicker } from "../../../Shared/Picker/Picker";
-import { InputNumber } from "../../../Shared/InputNumber/InputNumber";
+import InputNumber from "../../../Shared/InputNumber/InputNumber";
 
 const regionesYComunas = {
   "Arica y Parinacota": [
