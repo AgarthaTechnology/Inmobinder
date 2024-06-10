@@ -3,14 +3,20 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 // import HomeScreen from "./HomeScreen";
 import { CreatePublicationScreen } from "../NaturalPerson/CreatePublicationScreen/CreatePublicationScreen";
 import Map from "../NaturalPerson/MapScreen/Map";
+import { styles } from "../NaturalPerson/MapScreen/MapStyles";
+import { View } from "react-native";
+import MenuButton from "../NaturalPerson/MapScreen/Menu";
+import { StatusBar } from "expo-status-bar";
+
 
 const Drawer = createDrawerNavigator();
 
 export function AppNavigation() {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="INMOBINDER" component={Map} />
-      <Drawer.Screen name="Añadir propiedad" component={CreatePublicationScreen} />
-    </Drawer.Navigator>
+    <View style={styles.map}>
+      <Map/>
+      <MenuButton/>
+      <StatusBar style="auto"/>
+    </View>
   );
 }
