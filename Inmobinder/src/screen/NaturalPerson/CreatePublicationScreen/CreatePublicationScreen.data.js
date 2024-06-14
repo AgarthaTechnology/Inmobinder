@@ -7,42 +7,40 @@ export function initialValues(propertyType) {
     metters: "",
     mettersProperty: "",
     address: "",
-    city: "",
     region: "",
+    city: "",
     price: "",
-    rooms: "",
-    bathrooms: "",
     description: "",
     location: null,
     gallery: [],
     video: [],
   };
 
-  if (propertyType === "Casa") {
+  if (propertyType === "Casa" || propertyType === "Departamento") {
     return {
       ...baseValues,
       commonExpenses: "",
+      condition: "",
+      rooms: "",
+      bathrooms: "",
     };
   }
 
   if (propertyType === "Departamento") {
     return {
-      ...baseValues,
+      allowmetters: "",
     };
   }
 
   if (propertyType === "Terreno") {
-    return {
-      ...baseValues,
-      commonExpenses,
-    };
+    return baseValues;
   }
 
   return baseValues;
 }
 
 export function validationSchema(propertyType) {
-  let baseSchema = {
+  const baseSchema = Yup.object().shape({
     nameProperty: Yup.string()
       .min(2, "El nombre de la propiedad debe tener al menos 2 caracteres")
       .required("Campo obligatorio"),
@@ -79,16 +77,6 @@ export function validationSchema(propertyType) {
       .positive("No se permiten valores menores a 0")
       .required("Campo obligatorio"),
 
-    rooms: Yup.number()
-      .min(1, "Debe tener al menos 1 habitación")
-      .positive("No se permiten valores menores a 0")
-      .required("Campo obligatorio"),
-
-    bathrooms: Yup.number()
-      .min(1, "Debe tener al menos 1 baño")
-      .positive("No se permiten valores menores a 0")
-      .required("Campo obligatorio"),
-
     description: Yup.string()
       .min(10, "La descripción debe tener al menos 10 caracteres")
       .required("Campo obligatorio"),
@@ -98,33 +86,33 @@ export function validationSchema(propertyType) {
     video: Yup.array().max(1, "Solo puede subir un video"),
 
     location: Yup.object().required("La ubicación es requerida"),
+  });
+
+  const extendedSchema = {
+    commonExpenses: Yup.number()
+      .integer("Los gastos comunes deben ser un número entero")
+      .min(0, "No se permiten valores menores a 0")
+      .positive("No se permiten valores menores a 0")
+      .required("Campo obligatorio"),
+
+    condition: Yup.string()
+      .oneOf(["nuevo", "usado"], 'La condición debe ser "nuevo" o "usado"')
+      .required("Campo obligatorio"),
+
+    rooms: Yup.number()
+      .min(1, "Debe tener al menos 1 habitación")
+      .positive("No se permiten valores menores a 0")
+      .required("Campo obligatorio"),
+
+    bathrooms: Yup.number()
+      .min(1, "Debe tener al menos 1 baño")
+      .positive("No se permiten valores menores a 0")
+      .required("Campo obligatorio"),
   };
 
-  if (propertyType === "Casa") {
-    return {
-      ...baseSchema,
-      commonExpenses: Yup.number()
-        .integer("Los gastos comunes deben ser un número entero")
-        .min(0, "No se permiten valores menores a 0")
-        .positive("No se permiten valores menores a 0")
-        .required("Campo obligatorio"),
-    };
+  if (propertyType === "Casa" || propertyType === "Departamento") {
+    return baseSchema.concat(Yup.object().shape(extendedSchema));
   }
 
-  if (propertyType === "Departamento") {
-    return Yup.object(baseSchema);
-  }
-
-  if (propertyType === "Terreno") {
-    return {
-      ...baseSchema,
-      commonExpenses: Yup.number()
-        .integer("Los gastos comunes deben ser un número entero")
-        .min(0, "No se permiten valores menores a 0")
-        .positive("No se permiten valores menores a 0")
-        .required("Campo obligatorio"),
-    };
-  }
-
-  return Yup.object(baseSchema);
+  return baseSchema;
 }
