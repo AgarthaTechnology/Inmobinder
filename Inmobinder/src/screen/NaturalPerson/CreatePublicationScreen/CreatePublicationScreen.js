@@ -10,7 +10,10 @@ import { InfoForm } from "../../../components/NaturalPerson/CreatePublication/In
 import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
 import { UploadVideo } from "../../../components/NaturalPerson/CreatePublication/UploadVideo";
 import { db } from "../../../utils/firebase";
-import { initialValues } from "./CreatePublicationScreen.data";
+import {
+  initialValues,
+  validationSchema,
+} from "./CreatePublicationScreen.data";
 import { styles } from "./CreatePublication.styles";
 
 export function CreatePublicationScreen() {
@@ -21,12 +24,8 @@ export function CreatePublicationScreen() {
   const { propertyType } = route.params;
 
   const formik = useFormik({
-    initialValues: {
-      ...initialValues(propertyType),
-      gallery: [],
-      video: [],
-      propertyType: propertyType,
-    },
+    initialValues: initialValues(propertyType),
+    validationSchema: validationSchema(propertyType),
     validateOnChange: false,
     onSubmit: async (formValue) => {
       try {
@@ -62,8 +61,11 @@ export function CreatePublicationScreen() {
           })
         );
 
+        // Eliminar funciones de formValue
+        const cleanedFormValue = JSON.parse(JSON.stringify(formValue));
+
         const newData = {
-          ...formValue,
+          ...cleanedFormValue,
           gallery: uploadedImages,
           video: uploadedVideos,
           id: newPublicationId,
