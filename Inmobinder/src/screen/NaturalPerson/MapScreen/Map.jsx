@@ -266,11 +266,6 @@ const Map = () => {
         <Legend setFilter={setFilter} />
       </View>
 
-      {/* Logo de Inmobinder */}
-      <View style={styles.imageContainer}>
-        <Image source={INMOBINDER} style={styles.image} />
-      </View>
-
       {/* Botón para ir a la ubicación actual*/}
       <TouchableOpacity style={styles.button} onPress={goToOrigin}>
         <FontAwesome name="map-marker" size={30} color="black" />
@@ -295,6 +290,8 @@ const Map = () => {
           setBathroomsFilter={setBathroomsFilter}
           squareMetersFilter={squareMetersFilter}
           setSquareMetersFilter={setSquareMetersFilter}
+          toggleMenuVisibility={toggleMenuVisibility}
+          handleSearch={handleSearch}
           applyFilter={applyFilter}
           clearFilter={clearFilter}
         />
