@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput, Text, ImageBackground } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Input } from "react-native-elements";
 import { MapForm } from "../MapForm";
@@ -100,7 +100,7 @@ export function InfoForm({ formik, images, propertyType }) {
       </View>
 
       <View style={styles.container}>
-        <Text>Descripción:</Text>
+        <Text style={styles.label}>Descripción:</Text>
         <TextInput
           style={styles.descriptionInput}
           multiline={true}
@@ -110,7 +110,7 @@ export function InfoForm({ formik, images, propertyType }) {
       </View>
 
       <View style={styles.container}>
-        <Text>Precio:</Text>
+        <Text style={styles.label}>Precio:</Text>
         <TextInput
           style={styles.input}
           keyboardType="numeric"
@@ -140,7 +140,7 @@ export function InfoForm({ formik, images, propertyType }) {
         error={formik.errors.commonExpenses}
       />
 
-      <View style={styles.row}>
+      <View style={styles.container}>
         <Text style={styles.label}>Metros Totales:</Text>
         <TextInput
           style={styles.input}
@@ -152,7 +152,7 @@ export function InfoForm({ formik, images, propertyType }) {
 
       {(propertyType === "Casa" || propertyType === "Departamento") && (
         <View style={styles.container}>
-          <View style={styles.row}>
+          <View style={styles.container}>
             <Text style={styles.label}>Metros Construidos:</Text>
             <TextInput
               style={styles.input}

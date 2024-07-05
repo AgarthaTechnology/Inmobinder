@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, Button } from "react-native";
+import { ScrollView, Button, ImageBackground } from "react-native";
 import { useFormik } from "formik";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
@@ -81,20 +81,22 @@ export function CreatePublicationScreen() {
   });
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <InfoForm
-        formik={formik}
-        images={formik.values.gallery}
-        propertyType={propertyType}
-      />
-      <UploadImagesForm formik={formik} />
-      <UploadVideo formik={formik} />
-      <Button
-        title="Crear publicación"
-        buttonStyle={styles.addPublication}
-        onPress={formik.handleSubmit}
-        disabled={formik.isSubmitting}
-      />
-    </ScrollView>
+    <ImageBackground source={require("../../../../assets/img/fondo.png")}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <InfoForm
+          formik={formik}
+          images={formik.values.gallery}
+          propertyType={propertyType}
+        />
+        <UploadImagesForm formik={formik} />
+        <UploadVideo formik={formik} />
+        <Button
+          title="Crear publicación"
+          buttonStyle={styles.button}
+          onPress={formik.handleSubmit}
+          disabled={formik.isSubmitting}
+        />
+      </ScrollView>
+    </ImageBackground>
   );
 }

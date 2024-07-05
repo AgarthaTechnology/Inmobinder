@@ -36,14 +36,20 @@ export const BathroomsPicker = ({ selectedValue, onValueChange, error }) => (
 
 const styles = StyleSheet.create({
   pickerContainer: {
-    flex: 1,
+    width: "45%",
+    marginHorizontal: 10,
   },
   picker: {
-    height: 50,
-    width: 150,
+    backgroundColor: "#fff",
+    borderColor: "#000",
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
   },
   error: {
-    color: "red",
+    color: "#FF0000",
     fontSize: 12,
+    marginTop: 5,
+    marginHorizontal: 10,
   },
 });

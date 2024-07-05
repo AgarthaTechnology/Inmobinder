@@ -4,12 +4,12 @@ export const styles = StyleSheet.create({
   containerImage: {
     flexDirection: "row",
     marginHorizontal: 20,
-    marginTop: 1,
+    marginTop: 30,
   },
   Icon: {
     justifyContent: "center",
     marginRight: 10,
-    backgroundColor: "#e3e3e3",
+    backgroundColor: "#fff",
     width: 70,
     height: 70,
   },
@@ -23,6 +23,6 @@ export const styles = StyleSheet.create({
   video: {
     width: 70,
     height: 70,
-    marginRight: 10,
+    marginRight: 20,
   },
 });

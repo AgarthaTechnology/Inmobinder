@@ -1,74 +1,94 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  Expenses: {
-    alignItems: "center",
-  },
   container: {
     marginHorizontal: 10,
+    marginVertical: 8,
   },
-  input: {
-    width: "100%",
-    marginVertical: 10,
+  pickerContainer: {
+    width: "45%",
+    marginHorizontal: "auto",
+    marginTop: 10,
+  },
+  picker: {
     backgroundColor: "#fff",
-  },
-  error: {
-    color: "red",
-    marginBottom: 10,
-  },
-  container: {
-    marginTop: 20,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  input: {
-    width: 150,
     borderColor: "#000",
     borderWidth: 1,
-    height: 50,
+    borderRadius: 5,
+    height: 40,
+    width: "100%",
+  },
+  input: {
+    width: "90%",
+    marginVertical: 10,
+    backgroundColor: "#fff",
+    borderColor: "#000",
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
     alignSelf: "center",
   },
-  image: {
-    width: 100,
-    height: 110,
-    alignSelf: "center",
-    borderWidth: 1,
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  error: {
+    textAlign: "center",
+    color: "#FF0000",
+    fontSize: 12,
+    marginTop: 5,
+    marginHorizontal: 10,
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginVertical: 5,
+    paddingHorizontal: 10,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  label: {
-    marginLeft: 40,
-  },
-  expensesInput: {
-    width: 90,
-    marginLeft: 10,
-    borderColor: "#000",
-    borderWidth: 1,
-  },
-  picker: {
-    width: 200,
-    borderColor: "#000",
-    borderWidth: 1,
-    marginTop: 10,
+    marginVertical: 10,
   },
   inputContainer: {
+    backgroundColor: "#fff",
     borderColor: "#000",
     borderWidth: 1,
-    height: 30,
-  },
-  pickerContainer: {
-    margin: 5,
-    width: 150,
+    borderRadius: 5,
+    height: 40,
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    marginVertical: 10,
   },
   descriptionInput: {
-    width: 300,
+    backgroundColor: "#fff",
+    width: "100%",
     borderColor: "#000",
     borderWidth: 1,
-    marginTop: 10,
+    padding: 10,
+    borderRadius: 5,
+    height: 100,
+    textAlignVertical: "top",
   },
-  error: {
-    color: "#FF0000",
+  mapIcon: {
+    color: "#c2c2c2",
+  },
+  containerImage: {
+    flexDirection: "row",
+    marginHorizontal: 20,
+    marginTop: 30,
+  },
+  icon: {
+    justifyContent: "center",
+    marginRight: 10,
+    backgroundColor: "#e3e3e3",
+    width: 70,
+    height: 70,
+  },
+  image: {
+    width: 70,
+    height: 70,
+    marginRight: 10,
   },
 });

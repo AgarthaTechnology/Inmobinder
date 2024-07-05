@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   Icon: {
     justifyContent: "center",
     marginRight: 10,
-    backgroundColor: "#e3e3e3",
+    backgroundColor: "#fff",
     width: 70,
     height: 70,
   },

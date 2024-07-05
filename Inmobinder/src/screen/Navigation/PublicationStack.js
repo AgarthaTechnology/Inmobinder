@@ -10,7 +10,7 @@ export function PublicationStack() {
       screenOptions={{
         headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#fff",
         },
       }}
     >

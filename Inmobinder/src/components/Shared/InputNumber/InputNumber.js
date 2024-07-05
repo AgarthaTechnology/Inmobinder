@@ -5,7 +5,7 @@ import { View, TextInput, Text, StyleSheet } from "react-native";
 const InputNumber = ({ value, onChangeText, error }) => {
   return (
     <View style={styles.container}>
-      <Text>Gastos Comunes:</Text>
+      <Text style={styles.label}>Gastos Comunes:</Text>
       <TextInput
         style={styles.expensesInput}
         placeholder="$000.000"
@@ -22,17 +22,23 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 15,
   },
+  label: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginVertical: 5,
+    paddingHorizontal: 10,
+  },
   expensesInput: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#000",
     borderWidth: 1,
-    marginTop: 8,
-    marginBottom: 8,
-    paddingLeft: 10,
+    marginHorizontal: 10,
+    backgroundColor: "#fff",
   },
   error: {
-    color: "red",
+    color: "#FF0000",
     fontSize: 12,
+    textAlign: "center",
   },
 });
 
