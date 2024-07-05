@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { styles } from "./CreatePublication.styles";
+import { styles } from "./FormSelection.styles";
 
 export function FormSelectionScreen() {
   const navigation = useNavigation();

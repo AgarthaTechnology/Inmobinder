@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    width: "100%",
   },
   button: {
     width: 150,
