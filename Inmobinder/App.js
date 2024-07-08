@@ -1,8 +1,10 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { AppNavigation } from "./src/screen/Navigation/AppNavigation"
+import { createStackNavigator } from "@react-navigation/stack";
+import { AppNavigation } from "./src/screen/AppNavigation/AppNavigation.js";
 import "react-native-get-random-values";
-import { Toast } from "react-native-toast-message";
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (

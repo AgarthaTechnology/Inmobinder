@@ -5,6 +5,7 @@ const widthScreen = Dimensions.get("window").width;
 export const styles = StyleSheet.create({
   content: {
     marginBottom: 20,
+    alignSelf: "center",
   },
   mainImage: {
     height: 250,

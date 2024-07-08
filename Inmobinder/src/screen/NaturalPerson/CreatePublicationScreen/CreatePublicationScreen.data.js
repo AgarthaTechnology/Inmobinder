@@ -47,7 +47,7 @@ export function validationSchema(propertyType) {
 
     state: Yup.string()
       .oneOf(
-        ["Disponible", "No disponible"],
+        ["Venta", "Arriendo", "Arriendo y Venta"],
         'La disponibilidad debe ser "Disponible" o "No disponible"'
       )
       .required("Campo obligatorio"),

@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    width: 150,
+    width: 328,
     height: 50,
     backgroundColor: "#00a680",
     justifyContent: "center",

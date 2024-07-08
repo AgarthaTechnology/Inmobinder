@@ -10,7 +10,7 @@ import InputNumber from "../../../Shared/InputNumber/InputNumber";
 import { RegyCom } from "./RegyCom";
 
 const ConditionPicker = ({ selectedValue, onValueChange, error }) => (
-  <View style={styles.pickerContainer}>
+  <>
     <Picker
       selectedValue={selectedValue}
       onValueChange={onValueChange}
@@ -21,7 +21,7 @@ const ConditionPicker = ({ selectedValue, onValueChange, error }) => (
       <Picker.Item label="Usado" value="Usado" />
     </Picker>
     {error && <Text style={styles.error}>{error}</Text>}
-  </View>
+  </>
 );
 
 const ErrorMessage = ({ error }) =>
@@ -47,7 +47,8 @@ export function InfoForm({ formik, images, propertyType }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Crear {propertyType} </Text>
       <TextInput
         placeholder="Nombre de la propiedad"
         style={styles.input}
@@ -55,25 +56,20 @@ export function InfoForm({ formik, images, propertyType }) {
       />
       <ErrorMessage error={formik.errors.nameProperty} />
 
-      <View style={styles.container}>
-        <UploadImage formik={formik} images={images} />
-      </View>
+      <UploadImage formik={formik} images={images} />
 
       {/* ESTADO DE LA PROPIEDAD */}
-      <View style={styles.container}>
-        <Picker
-          selectedValue={formik.values.state}
-          onValueChange={(value) => formik.setFieldValue("state", value)}
-          style={styles.picker}
-          mode="dropdown"
-        >
-          <Picker.Item label="Estado" value="" />
-          <Picker.Item label="Venta" value="Venta" />
-          <Picker.Item label="Arriendo y Venta" value="Arriendo y Venta" />
-          <Picker.Item label="Arriendo" value="Arriendo" />
-        </Picker>
-        <ErrorMessage error={formik.errors.state} />
-      </View>
+      <Picker
+        selectedValue={formik.values.state}
+        onValueChange={(value) => formik.setFieldValue("state", value)}
+        style={styles.picker}
+        mode="dropdown"
+      >
+        <Picker.Item label="Estado" value="" />
+        <Picker.Item label="Venta" value="Venta" />
+        <Picker.Item label="Arriendo" value="Arriendo" />
+      </Picker>
+      <ErrorMessage error={formik.errors.state} />
 
       {(propertyType === "Casa" || propertyType === "Departamento") && (
         <ConditionPicker
@@ -83,41 +79,35 @@ export function InfoForm({ formik, images, propertyType }) {
         />
       )}
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Dirección:</Text>
-        <Input
-          inputContainerStyle={styles.inputContainer}
-          rightIcon={{
-            type: "material-community",
-            name: "map-marker-radius",
-            color: getColorIconMap(formik),
-            onPress: onOpenCloseMap,
-          }}
-          onChangeText={handleFieldChange(formik, "address")}
-          errorMessage={formik.errors.address}
-        />
-        <MapForm show={showMap} close={onOpenCloseMap} formik={formik} />
-      </View>
+      <Text style={styles.label}>Dirección:</Text>
+      <Input
+        inputContainerStyle={styles.inputContainer}
+        rightIcon={{
+          type: "material-community",
+          name: "map-marker-radius",
+          color: getColorIconMap(formik),
+          onPress: onOpenCloseMap,
+        }}
+        onChangeText={handleFieldChange(formik, "address")}
+        errorMessage={formik.errors.address}
+      />
+      <MapForm show={showMap} close={onOpenCloseMap} formik={formik} />
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Descripción:</Text>
-        <TextInput
-          style={styles.descriptionInput}
-          multiline={true}
-          onChangeText={handleFieldChange(formik, "description")}
-        />
-        <ErrorMessage error={formik.errors.description} />
-      </View>
+      <Text style={styles.label}>Descripción:</Text>
+      <TextInput
+        style={styles.descriptionInput}
+        multiline={true}
+        onChangeText={handleFieldChange(formik, "description")}
+      />
+      <ErrorMessage error={formik.errors.description} />
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Precio:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={handleFieldChange(formik, "price")}
-        />
-        <ErrorMessage error={formik.errors.price} />
-      </View>
+      <Text style={styles.label}>Precio:</Text>
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        onChangeText={handleFieldChange(formik, "price")}
+      />
+      <ErrorMessage error={formik.errors.price} />
 
       {(propertyType === "Casa" || propertyType === "Departamento") && (
         <View style={styles.row}>
@@ -140,41 +130,35 @@ export function InfoForm({ formik, images, propertyType }) {
         error={formik.errors.commonExpenses}
       />
 
-      <View style={styles.container}>
-        <Text style={styles.label}>Metros Totales:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          onChangeText={handleFieldChange(formik, "metters")}
-        />
-        <ErrorMessage error={formik.errors.metters} />
-      </View>
+      <Text style={styles.label}>Metros Totales:</Text>
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        onChangeText={handleFieldChange(formik, "metters")}
+      />
+      <ErrorMessage error={formik.errors.metters} />
 
       {(propertyType === "Casa" || propertyType === "Departamento") && (
-        <View style={styles.container}>
-          <View style={styles.container}>
-            <Text style={styles.label}>Metros Construidos:</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              onChangeText={handleFieldChange(formik, "mettersProperty")}
-            />
-            <ErrorMessage error={formik.errors.mettersProperty} />
-          </View>
-        </View>
+        <>
+          <Text style={styles.label}>Metros Construidos:</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            onChangeText={handleFieldChange(formik, "mettersProperty")}
+          />
+          <ErrorMessage error={formik.errors.mettersProperty} />
+        </>
       )}
 
       {propertyType === "Departamento" && (
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Text style={styles.label}>Metros Permitidos:</Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              onChangeText={handleFieldChange(formik, "allowmetters")}
-            />
-            <ErrorMessage error={formik.errors.allowmetters} />
-          </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Metros Permitidos:</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            onChangeText={handleFieldChange(formik, "allowmetters")}
+          />
+          <ErrorMessage error={formik.errors.allowmetters} />
         </View>
       )}
 

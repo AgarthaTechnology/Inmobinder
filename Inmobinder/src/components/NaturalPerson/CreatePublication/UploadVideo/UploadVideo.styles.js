@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  containerImage: {
+  containerVideo: {
     flexDirection: "row",
     marginHorizontal: 20,
-    marginTop: 30,
+    left: 22,
+    width: 328,
+    backgroundColor: "#fff",
   },
   Icon: {
     justifyContent: "center",
@@ -23,6 +25,6 @@ export const styles = StyleSheet.create({
   video: {
     width: 70,
     height: 70,
-    marginRight: 20,
+    marginRight: 10,
   },
 });

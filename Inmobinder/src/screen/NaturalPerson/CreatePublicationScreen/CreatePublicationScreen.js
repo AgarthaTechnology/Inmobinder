@@ -70,6 +70,7 @@ export function CreatePublicationScreen() {
           video: uploadedVideos,
           id: newPublicationId,
           createdAt: new Date(),
+          mainImage: formik.mainImage,
         };
 
         const myDB = doc(db, "publications", newPublicationId);
