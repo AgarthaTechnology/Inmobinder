@@ -18,7 +18,7 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
 
   const navigateToEditProfile = () => {
-    navigation.navigate(screenName.profile.editProfile);
+    navigation.navigate("EditProfile");
   };
 
   if (error) {

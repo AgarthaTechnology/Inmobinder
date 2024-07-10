@@ -4,7 +4,7 @@ import { CreatePublicationScreen } from "../../screen/NaturalPerson/CreatePublic
 import { FormSelectionScreen } from "../../screen/NaturalPerson/CreatePublicationScreen/FormSelectionScreen";
 import { DisplayPublicationScreen } from "../../screen/NaturalPerson/DisplayPublicationScreen/DisplayPublicationScreen";
 import { MapPublication } from "../../screen/NaturalPerson/MapScreen/MapPublication";
-import { screenName } from "../../utils/screenName";
+import { screen } from "../../utils/screenName";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,22 +12,22 @@ export function PublicationStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={screenName.publication.publications}
+        name={screen.publication.publications}
         component={DisplayPublicationScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={screenName.publication.form}
+        name={screen.publication.form}
         component={FormSelectionScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={screenName.publication.create}
+        name={screen.publication.create}
         component={CreatePublicationScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={screenName.publication.publicationMap}
+        name={screen.publication.publicationMap}
         component={MapPublication}
         options={{ headerShown: false }}
       />

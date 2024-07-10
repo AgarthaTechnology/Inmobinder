@@ -8,7 +8,7 @@ export function FormSelectionScreen() {
   const navigation = useNavigation();
 
   const handleForm = (propertyType) => {
-    navigation.navigate(screenName.publication.create, {
+    navigation.navigate("CreatePublication", {
       propertyType,
     });
   };

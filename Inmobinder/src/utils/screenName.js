@@ -1,19 +1,17 @@
 const PublicationStack = {
-  stack: "PublicationStack",
-  publications: "Publications",
-  form: "FormSection",
-  create: "CreatePublication",
-  publicationMap: "PublicationMap",
+  publications: "DisplayPublicationScreen",
+  form: "FormSelectionScreen",
+  create: "CreatePublicationScreen",
+  publicationMap: "MapPublication",
 };
 
 const ProfileStack = {
-  stack: "ProfileStack",
-  profile: "Profile",
-  editProfile: "EditProfile",
-  changePass: "ChangePassword",
+  profile: "ProfileScreen",
+  editProfile: "EditProfileScreen",
+  changePass: "ChangePasswordScreen",
 };
 
-export const screenName = {
+export const screen = {
   publication: PublicationStack,
   profile: ProfileStack,
 };
