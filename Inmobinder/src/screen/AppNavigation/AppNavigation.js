@@ -2,7 +2,8 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreenWithMenu from "./MapScreenWithMenu";
 import { PublicationStack } from "./PublicationStack";
-import { MapPublication } from "../NaturalPerson/MapScreen/MapPublication";
+import { ProfileStack } from "./ProfileStack";
+import { screenName } from "../../utils/screenName";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,13 +16,13 @@ export function AppNavigation() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="FormSelectionScreen"
-        component={PublicationStack}
+        name={screenName.profile.stack}
+        component={ProfileStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="MapPublication"
-        component={MapPublication}
+        name={screenName.publication.stack}
+        component={PublicationStack}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
