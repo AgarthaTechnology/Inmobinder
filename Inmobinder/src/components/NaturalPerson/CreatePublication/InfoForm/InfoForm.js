@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, ImageBackground } from "react-native";
+import { View, TextInput, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Input } from "react-native-elements";
 import { MapForm } from "../MapForm";
@@ -32,17 +32,15 @@ const handleFieldChange = (formik, field) => (text) => {
 };
 
 export function InfoForm({ formik, images, propertyType }) {
-  //estado para mostrar el mapa
+  // Estado para mostrar el mapa
   const [showMap, setShowMap] = useState(false);
 
   const onOpenCloseMap = () => setShowMap((prevState) => !prevState);
 
-  //Obtener el color del icono del mapa
+  // Obtener el color del icono del mapa
   const getColorIconMap = (formik) => {
     if (formik.errors.location) return "#FF0000";
-
     if (formik.values.location) return "#00a680";
-
     return "#c2c2c2";
   };
 
@@ -53,6 +51,7 @@ export function InfoForm({ formik, images, propertyType }) {
         placeholder="Nombre de la propiedad"
         style={styles.input}
         onChangeText={handleFieldChange(formik, "nameProperty")}
+        value={formik.values.nameProperty}
       />
       <ErrorMessage error={formik.errors.nameProperty} />
 
@@ -89,6 +88,7 @@ export function InfoForm({ formik, images, propertyType }) {
           onPress: onOpenCloseMap,
         }}
         onChangeText={handleFieldChange(formik, "address")}
+        value={formik.values.address}
         errorMessage={formik.errors.address}
       />
       <MapForm show={showMap} close={onOpenCloseMap} formik={formik} />
@@ -98,6 +98,7 @@ export function InfoForm({ formik, images, propertyType }) {
         style={styles.descriptionInput}
         multiline={true}
         onChangeText={handleFieldChange(formik, "description")}
+        value={formik.values.description}
       />
       <ErrorMessage error={formik.errors.description} />
 
@@ -106,6 +107,7 @@ export function InfoForm({ formik, images, propertyType }) {
         style={styles.input}
         keyboardType="numeric"
         onChangeText={handleFieldChange(formik, "price")}
+        value={formik.values.price}
       />
       <ErrorMessage error={formik.errors.price} />
 
@@ -124,39 +126,44 @@ export function InfoForm({ formik, images, propertyType }) {
         </View>
       )}
 
-      <InputNumber
-        value={formik.values.commonExpenses}
-        onChangeText={handleFieldChange(formik, "commonExpenses")}
-        error={formik.errors.commonExpenses}
-      />
+      {(propertyType === "Casa" || propertyType === "Departamento") && (
+        <InputNumber
+          value={formik.values.commonExpenses}
+          onChangeText={handleFieldChange(formik, "commonExpenses")}
+          error={formik.errors.commonExpenses}
+        />
+      )}
 
       <Text style={styles.label}>Metros Totales:</Text>
       <TextInput
         style={styles.input}
         keyboardType="numeric"
         onChangeText={handleFieldChange(formik, "metters")}
+        value={formik.values.metters}
       />
       <ErrorMessage error={formik.errors.metters} />
 
-      {(propertyType === "Casa" || propertyType === "Departamento") && (
+      {propertyType === "Casa" && (
         <>
           <Text style={styles.label}>Metros Construidos:</Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
             onChangeText={handleFieldChange(formik, "mettersProperty")}
+            value={formik.values.mettersProperty}
           />
           <ErrorMessage error={formik.errors.mettersProperty} />
         </>
       )}
 
       {propertyType === "Departamento" && (
-        <View style={styles.row}>
+        <View>
           <Text style={styles.label}>Metros Permitidos:</Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
             onChangeText={handleFieldChange(formik, "allowmetters")}
+            value={formik.values.allowmetters}
           />
           <ErrorMessage error={formik.errors.allowmetters} />
         </View>

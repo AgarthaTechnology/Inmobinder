@@ -4,8 +4,7 @@ export const styles = StyleSheet.create({
   containerVideo: {
     flexDirection: "row",
     marginHorizontal: 20,
-    left: 22,
-    width: 328,
+    width: 305,
     backgroundColor: "#fff",
   },
   Icon: {

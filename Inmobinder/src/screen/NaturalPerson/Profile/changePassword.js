@@ -91,13 +91,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#fff",
     width: 328,
-    height: 600,
+    height: 400,
     borderRadius: 20,
   },
   title: {
     fontSize: 24,
     marginTop: 20,
-    marginBottom: 80,
     fontWeight: "bold",
   },
   input: {
@@ -117,7 +116,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     marginVertical: 10,
-    top: 60,
+    alignSelf: "center",
+    top: 10,
   },
   buttonText: {
     color: "#fff",

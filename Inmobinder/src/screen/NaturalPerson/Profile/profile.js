@@ -70,14 +70,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 20,
     marginVertical: 10,
-    top: 130,
+    top: 50,
   },
   container: {
     alignItems: "center",
     alignSelf: "center",
     backgroundColor: "#fff",
     width: 328,
-    height: 600,
+    height: 500,
     borderRadius: 20,
   },
   title: {

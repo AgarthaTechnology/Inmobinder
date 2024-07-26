@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     width: 328,
     alignSelf: "center",
     backgroundColor: "#fff",
-    top: 100,
     borderRadius: 20,
   },
   title: {

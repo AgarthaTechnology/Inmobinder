@@ -1,5 +1,12 @@
 import React from "react";
-import { ScrollView, Button, ImageBackground } from "react-native";
+import {
+  ScrollView,
+  TouchableOpacity,
+  Text,
+  ImageBackground,
+  View,
+  Alert,
+} from "react-native";
 import { useFormik } from "formik";
 import { v4 as uuid } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
@@ -70,11 +77,21 @@ export function CreatePublicationScreen() {
           video: uploadedVideos,
           id: newPublicationId,
           createdAt: new Date(),
-          mainImage: formik.mainImage,
         };
 
         const myDB = doc(db, "publications", newPublicationId);
         await setDoc(myDB, newData);
+
+        Alert.alert(
+          "Publicación creada",
+          "La publicación ha sido creada exitosamente.",
+          [
+            {
+              text: "OK",
+              onPress: () => navigation.navigate("Map"),
+            },
+          ]
+        );
       } catch (error) {
         console.error("Error adding document: ", error);
       }
@@ -82,21 +99,28 @@ export function CreatePublicationScreen() {
   });
 
   return (
-    <ImageBackground source={require("../../../../assets/img/fondo.png")}>
+    <ImageBackground
+      source={require("../../../../assets/img/fondo.png")}
+      style={styles.background}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
-        <InfoForm
-          formik={formik}
-          images={formik.values.gallery}
-          propertyType={propertyType}
-        />
-        <UploadImagesForm formik={formik} />
-        <UploadVideo formik={formik} />
-        <Button
-          title="Crear publicación"
-          buttonStyle={styles.button}
-          onPress={formik.handleSubmit}
-          disabled={formik.isSubmitting}
-        />
+        <View style={styles.formContainer}>
+          <InfoForm
+            formik={formik}
+            images={formik.values.gallery}
+            propertyType={propertyType}
+          />
+          <UploadImagesForm formik={formik} />
+          <UploadVideo formik={formik} />
+          <TouchableOpacity
+            title="Crear publicación"
+            style={styles.button}
+            onPress={formik.handleSubmit}
+            disabled={formik.isSubmitting}
+          >
+            <Text style={styles.buttonText}>Crear publicación</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </ImageBackground>
   );
