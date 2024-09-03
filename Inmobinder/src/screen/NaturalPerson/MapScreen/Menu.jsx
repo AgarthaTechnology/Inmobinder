@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Modal, Image, Text, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BotonMenu from '../../../components/NaturalPerson/BotonMenu';
-import { screen } from '../../../utils/screenName';
-
+import { screens } from '../../../utils/screenName';
 
 const MenuButton = () => {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -13,40 +12,45 @@ const MenuButton = () => {
     setMenuVisible(!isMenuVisible);
   };
 
+  const handleNavigation = (screenName) => {
+    toggleMenu(); // Cierra el menú
+    navigation.navigate(screenName);
+  };
+
   return (
     <>
-      <TouchableOpacity onPress={toggleMenu} style={styles.button} >
-          <Image source={require('../../../../assets/images/perfil.png')} style={styles.profileIcon} />
+      <TouchableOpacity onPress={toggleMenu} style={styles.button}>
+        <Image source={require('../../../../assets/images/perfil.png')} style={styles.profileIcon} />
       </TouchableOpacity>
       <Modal
         animationType="slide"
         transparent={true}
         visible={isMenuVisible}
         onRequestClose={toggleMenu}
-        >
+      >
         <TouchableWithoutFeedback onPress={toggleMenu}>
-        <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback> 
-          <View style={styles.menu}>
-            <View style={styles.profileContainer}>
-              <Image source={require('../../../../assets/images/perfil.png')} style={styles.profile}/>   
-              <Text style={styles.titulo}>11.111.111-1</Text>
-              <Text style={styles.titulo}>Nombre Nombre Apellido Apellido</Text>
-            </View>
-            <View style={styles.menuItem}>
-              <BotonMenu text="Mi Perfil" onPress={() => navigation.navigate("Profile")}/>
-              <BotonMenu text="Mis Publicaciones" onPress={() => navigation.navigate("Publication")}/>
-              <BotonMenu text="Añadir Propiedad"  onPress={() => navigation.navigate("FormSelection")}/>
-              <BotonMenu text="Agenda" />
-              <BotonMenu text="Configuración" />
-              <BotonMenu text="Centro de Ayuda" />
-              <BotonMenu text="Agencia" />
-              <BotonMenu text="Mis Clientes" />
-            </View>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.menu}>
+                <View style={styles.profileContainer}>
+                  <Image source={require('../../../../assets/images/perfil.png')} style={styles.profile} />   
+                  <Text style={styles.titulo}>11.111.111-1</Text>
+                  <Text style={styles.titulo}>Nombre Nombre Apellido Apellido</Text>
+                </View>
+                <View style={styles.menuItem}>
+                  <BotonMenu text="Mi Perfil" onPress={() => handleNavigation(screens.profile)} />
+                  <BotonMenu text="Mis Publicaciones" onPress={() => handleNavigation(screens.publications)} />
+                  <BotonMenu text="Añadir Propiedad" onPress={() => handleNavigation(screens.formSelection)} />
+                  <BotonMenu text="Agenda" />
+                  <BotonMenu text="Configuración" />
+                  <BotonMenu text="Centro de Ayuda" />
+                  <BotonMenu text="Agencia" />
+                  <BotonMenu text="Mis Clientes" />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
       </Modal>
     </>
   );

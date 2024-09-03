@@ -1,9 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreenWithMenu from "./MapScreenWithMenu";
-import { PublicationStack } from "./PublicationStack";
-import { ProfileStack } from "./ProfileStack";
-import { publication, profile } from "../../utils/screenName";
+import { screens } from "../../utils/screenName";
 import ProfileScreen from "../../screen/NaturalPerson/Profile/profile";
 import EditProfileScreen from "../../screen/NaturalPerson/Profile/editProfile";
 import ChangePasswordScreen from "../../screen/NaturalPerson/Profile/changePassword";
@@ -16,46 +14,38 @@ const Stack = createNativeStackNavigator();
 
 export function AppNavigation() {
   return (
-    <Stack.Navigator initialRouteName="Map">
+    <Stack.Navigator initialRouteName={screens.map} screenOptions={{headerShown: false}}>
       <Stack.Screen
-        name="Map"
+        name={screens.map}
         component={MapScreenWithMenu}
-        options={{ headerShown: false }}
       />
-        <Stack.Screen
-        name="Publication"
+      <Stack.Screen
+        name={screens.publications}
         component={DisplayPublicationScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="FormSelection"
+        name={screens.formSelection}
         component={FormSelectionScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="CreatePublication"
+        name={screens.createPublication}
         component={CreatePublicationScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="PublicationMap"
+        name={screens.publicationMap}
         component={MapPublication}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Profile"
+        name={screens.profile}
         component={ProfileScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="EditProfile"
+        name={screens.editProfile}
         component={EditProfileScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ChangePassword"
+        name={screens.changePassword}
         component={ChangePasswordScreen}
-        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

@@ -1,17 +1,10 @@
-const PublicationStack = {
-  publications: "DisplayPublicationScreen",
-  form: "FormSelectionScreen",
-  create: "CreatePublicationScreen",
-  publicationMap: "MapPublication",
-};
-
-const ProfileStack = {
-  profile: "ProfileScreen",
-  editProfile: "EditProfileScreen",
-  changePass: "ChangePasswordScreen",
-};
-
-export const screen = {
-  publication: PublicationStack,
-  profile: ProfileStack,
+export const screens = {
+  map: "Map",
+  publications: "Publications",
+  formSelection: "FormSelection",
+  createPublication: "CreatePublication",
+  publicationMap: "PublicationMap",
+  profile: "Profile",
+  editProfile: "EditProfile",
+  changePassword: "ChangePassword",
 };
