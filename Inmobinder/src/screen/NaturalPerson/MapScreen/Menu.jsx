@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Modal, Image, Text, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BotonMenu from '../../../components/NaturalPerson/BotonMenu';
-import { screens } from '../../../utils/screenName';
+import { screen } from '../../../utils/screenName';
 
 const MenuButton = () => {
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -38,9 +38,9 @@ const MenuButton = () => {
                   <Text style={styles.titulo}>Nombre Nombre Apellido Apellido</Text>
                 </View>
                 <View style={styles.menuItem}>
-                  <BotonMenu text="Mi Perfil" onPress={() => handleNavigation(screens.profile)} />
-                  <BotonMenu text="Mis Publicaciones" onPress={() => handleNavigation(screens.publications)} />
-                  <BotonMenu text="Añadir Propiedad" onPress={() => handleNavigation(screens.formSelection)} />
+                  <BotonMenu text="Mi Perfil" onPress={() => handleNavigation(screen.profile)} />
+                  <BotonMenu text="Mis Publicaciones" onPress={() => handleNavigation(screen.publications)} />
+                  <BotonMenu text="Añadir Propiedad" onPress={() => handleNavigation(screen.formSelection)} />
                   <BotonMenu text="Agenda" />
                   <BotonMenu text="Configuración" />
                   <BotonMenu text="Centro de Ayuda" />

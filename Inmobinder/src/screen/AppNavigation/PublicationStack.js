@@ -10,26 +10,22 @@ const Stack = createNativeStackNavigator();
 
 export function PublicationStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name={screen.publication.publications}
         component={DisplayPublicationScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={screen.publication.form}
         component={FormSelectionScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={screen.publication.create}
         component={CreatePublicationScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
         name={screen.publication.publicationMap}
         component={MapPublication}
-        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

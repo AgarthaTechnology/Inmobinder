@@ -1,4 +1,4 @@
-export const screens = {
+export const screen = {
   map: "Map",
   publications: "Publications",
   formSelection: "FormSelection",
