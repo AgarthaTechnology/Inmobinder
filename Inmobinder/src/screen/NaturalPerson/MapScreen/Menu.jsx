@@ -1,3 +1,4 @@
+// MenuButton.jsx
 import React, { useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Modal, Image, Text, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -12,9 +13,11 @@ const MenuButton = () => {
     setMenuVisible(!isMenuVisible);
   };
 
-  const handleNavigation = (screenName) => {
+  const handleNavigation = (stackName, screenName) => {
     toggleMenu(); // Cierra el menú
-    navigation.navigate(screenName);
+    navigation.navigate(stackName, {
+      screen: screenName, // Navegar a la pantalla dentro del stack
+    });
   };
 
   return (
@@ -38,9 +41,9 @@ const MenuButton = () => {
                   <Text style={styles.titulo}>Nombre Nombre Apellido Apellido</Text>
                 </View>
                 <View style={styles.menuItem}>
-                  <BotonMenu text="Mi Perfil" onPress={() => handleNavigation(screen.profile)} />
-                  <BotonMenu text="Mis Publicaciones" onPress={() => handleNavigation(screen.publications)} />
-                  <BotonMenu text="Añadir Propiedad" onPress={() => handleNavigation(screen.formSelection)} />
+                  <BotonMenu text="Mi Perfil" onPress={() => handleNavigation(screen.profile.stack, screen.profile.profile)} />
+                  <BotonMenu text="Mis Publicaciones" onPress={() => handleNavigation(screen.publication.stack, screen.publication.publications)} />
+                  <BotonMenu text="Añadir Propiedad" onPress={() => handleNavigation(screen.publication.stack, screen.publication.form)} />
                   <BotonMenu text="Agenda" />
                   <BotonMenu text="Configuración" />
                   <BotonMenu text="Centro de Ayuda" />

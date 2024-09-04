@@ -13,6 +13,7 @@ import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUse
 import { useLoadUserProfile } from "../../../components/NaturalPerson/Profile/loadUserProfile";
 import { pickProfileImage } from "../../../components/NaturalPerson/Profile/profileImagePicker";
 import { updateUserProfile } from "../../../components/NaturalPerson/Profile/updateUserProfile";
+import { screen } from "../../../utils/screenName";
 
 export default function EditProfileScreen() {
   const {
@@ -43,7 +44,7 @@ export default function EditProfileScreen() {
   };
 
   const navigateToChangePassword = () => {
-    navigation.navigate("ChangePassword");
+    navigation.navigate(screen.profile.changePass);
   };
 
   return (

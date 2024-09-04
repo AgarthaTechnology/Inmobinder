@@ -1,10 +1,21 @@
-export const screen = {
-  map: "Map",
+// screenName.js
+const PublicationStack = {
+  stack: "PublicationStack",
   publications: "Publications",
-  formSelection: "FormSelection",
-  createPublication: "CreatePublication",
+  form: "FormSelection",
+  create: "CreatePublication",
   publicationMap: "PublicationMap",
+};
+
+const ProfileStack = {
+  stack: "ProfileStack",
   profile: "Profile",
   editProfile: "EditProfile",
-  changePassword: "ChangePassword",
+  changePass: "ChangePassword",
+};
+
+export const screen = {
+  publication: PublicationStack,
+  map: "Map",
+  profile: ProfileStack,
 };

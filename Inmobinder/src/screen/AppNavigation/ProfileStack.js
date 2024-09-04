@@ -1,29 +1,27 @@
+// ProfileStack.js
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfileScreen from "../../screen/NaturalPerson/Profile/profile";
 import EditProfileScreen from "../../screen/NaturalPerson/Profile/editProfile";
 import ChangePasswordScreen from "../../screen/NaturalPerson/Profile/changePassword";
-import { screenName } from "../../utils/screenName";
+import { screen } from "../../utils/screenName";
 
 const Stack = createNativeStackNavigator();
 
 export function ProfileStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name={screenName.profile.profile}
+        name={screen.profile.profile}
         component={ProfileScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={screenName.profile.editProfile}
+        name={screen.profile.editProfile}
         component={EditProfileScreen}
-        options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={screenName.profile.changePass}
+        name={screen.profile.changePass}
         component={ChangePasswordScreen}
-        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

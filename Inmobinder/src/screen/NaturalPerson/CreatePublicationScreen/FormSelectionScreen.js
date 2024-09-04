@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "./FormSelection.styles";
-import { screenName } from "../../../utils/screenName";
+import { screen } from "../../../utils/screenName";
 
 export function FormSelectionScreen() {
   const navigation = useNavigation();
 
   const handleForm = (propertyType) => {
-    navigation.navigate("CreatePublication", {
+    navigation.navigate( screen.publication.create, {
       propertyType,
     });
   };

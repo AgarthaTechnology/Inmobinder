@@ -1,3 +1,4 @@
+// PublicationStack.js
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CreatePublicationScreen } from "../../screen/NaturalPerson/CreatePublicationScreen/CreatePublicationScreen";

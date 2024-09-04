@@ -11,14 +11,14 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
 import image from "../../../../assets/images/perfil.png";
-import { screenName } from "../../../utils/screenName";
+import { screen } from "../../../utils/screenName";
 
 const ProfileScreen = () => {
   const { data, error } = useUserProfile();
   const navigation = useNavigation();
 
   const navigateToEditProfile = () => {
-    navigation.navigate("EditProfile");
+    navigation.navigate(screen.profile.editProfile);
   };
 
   if (error) {
