@@ -3,9 +3,12 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreenWithMenu from "./MapScreenWithMenu";
 import { PublicationStack } from "./PublicationStack";
-import { ProfileStack } from "./ProfileStack"; // Importa ProfileStack
+import { ProfileStack } from "./ProfileStack"; 
 import { screen } from "../../utils/screenName";
 import { MapPublication } from "../../screen/NaturalPerson/MapScreen/MapPublication";
+
+import { ViewPublicationScreen } from "../../screen/NaturalPerson/ViewPublicationScreen/ViewPublicationScreen";
+import EditPublicationScreen  from "../../screen/NaturalPerson/EditPublicationScreen/EditPublicationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +31,14 @@ export function AppNavigation() {
         name={screen.publication.publicationMap}
         component={MapPublication}
       />
+    <Stack.Screen
+      name="ViewPublication"
+      component={ViewPublicationScreen}
+    />
+    <Stack.Screen
+      name="EditPublication"
+      component={EditPublicationScreen}
+    />
     </Stack.Navigator>
   );
 }
