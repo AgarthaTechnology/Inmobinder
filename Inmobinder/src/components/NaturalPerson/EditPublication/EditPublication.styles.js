@@ -16,4 +16,16 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 5,
   },
+  background: {
+    flex: 1,
+  },
+  formContainer: {
+    marginTop: 100,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    width: 328,
+    alignSelf: "center",
+    top: 50,
+    marginBottom: 250,
+  },
 });

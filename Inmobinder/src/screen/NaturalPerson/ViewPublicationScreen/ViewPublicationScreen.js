@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { ImageBackground ,View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import ViewPublication from "../../../components/NaturalPerson/ViewPublication/ViewPublication";
 import { styles } from "./ViewPublicationScreen.styles";
@@ -9,8 +9,13 @@ export function ViewPublicationScreen() {
   const { publication } = route.params;
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("../../../images/fondo.png")}
+      style={styles.container}
+      >
+    <View style={styles.publicationContainer}>
       <ViewPublication publication={publication} />
     </View>
+    </ImageBackground>
   );
 }

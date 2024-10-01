@@ -32,12 +32,6 @@ export function FormSelectionScreen() {
         >
           <Text style={styles.buttonText}>Departamento</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleForm("Terreno")}
-        >
-          <Text style={styles.buttonText}>Terreno</Text>
-        </TouchableOpacity>
       </View>
     </ImageBackground>
   );

@@ -8,7 +8,7 @@ import { screen } from "../../utils/screenName";
 import { MapPublication } from "../../screen/NaturalPerson/MapScreen/MapPublication";
 
 import { ViewPublicationScreen } from "../../screen/NaturalPerson/ViewPublicationScreen/ViewPublicationScreen";
-import EditPublicationScreen  from "../../screen/NaturalPerson/EditPublicationScreen/EditPublicationScreen";
+import {EditPublicationScreen}  from "../../screen/NaturalPerson/EditPublicationScreen/EditPublicationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,12 +20,12 @@ export function AppNavigation() {
         component={MapScreenWithMenu}
       />
       <Stack.Screen
-        name={screen.publication.stack} // Nombre correcto del stack
-        component={PublicationStack} // Componente correcto para el stack
+        name={screen.publication.stack} 
+        component={PublicationStack} 
       />
       <Stack.Screen
-        name={screen.profile.stack} // Nombre correcto del stack
-        component={ProfileStack} // Componente correcto para el stack
+        name={screen.profile.stack} 
+        component={ProfileStack} 
       />
       <Stack.Screen
         name={screen.publication.publicationMap}

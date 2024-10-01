@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
-import EditPublication from '../../../components/NaturalPerson/EditPublication';
+import {EditPublication} from '../../../components/NaturalPerson/EditPublication';
 import { styles } from './EditPublicationScreen.styles';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from "../../../utils/firebase";
@@ -21,8 +21,6 @@ export function EditPublicationScreen({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
       <EditPublication publication={publication} onSave={handleSave} />
-    </View>
   );
 }

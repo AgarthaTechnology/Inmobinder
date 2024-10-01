@@ -6,8 +6,6 @@ export function initialValues(propertyType) {
     state: "",
     metters: "",
     address: "",
-    region: "",
-    city: "",
     price: "",
     description: "",
     location: null,
@@ -64,10 +62,6 @@ export function validationSchema(propertyType) {
     address: Yup.string()
       .min(6, "La dirección debe tener al menos 6 caracteres")
       .required("Campo obligatorio"),
-
-    city: Yup.string().required("Campo obligatorio"),
-
-    region: Yup.string().required("Campo obligatorio"),
 
     price: Yup.number().min(1, "Valor inválido").required("Campo obligatorio"),
 

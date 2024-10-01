@@ -1,210 +1,199 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, Modal, TouchableOpacity, TextInput, View, TouchableWithoutFeedback } from 'react-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { Picker } from '@react-native-picker/picker';
-import regionesYComunas from './regionsWithCommunes'; // Asegúrate de importar correctamente tus regiones y comunas
 
-const FilterMenu = ({
-  isVisible,
-  minCommonExpensesFilter,
-  setMinCommonExpensesFilter,
-  maxCommonExpensesFilter,
-  setMaxCommonExpensesFilter,
-  bedroomsFilter,
-  setBedroomsFilter,
-  bathroomsFilter,
-  setBathroomsFilter,
-  squareMetersFilter,
-  setSquareMetersFilter,
-  applyFilter,
-  clearFilter,
-  toggleMenuVisibility,
-  handleSearch, // Asegúrate de recibir handleSearch como prop
-}) => {
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const [selectedCommune, setSelectedCommune] = useState(null);
+const FilterMenu = () => {
+  const [estado, setEstado] = useState(null);
+  const [propiedad, setPropiedad] = useState(null);
+  const [ciudad, setCiudad] = useState('');
+  const [rangoPrecio, setRangoPrecio] = useState([0, 100000000]);
+  const [tamano, setTamano] = useState('');
+  const [habitaciones, setHabitaciones] = useState(1);
 
-  const toggleMenu = () => {
-    toggleMenuVisibility();
-  };
-
-  const handleApplyFilter = () => {
-    applyFilter();
-    toggleMenu();
-  };
-
-  const handleClearFilter = () => {
-    clearFilter();
-    toggleMenu();
-  };
-
-  const handleSelectCommune = (commune) => {
-    setSelectedCommune(commune);
-    // Llamar a handleSearch para mover el mapa a la comuna seleccionada
-    handleSearch(selectedRegion, commune); // Aquí deberías pasar la región y la comuna seleccionada
+  const aplicarFiltros = () => {
+    console.log({
+      estado,
+      propiedad,
+      ciudad,
+      rangoPrecio,
+      tamano,
+      habitaciones,
+    });
   };
 
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={toggleMenu}
-    >
-      <TouchableWithoutFeedback onPress={toggleMenu}>
-        <View style={styles.modalContainer}>
-          <TouchableWithoutFeedback >
-            <View style={styles.modalContent}>
-              <Text style={styles.filterText}>Opciones de Filtro</Text>
+    <ScrollView style={{ padding: 20, backgroundColor: '#fff', borderRadius: 10 }}>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10, alignSelf: 'center' }}>Filtros</Text>
+      
+      {/* Estado */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099" }}>Estado</Text>
+      <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 10 }}>
+        <TouchableOpacity
+          onPress={() => setEstado('Nuevo')}
+          style={{
+            borderColor: '##009245',
+            borderWidth: 1,
+            borderRadius: 20,
+            marginRight: 5,
+            alignItems: 'center',
+            width: 191,
+            height: 30,
+          }}>
+          <Text style={{ color: estado === 'Nuevo' ? '#fff' : '#4CAF50' }}>Nuevo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setEstado('Usado')}
+          style={{
+            borderColor: '##009245',
+            borderWidth: 1,
+            borderRadius: 20,
+            marginRight: 5,
+            alignItems: 'center',
+            width: 191,
+            height: 30,
+          }}>
+          <Text style={{ color: estado === 'Usado' ? '#fff' : '#4CAF50' }}>Usado</Text>
+        </TouchableOpacity>
+      </View>
 
-              <Text style={styles.label}>
-                Gastos Comunes: {minCommonExpensesFilter} - {maxCommonExpensesFilter}
-              </Text>
-              <MultiSlider
-                values={[minCommonExpensesFilter, maxCommonExpensesFilter]}
-                min={0}
-                max={600}
-                step={10}
-                onValuesChange={(values) => {
-                  setMinCommonExpensesFilter(values[0]);
-                  setMaxCommonExpensesFilter(values[1]);
-                }}
-                sliderLength={280}
-              />
+      {/* Propiedad en */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Propiedad en</Text>
+      <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 10 }}>
+        <TouchableOpacity
+          onPress={() => setPropiedad('Arriendo y Venta')}
+          style={{
+            borderColor: '##009245',
+            borderWidth: 1,
+            borderRadius: 20,
+            marginRight: 5,
+            alignItems: 'center',
+            width: 191,
+            height: 30,
+          }}>
+          <Text style={{ color: propiedad === 'Arriendo y Venta' ? '#fff' : '#4CAF50' }}>Arriendo y Venta</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setPropiedad('Arriendo')}
+          style={{
+            borderColor: '##009245',
+            borderWidth: 1,
+            borderRadius: 20,
+            marginRight: 5,
+            alignItems: 'center',
+            width: 191,
+            height: 30,
+          }}>
+          <Text style={{ color: propiedad === 'Arriendo' ? '#fff' : '#4CAF50' }}>Arriendo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setPropiedad('Venta')}
+          style={{
+            borderColor: '##009245',
+            borderWidth: 1,
+            borderRadius: 20,
+            marginRight: 5,
+            alignItems: 'center',
+            width: 191,
+            height: 30,
+          }}>
+          <Text style={{ color: propiedad === 'Venta' ? '#fff' : '#4CAF50' }}>Venta</Text>
+        </TouchableOpacity>
+      </View>
 
-              <Text style={styles.label}>Habitaciones</Text>
-              <Picker
-                selectedValue={bedroomsFilter}
-                style={styles.picker}
-                onValueChange={(itemValue) => setBedroomsFilter(itemValue)}
-              >
-                <Picker.Item label="0" value={null}/>
-                {[...Array(10).keys()].map((i) => (
-                  <Picker.Item key={i} label={`${i}`} value={i} />
-                ))}
-              </Picker>
+      {/* Ciudad */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Ciudad</Text>
+      <Picker
+        selectedValue={ciudad}
+        onValueChange={(itemValue) => setCiudad(itemValue)}
+        style={{width:301, height: 33, marginBottom: 10, borderRadius: 20}}
+      >
+        <Picker.Item label="Seleccione una ciudad" value="" />
+        <Picker.Item label="Ciudad 1" value="Ciudad 1" />
+        <Picker.Item label="Ciudad 2" value="Ciudad 2" />
+      </Picker>
 
-              <Text style={styles.label}>Baños</Text>
-              <Picker
-                selectedValue={bathroomsFilter}
-                style={styles.picker}
-                onValueChange={(itemValue) => setBathroomsFilter(itemValue)}
-              >
-                <Picker.Item label="0" value={null} />
-                {[...Array(10).keys()].map((i) => (
-                  <Picker.Item key={i} label={`${i}`} value={i} />
-                ))}
-              </Picker>
+      {/* Rango de precio */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Rango de precio</Text>
+      <Slider
+        style={{ width: 342, height: 18}}
+        thumbTintColor='#009245'
+        minimumTrackTintColor='#009245'
+        minimumValue={230000}
+        maximumValue={600000}
+        value={rangoPrecio[1]}
+        onValueChange={(value) => setRangoPrecio([230000, value])}
+        step={1000}
+      />
+      <Text>{`$${rangoPrecio[0]} - $${rangoPrecio[1]}`}</Text>
 
-              <Text style={styles.label}>Metros Cuadrados Totales</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                value={squareMetersFilter ? squareMetersFilter.toString() : ''}
-                onChangeText={(text) =>
-                  setSquareMetersFilter(text ? parseInt(text) : null)
-                }
-              />
+      {/* Tamaño */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Tamaño</Text>
+      <TextInput
+        placeholder="Ingrese un valor (m2)"
+        value={tamano}
+        onChangeText={setTamano}
+        keyboardType="numeric"
+        style={{
+          borderWidth: 1,
+          borderColor: '#989898',
+          borderRadius: 20,
+          width: 216,
+          height: 33,
+          marginBottom: 10,
+        }}
+      />
 
-              {/* Selector de Región */}
-              <Text style={styles.label}>Región</Text>
-              <Picker
-                selectedValue={selectedRegion}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedRegion(itemValue)}
-              >
-                <Picker.Item label="Seleccione Región" value="" />
-                {regionesYComunas.map((region, index) => (
-                  <Picker.Item key={index} label={region.region} value={region.region} />
-                ))}
-              </Picker>
+      {/* Habitaciones */}
+      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Habitaciones</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+        {[1, 2, 3, 4, 5].map((num) => (
+          <TouchableOpacity
+            key={num}
+            onPress={() => setHabitaciones(num)}
+            style={{
+              backgroundColor: habitaciones === num ? '#4CAF50' : '#fff',
+              borderColor: '#4CAF50',
+              borderWidth: 1,
+              borderRadius: 5,
+              padding: 10,
+              flex: 1,
+              marginRight: num !== 5 ? 5 : 0,
+              alignItems: 'center'
+            }}>
+            <Text style={{ color: habitaciones === num ? '#fff' : '#4CAF50' }}>{num}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-              {/* Selector de Comuna */}
-              {selectedRegion !== '' && (
-                <>
-                  <Text style={styles.label}>Comuna</Text>
-                  <Picker
-                    selectedValue={selectedCommune}
-                    style={styles.picker}
-                    onValueChange={(itemValue) => handleSelectCommune(itemValue)}
-                  >
-                    <Picker.Item label="Seleccione Comuna" value="" />
-                    {regionesYComunas.find(region => region.region === selectedRegion)?.comunas.map((comuna, index) => (
-                      <Picker.Item key={index} label={comuna} value={comuna} />
-                    ))}
-                  </Picker>
-                </>
-              )}
-
-              <TouchableOpacity style={styles.applyButton} onPress={handleApplyFilter}>
-                <Text style={styles.buttonText}>Aplicar Filtros</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.clearButton} onPress={handleClearFilter}>
-                <Text style={styles.buttonText}>Limpiar Filtros</Text>
-              </TouchableOpacity>
-
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+      {/* Botones */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <TouchableOpacity
+          onPress={() => console.log('Cancelar')}
+          style={{
+            backgroundColor: '#f44336',
+            padding: 15,
+            borderRadius: 5,
+            alignItems: 'center',
+            flex: 1,
+            marginRight: 5
+          }}>
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Cancelar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={aplicarFiltros}
+          style={{
+            backgroundColor: '#4CAF50',
+            padding: 15,
+            borderRadius: 5,
+            alignItems: 'center',
+            flex: 1
+          }}>
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Aplicar filtros</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    top : 30,
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 20,
-    marginBottom: 80,
-    width: '90%',
-  },
-  filterText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginTop: 10,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  applyButton: {
-    backgroundColor: '#009245',
-    padding: 10,
-    marginTop: 20,
-    borderRadius: 10,
-  },
-  clearButton: {
-    backgroundColor: '#92004d',
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-});
 
 export default FilterMenu;

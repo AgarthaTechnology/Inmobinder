@@ -7,7 +7,6 @@ import { styles } from "./InfoForm.styles";
 import { UploadImage } from "../ImagePublication/UploadImage";
 import { RoomsPicker, BathroomsPicker } from "../../../Shared/Picker/Picker";
 import InputNumber from "../../../Shared/InputNumber/InputNumber";
-import { RegyCom } from "./RegyCom";
 
 const ConditionPicker = ({ selectedValue, onValueChange, error }) => (
   <>
@@ -169,7 +168,6 @@ export function InfoForm({ formik, images, propertyType }) {
         </View>
       )}
 
-      <RegyCom formik={formik} ErrorMessage={ErrorMessage} />
     </View>
   );
 }
