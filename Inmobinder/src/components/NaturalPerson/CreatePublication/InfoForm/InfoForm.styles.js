@@ -32,14 +32,12 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 16,
-    marginBottom: 8,
   },
   inputField: {
     borderWidth: 1,
     borderColor: '#CCC',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 16,
   },
   inputContainer: {
     borderBottomWidth: 0,

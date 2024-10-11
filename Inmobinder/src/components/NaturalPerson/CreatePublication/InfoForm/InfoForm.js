@@ -156,7 +156,10 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.bathrooms)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("bathrooms", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "bathrooms",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
@@ -185,7 +188,10 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.metters)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("metters", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "metters",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
@@ -198,7 +204,10 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.mettersProperty)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("mettersProperty", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "mettersProperty",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />

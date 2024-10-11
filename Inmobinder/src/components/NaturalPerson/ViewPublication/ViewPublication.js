@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { styles } from './ViewPublication.styles';
 
@@ -10,13 +10,28 @@ const formatPrice = (value) => {
 };
 
 const ViewPublication = ({ publication }) => {
+  const { width } = Dimensions.get('window');
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       {/* Contenedor principal con sombra */}
       <View style={styles.container}>
-        {/* Imagen de la propiedad */}
-        {publication.gallery && publication.gallery[0] ? (
-          <Image source={{ uri: publication.gallery[0] }} style={styles.image} />
+        {/* Slider de imágenes */}
+        {publication.gallery && publication.gallery.length > 0 ? (
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            style={styles.imageSlider}
+          >
+            {publication.gallery.map((imageUri, index) => (
+              <Image
+                key={index}
+                source={{ uri: imageUri }}
+                style={[styles.image, { width: width}]}
+              />
+            ))}
+          </ScrollView>
         ) : (
           <Text style={styles.noImageText}>No hay imágenes disponibles.</Text>
         )}

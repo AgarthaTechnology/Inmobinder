@@ -1,11 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
 
 export const styles = StyleSheet.create({
   publication: {
     backgroundColor: "#FEFEFE",
     marginTop: 20,
     borderRadius: 10,
-    padding: 15,
     alignSelf: "center",
     width: 328,
     shadowColor: "#000",
@@ -17,14 +18,20 @@ export const styles = StyleSheet.create({
     shadowRadius: 4.2,
     elevation: 5,
   },
-  gallery: {
-    resizeMode: "cover",
+  galleryContainer: {
+    width: '100%',
     height: 200,
+    overflow: 'hidden',
+  },
+  gallery: {
+    marginTop: 10,
+    resizeMode: "contain",
+    height: "100%",
     width: "100%",
-    borderRadius: 10,
   },
   infoContainer: {
     marginTop: 10,
+    marginBottom: 10,
   },
   nameProperty: {
     fontWeight: "bold",
@@ -38,7 +45,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
     paddingHorizontal: 10,
-    marginBottom: 10, // Añadir margen inferior para espacio vertical
+    marginBottom: 10,
   },
   detailItem: {
     flexDirection: "row",

@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
-    backgroundColor: 'transparent', // Fondo transparente
+    backgroundColor: 'transparent',
   },
   detailsContainer: {
     backgroundColor: "#FEFEFE",
@@ -22,17 +22,12 @@ export const styles = StyleSheet.create({
     shadowRadius: 4.2,
     elevation: 5,
   },
-  gallery: {
-    resizeMode: "cover",
-    height: 200,
-    width: "100%",
-    borderRadius: 10,
+  imageSlider: {
+    width: '100%',
+    height: 250,
   },
   image: {
-    resizeMode: "cover",
-    height: 200,
-    width: "100%",
-    borderRadius: 10,
+    resizeMode: 'center',
   },
   title: {
     fontWeight: "bold",
@@ -62,10 +57,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: "#555",
     marginTop: 5,
-  },
-  featuresContainer: {
-    marginTop: 10,
-  },
+  },  
   featureItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -92,5 +84,22 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: "#999",
     marginVertical: 100,
+  },
+  deleteIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 15,
+  },
+  addImageButton: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -25 }, { translateY: -25 }],
   },
 });

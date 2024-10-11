@@ -59,10 +59,12 @@ const DisplayPublication = (props) => {
         {publication && (
           <View style={styles.publication}>
             {publication.gallery && publication.gallery[0] ? (
+              <View style={styles.galleryContainer}>
               <Image
                 source={{ uri: publication.gallery[0] }}
                 style={styles.gallery}
               />
+              </View>
             ) : (
               <Text style={styles.noImageText}>No hay imágenes</Text>
             )}
