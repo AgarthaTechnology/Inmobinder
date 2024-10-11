@@ -1,3 +1,5 @@
+// CreatePublicationScreen.js
+
 import React from "react";
 import {
   ScrollView,
@@ -112,13 +114,13 @@ export function CreatePublicationScreen() {
           />
           <UploadImagesForm formik={formik} />
           <UploadVideo formik={formik} />
+          {/* Botón "Crear Publicación" */}
           <TouchableOpacity
-            title="Crear publicación"
             style={styles.button}
             onPress={formik.handleSubmit}
             disabled={formik.isSubmitting}
           >
-            <Text style={styles.buttonText}>Crear publicación</Text>
+            <Text style={styles.buttonText}>Crear Publicación</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

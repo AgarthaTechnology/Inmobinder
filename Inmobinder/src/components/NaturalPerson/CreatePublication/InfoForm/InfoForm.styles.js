@@ -1,105 +1,100 @@
-import { StyleSheet } from "react-native";
+// InfoForm.styles.js
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 328,
+    backgroundColor: 'transparent', // Fondo transparente
+  },
+  detailsContainer: {
+    backgroundColor: "#FEFEFE",
+    marginTop: 0, // Espacio en la parte superior
+    marginBottom: 20, // Espacio en la parte inferior
+    borderRadius: 10,
+    padding: 20,
     alignSelf: "center",
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    width: 328,
+    // Sombra similar a la de EditPublication
+   // shadowColor: "#000",
+   // shadowOffset: {
+   //   width: 0,
+   //   height: 2,
+   // },
+   // shadowOpacity: 0.4,
+   // shadowRadius: 4.2,
+   // elevation: 5,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-    marginBottom: 10,
+  scrollViewContainer: {
+    flexGrow: 1,
+    backgroundColor: 'transparent', // Fondo transparente
   },
-  pickerContainer: {
-    width: "45%",
-    marginHorizontal: "auto",
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
     marginBottom: 8,
   },
-  picker: {
-    backgroundColor: "#fff",
-    borderColor: "#000",
+  inputField: {
     borderWidth: 1,
-    borderRadius: 5,
-    height: 40,
-    width: "100%",
-    marginBottom: 10,
-  },
-  input: {
-    width: "90%",
-    marginVertical: 10,
-    backgroundColor: "#fff",
-    borderColor: "#000",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: "center",
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-  },
-  error: {
-    textAlign: "center",
-    color: "#FF0000",
-    fontSize: 12,
-    marginHorizontal: 10,
-  },
-  label: {
-    fontSize: 15,
-    fontWeight: "bold",
-    paddingHorizontal: 10,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-    width: 328,
-    backgroundColor: "#fff",
-    marginBottom: 12,
+    borderColor: '#CCC',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
   },
   inputContainer: {
-    backgroundColor: "#fff",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 40,
-    justifyContent: "center",
-    paddingHorizontal: 10,
-    marginVertical: 10,
+    borderBottomWidth: 0,
   },
-  descriptionInput: {
-    backgroundColor: "#fff",
-    width: "90%",
-    alignSelf: "center",
-    borderColor: "#000",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 5,
-    height: 100,
-    textAlignVertical: "top",
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
-  mapIcon: {
-    color: "#c2c2c2",
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 4,
   },
-  containerImage: {
-    flexDirection: "row",
-    marginHorizontal: 20,
-    marginTop: 30,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-  icon: {
-    justifyContent: "center",
-    backgroundColor: "#e3e3e3",
-    width: 70,
-    height: 70,
+  toggleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-  image: {
-    width: 70,
-    height: 70,
+  toggleButton: {
+    flex: 1,
+    padding: 12,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 8,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  selectedButton: {
+    backgroundColor: '#3a9347', // Verde cuando esté seleccionado
+  },
+  toggleButtonText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  mediaButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  mediaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#3a9347', // Color verde
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 10,
+  },
+  mediaButtonText: {
+    color: '#fff',
+    marginLeft: 8,
+    fontSize: 16,
   },
 });

@@ -1,6 +1,8 @@
+// EditPublicationScreen.js
+
 import React from 'react';
-import { View, Alert } from 'react-native';
-import {EditPublication} from '../../../components/NaturalPerson/EditPublication';
+import { ImageBackground, View, Alert } from "react-native";
+import { EditPublication } from '../../../components/NaturalPerson/EditPublication/EditPublication';
 import { styles } from './EditPublicationScreen.styles';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from "../../../utils/firebase";
@@ -21,6 +23,13 @@ export function EditPublicationScreen({ navigation, route }) {
   };
 
   return (
-      <EditPublication publication={publication} onSave={handleSave} />
+    <View style={styles.outerContainer}>
+      <ImageBackground
+        source={require("../../../images/fondo.png")}
+        style={styles.container}
+      >
+        <EditPublication publication={publication} onSave={handleSave} />
+      </ImageBackground>
+    </View>
   );
 }

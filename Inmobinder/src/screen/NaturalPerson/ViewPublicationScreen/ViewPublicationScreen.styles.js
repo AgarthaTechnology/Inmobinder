@@ -1,18 +1,33 @@
+// ViewPublicationScreen.styles.js
+
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'transparent',
-        padding: 20,
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  outerContainer: {
+    flex: 1,
+    margin: 20,
+    padding: 20,
+    borderRadius: 20,
+    // Propiedades de sombra
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
     },
-    publicationContainer: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 20,
-        padding: 5,
-        shadowOffset: { width: 0, height: 4 },
-        margin : 25,
-        overflow: 'hidden',
-    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4.2,
+    elevation: 5,
+  },
+  container: {
+    flex: 1,
+    margin: 10,
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
 });

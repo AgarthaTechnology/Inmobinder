@@ -38,6 +38,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
     paddingHorizontal: 10,
+    marginBottom: 10, // Añadir margen inferior para espacio vertical
   },
   detailItem: {
     flexDirection: "row",
@@ -69,6 +70,8 @@ export const styles = StyleSheet.create({
   },
   goButton: {
     backgroundColor: "#3a9347",
+    width: 45,
+    height: 45,
     flex: 2.5,
     borderRadius: 25, // Ajuste para bordes más redondeados
     marginRight: 10,
@@ -90,10 +93,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonText: {
+  buttonText: { // botón de ir a la public
     color: "white",
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 16,
   },
   noImageText: {
     alignSelf: "center",

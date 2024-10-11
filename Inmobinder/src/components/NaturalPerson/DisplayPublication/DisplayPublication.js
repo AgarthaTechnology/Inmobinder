@@ -82,16 +82,13 @@ const DisplayPublication = (props) => {
                   <Text style={styles.detailsText}>{publication.metters} m²</Text>
                 </View>
               </View>
-              <View style={styles.locationRow}>
-                <Entypo name="location-pin" size={14} color="red" />
-                <Text style={styles.detailsText}>A {publication.distance} metros de tu posición</Text>
-              </View>
+
               <View style={styles.actionsRow}>
                 <TouchableOpacity 
                   style={[styles.button, styles.goButton]} 
                   onPress={() => goTo(publication)}
                 >
-                  <Text style={styles.buttonText}>Ir a la publicación</Text>
+                  <Text style={styles.buttonText}>Ver publicación</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                   style={[styles.button, styles.editButton]} 

@@ -1,1 +1,1 @@
-export * from './EditPublication';
+export { EditPublicationScreen } from './EditPublicationScreen';
