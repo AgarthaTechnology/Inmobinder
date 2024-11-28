@@ -1,6 +1,6 @@
 // InfoForm.js
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   TextInput,
@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   Button,
   ScrollView,
+  Alert,
 } from "react-native";
 import { useFormik } from "formik";
 import { MapForm } from "../MapForm";
 import { styles } from "./InfoForm.styles";
 import { UploadImage } from "../ImagePublication/UploadImage";
+import PhoneInput from "react-native-phone-number-input";
 
 // Definir la función formatPrice
 const formatPrice = (value) => {
@@ -24,14 +26,23 @@ const formatPrice = (value) => {
 export function InfoForm({ formik, images, propertyType }) {
   // Estado para mostrar el mapa
   const [showMap, setShowMap] = useState(false);
+  const phoneInput1 = useRef(null);
+  const phoneInput2 = useRef(null);
 
   const onOpenCloseMap = () => setShowMap((prevState) => !prevState);
 
   // Obtener el color del icono del mapa
-  const getColorIconMap = (formik) => {
+  const getColorIconMap = () => {
     if (formik.errors.location) return "#FF0000";
     if (formik.values.location) return "#00a680";
     return "#c2c2c2";
+  };
+
+  // Función para limitar el número de dígitos del teléfono
+  const handlePhoneChange = (text, field) => {
+    const numericText = text.replace(/\D/g, "");
+    const limitedText = numericText.slice(0, 9);
+    formik.setFieldValue(field, limitedText);
   };
 
   return (
@@ -156,10 +167,7 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.bathrooms)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue(
-                "bathrooms",
-                formattedValue.replace(/\./g, "")
-              );
+              formik.setFieldValue("bathrooms", formattedValue.replace(/\./g, ""));
             }}
             keyboardType="numeric"
           />
@@ -172,10 +180,7 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.commonExpenses)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue(
-                "commonExpenses",
-                formattedValue.replace(/\./g, "")
-              );
+              formik.setFieldValue("commonExpenses", formattedValue.replace(/\./g, ""));
             }}
             keyboardType="numeric"
           />
@@ -188,10 +193,7 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.metters)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue(
-                "metters",
-                formattedValue.replace(/\./g, "")
-              );
+              formik.setFieldValue("metters", formattedValue.replace(/\./g, ""));
             }}
             keyboardType="numeric"
           />
@@ -204,16 +206,77 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.mettersProperty)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue(
-                "mettersProperty",
-                formattedValue.replace(/\./g, "")
-              );
+              formik.setFieldValue("mettersProperty", formattedValue.replace(/\./g, ""));
             }}
             keyboardType="numeric"
           />
 
-          {/* Eliminar el botón "Crear Publicación" de aquí */}
-          {/* <Button title="Crear Publicación" onPress={formik.handleSubmit} /> */}
+          {/* DATOS DE CONTACTO */}
+          <Text style={styles.sectionTitle}>Datos de Contacto 1</Text>
+          <View style={styles.contactContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Nombre y Apellido"
+              value={formik.values.contact1Name}
+              onChangeText={formik.handleChange("contact1Name")}
+            />
+
+            {/* Campo de Número de Celular con Selector de País */}
+            <PhoneInput
+              ref={phoneInput1}
+              value={formik.values.contact1Phone}
+              defaultCode="CL"
+              layout="first"
+              onChangeText={(text) => handlePhoneChange(text, "contact1Phone")}
+              onChangeFormattedText={(text) => {
+                formik.setFieldValue("contact1PhoneFormatted", text);
+              }}
+              textInputProps={{
+                maxLength: 9,
+                keyboardType: "numeric",
+              }}
+              containerStyle={styles.phoneContainer}
+              textContainerStyle={styles.phoneTextContainer}
+              countryPickerProps={{ withAlphaFilter: true }}
+              withShadow={false}
+              disableArrowIcon={false}
+              countryPickerButtonStyle={styles.countryPickerButton}
+            />
+          </View>
+
+          {/* DATOS DE CONTACTO 2 (OPCIONAL) */}
+          <Text style={styles.sectionTitle}>Datos de Contacto 2 (Opcional)</Text>
+          <View style={styles.contactContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Nombre y Apellido"
+              value={formik.values.contact2Name}
+              onChangeText={formik.handleChange("contact2Name")}
+            />
+
+            {/* Campo de Número de Celular con Selector de País */}
+            <PhoneInput
+              ref={phoneInput2}
+              value={formik.values.contact2Phone}
+              defaultCode="CL"
+              layout="first"
+              onChangeText={(text) => handlePhoneChange(text, "contact2Phone")}
+              onChangeFormattedText={(text) => {
+                formik.setFieldValue("contact2PhoneFormatted", text);
+              }}
+              textInputProps={{
+                maxLength: 9,
+                keyboardType: "numeric",
+              }}
+              containerStyle={styles.phoneContainer}
+              textContainerStyle={styles.phoneTextContainer}
+              countryPickerProps={{ withAlphaFilter: true }}
+              withShadow={false}
+              disableArrowIcon={false}
+              countryPickerButtonStyle={styles.countryPickerButton}
+            />
+          </View>
+
         </ScrollView>
       </View>
     </View>

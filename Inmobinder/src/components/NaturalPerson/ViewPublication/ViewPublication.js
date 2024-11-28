@@ -1,16 +1,31 @@
+// ViewPublication.js
+
 import React from 'react';
-import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { styles } from './ViewPublication.styles';
 
 const formatPrice = (value) => {
-  const numericValue = value.toString().replace(/\D/g, "");
-  if (!numericValue) return "";
-  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const numericValue = value.toString().replace(/\D/g, '');
+  if (!numericValue) return '';
+  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
 const ViewPublication = ({ publication }) => {
   const { width } = Dimensions.get('window');
+
+  // Función para realizar una llamada telefónica
+  const handleCall = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -28,7 +43,7 @@ const ViewPublication = ({ publication }) => {
               <Image
                 key={index}
                 source={{ uri: imageUri }}
-                style={[styles.image, { width: width}]}
+                style={[styles.image, { width: width }]}
               />
             ))}
           </ScrollView>
@@ -41,9 +56,7 @@ const ViewPublication = ({ publication }) => {
           $ {publication.price ? formatPrice(publication.price) : 'Precio no disponible'}
         </Text>
         {publication.uf && (
-          <Text style={styles.uf}>
-            UF {formatPrice(publication.uf)}
-          </Text>
+          <Text style={styles.uf}>UF {formatPrice(publication.uf)}</Text>
         )}
         <Text style={styles.address}>{publication.address}</Text>
 
@@ -58,36 +71,71 @@ const ViewPublication = ({ publication }) => {
         <View style={styles.featuresContainer}>
           <View style={styles.featureItem}>
             <FontAwesome5 name="bed" size={15} color="black" />
-            <Text style={styles.featureText}>{formatPrice(publication.rooms)} dormitorios</Text>
+            <Text style={styles.featureText}>
+              {formatPrice(publication.rooms)} dormitorios
+            </Text>
           </View>
           <View style={styles.featureItem}>
             <FontAwesome5 name="bath" size={18} color="black" />
-            <Text style={styles.featureText}>{formatPrice(publication.bathrooms)} baños</Text>
+            <Text style={styles.featureText}>
+              {formatPrice(publication.bathrooms)} baños
+            </Text>
           </View>
+          {/* Puedes agregar más características si es necesario */}
           <View style={styles.featureItem}>
-            <MaterialIcons name="directions-car" size={18} color="black" />
-            <Text style={styles.featureText}>Estacionamiento</Text>
+            <MaterialIcons name="fullscreen" size={18} color="black" />
+            <Text style={styles.featureText}>
+              {formatPrice(publication.metters)} m² construidos
+            </Text>
           </View>
           <View style={styles.featureItem}>
             <MaterialIcons name="fullscreen" size={18} color="black" />
-            <Text style={styles.featureText}>{formatPrice(publication.metters)} m² construidos</Text>
-          </View>
-          <View style={styles.featureItem}>
-            <MaterialIcons name="fullscreen" size={18} color="black" />
-            <Text style={styles.featureText}>{formatPrice(publication.mettersProperty)} m² totales</Text>
+            <Text style={styles.featureText}>
+              {formatPrice(publication.mettersProperty)} m² totales
+            </Text>
           </View>
         </View>
 
         {/* Información del anunciante */}
         <Text style={styles.sectionTitle}>Información del anunciante</Text>
-        <View style={styles.agentInfoContainer}>
-          <FontAwesome5 name="user" size={18} color="black" />
-          <View style={styles.agentTextContainer}>
-            <Text style={styles.agentText}>felipinho henriquez</Text>
-            <Text style={styles.agentText}>felipe@gmail.com</Text>
-            <Text style={styles.agentText}>+56 9 1111 1111</Text>
+
+        {/* Contacto 1 */}
+        {publication.contact1Name && (
+          <View style={styles.contactContainer}>
+            <FontAwesome5 name="user" size={18} color="black" />
+            <View style={styles.contactTextContainer}>
+              <Text style={styles.contactName}>{publication.contact1Name}</Text>
+              {publication.contact1PhoneFormatted && (
+                <TouchableOpacity
+                  onPress={() => handleCall(publication.contact1PhoneFormatted)}
+                >
+                  <Text style={styles.contactPhone}>
+                    {publication.contact1PhoneFormatted}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
+        )}
+
+        {/* Contacto 2 */}
+        {publication.contact2Name && (
+          <View style={styles.contactContainer}>
+            <FontAwesome5 name="user" size={18} color="black" />
+            <View style={styles.contactTextContainer}>
+              <Text style={styles.contactName}>{publication.contact2Name}</Text>
+              {publication.contact2PhoneFormatted && (
+                <TouchableOpacity
+                  onPress={() => handleCall(publication.contact2PhoneFormatted)}
+                >
+                  <Text style={styles.contactPhone}>
+                    {publication.contact2PhoneFormatted}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

@@ -90,6 +90,47 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 10,
   },
+
+  inputField: {
+    borderWidth: 1,
+    borderColor: '#CCC',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+
+  contactContainer: {
+    marginBottom: 20,
+  },
+
+  phoneContainer: {
+    width: '100%',
+    height: 50,
+    marginBottom: 20,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CCC',
+  },
+
+  phoneTextContainer: {
+    paddingVertical: 0,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+    backgroundColor: '#FFFFFF',
+  },
+
+  countryPickerButton: {
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+
   mediaButtonText: {
     color: '#fff',
     marginLeft: 8,

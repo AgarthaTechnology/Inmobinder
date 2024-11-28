@@ -96,6 +96,24 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
+  contactContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  contactTextContainer: {
+    marginLeft: 8,
+  },
+  contactName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  contactPhone: {
+    fontSize: 16,
+    color: 'blue',
+    textDecorationLine: 'underline',
+    marginTop: 4,
+  },  
   loadingIndicator: {
     position: 'absolute',
     top: '50%',
