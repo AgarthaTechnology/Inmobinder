@@ -19,9 +19,9 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   galleryContainer: {
-    width: '100%',
+    width: "100%",
     height: 200,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   gallery: {
     marginTop: 10,
@@ -80,14 +80,14 @@ export const styles = StyleSheet.create({
     width: 45,
     height: 45,
     flex: 2.5,
-    borderRadius: 25, // Ajuste para bordes más redondeados
+    borderRadius: 25,
     marginRight: 10,
   },
   editButton: {
     backgroundColor: "#3a9347",
     width: 45,
     height: 45,
-    borderRadius: 45 / 2, // Totalmente redondeado
+    borderRadius: 45 / 2,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -96,11 +96,11 @@ export const styles = StyleSheet.create({
     backgroundColor: "#a02437",
     width: 45,
     height: 45,
-    borderRadius: 45 / 2, // Totalmente redondeado
+    borderRadius: 45 / 2,
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonText: { // botón de ir a la public
+  buttonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
@@ -111,8 +111,8 @@ export const styles = StyleSheet.create({
     color: "#999",
   },
   iconWrapper: {
-    width: 45,
-    height: 45,
+    width: 32,
+    height: 32,
     alignItems: "center",
     justifyContent: "center",
   },

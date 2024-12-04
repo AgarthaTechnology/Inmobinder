@@ -28,6 +28,11 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: 'transparent', // Fondo transparente
   },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+  },  
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',

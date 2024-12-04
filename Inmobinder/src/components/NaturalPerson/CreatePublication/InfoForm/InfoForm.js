@@ -56,6 +56,9 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formik.values.nameProperty}
             onChangeText={formik.handleChange("nameProperty")}
           />
+          {formik.touched.nameProperty && formik.errors.nameProperty && (
+            <Text style={styles.errorText}>{formik.errors.nameProperty}</Text>
+          )}
 
           {/* Subida de imágenes */}
           <UploadImage formik={formik} images={images} />
@@ -82,6 +85,9 @@ export function InfoForm({ formik, images, propertyType }) {
               <Text style={styles.toggleButtonText}>Arriendo</Text>
             </TouchableOpacity>
           </View>
+          {formik.touched.state && formik.errors.state && (
+            <Text style={styles.errorText}>{formik.errors.state}</Text>
+          )}
 
           {/* CONDICIÓN DE LA PROPIEDAD */}
           <Text style={styles.sectionTitle}>Condición de la propiedad</Text>
@@ -105,6 +111,9 @@ export function InfoForm({ formik, images, propertyType }) {
               <Text style={styles.toggleButtonText}>Usado</Text>
             </TouchableOpacity>
           </View>
+          {formik.touched.condition && formik.errors.condition && (
+            <Text style={styles.errorText}>{formik.errors.condition}</Text>
+          )}
 
           {/* DIRECCIÓN */}
           <Text style={styles.sectionTitle}>Dirección</Text>
@@ -114,11 +123,17 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formik.values.address}
             onChangeText={formik.handleChange("address")}
           />
+          {formik.touched.address && formik.errors.address && (
+            <Text style={styles.errorText}>{formik.errors.address}</Text>
+          )}
           <Button
             title="Seleccionar ubicación en el mapa"
             onPress={onOpenCloseMap}
             style={styles.mapButton}
           />
+          {formik.touched.location && formik.errors.location && (
+            <Text style={styles.errorText}>{formik.errors.location}</Text>
+          )}
 
           {/* Componente MapForm */}
           <MapForm show={showMap} close={onOpenCloseMap} formik={formik} />
@@ -145,6 +160,9 @@ export function InfoForm({ formik, images, propertyType }) {
             }}
             keyboardType="numeric"
           />
+          {formik.touched.price && formik.errors.price && (
+            <Text style={styles.errorText}>{formik.errors.price}</Text>
+          )}
 
           {/* DORMITORIOS */}
           <Text style={styles.sectionTitle}>Dormitorios</Text>
@@ -158,6 +176,9 @@ export function InfoForm({ formik, images, propertyType }) {
             }}
             keyboardType="numeric"
           />
+          {formik.touched.rooms && formik.errors.rooms && (
+            <Text style={styles.errorText}>{formik.errors.rooms}</Text>
+          )}
 
           {/* BAÑOS */}
           <Text style={styles.sectionTitle}>Baños</Text>
@@ -167,10 +188,16 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.bathrooms)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("bathrooms", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "bathrooms",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
+          {formik.touched.bathrooms && formik.errors.bathrooms && (
+            <Text style={styles.errorText}>{formik.errors.bathrooms}</Text>
+          )}
 
           {/* GASTOS COMUNES */}
           <Text style={styles.sectionTitle}>Gastos comunes</Text>
@@ -180,10 +207,18 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.commonExpenses)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("commonExpenses", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "commonExpenses",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
+          {formik.touched.commonExpenses && formik.errors.commonExpenses && (
+            <Text style={styles.errorText}>
+              {formik.errors.commonExpenses}
+            </Text>
+          )}
 
           {/* METROS CONSTRUIDOS */}
           <Text style={styles.sectionTitle}>Metros construidos</Text>
@@ -193,7 +228,10 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.metters)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("metters", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "metters",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
@@ -206,7 +244,10 @@ export function InfoForm({ formik, images, propertyType }) {
             value={formatPrice(formik.values.mettersProperty)}
             onChangeText={(text) => {
               const formattedValue = formatPrice(text);
-              formik.setFieldValue("mettersProperty", formattedValue.replace(/\./g, ""));
+              formik.setFieldValue(
+                "mettersProperty",
+                formattedValue.replace(/\./g, "")
+              );
             }}
             keyboardType="numeric"
           />
@@ -220,6 +261,9 @@ export function InfoForm({ formik, images, propertyType }) {
               value={formik.values.contact1Name}
               onChangeText={formik.handleChange("contact1Name")}
             />
+            {formik.touched.contact1Name && formik.errors.contact1Name && (
+            <Text style={styles.errorText}>{formik.errors.contact1Name}</Text>
+          )}
 
             {/* Campo de Número de Celular con Selector de País */}
             <PhoneInput
@@ -245,7 +289,9 @@ export function InfoForm({ formik, images, propertyType }) {
           </View>
 
           {/* DATOS DE CONTACTO 2 (OPCIONAL) */}
-          <Text style={styles.sectionTitle}>Datos de Contacto 2 (Opcional)</Text>
+          <Text style={styles.sectionTitle}>
+            Datos de Contacto 2 (Opcional)
+          </Text>
           <View style={styles.contactContainer}>
             <TextInput
               style={styles.inputField}
@@ -276,7 +322,6 @@ export function InfoForm({ formik, images, propertyType }) {
               countryPickerButtonStyle={styles.countryPickerButton}
             />
           </View>
-
         </ScrollView>
       </View>
     </View>

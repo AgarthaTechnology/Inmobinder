@@ -1,199 +1,244 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import Slider from '@react-native-community/slider';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  TextInput,
+  StyleSheet,
+} from "react-native";
 
-const FilterMenu = () => {
-  const [estado, setEstado] = useState(null);
-  const [propiedad, setPropiedad] = useState(null);
-  const [ciudad, setCiudad] = useState('');
-  const [rangoPrecio, setRangoPrecio] = useState([0, 100000000]);
-  const [tamano, setTamano] = useState('');
-  const [habitaciones, setHabitaciones] = useState(1);
+const FilterMenu = ({ applyFilters }) => {
+  const [visible, setMenuVisible] = useState(true);
+  const [rooms, setRooms] = useState(null);
+  const [condition, setCondition] = useState(null);
+  const [priceRange, setPriceRange] = useState([230000, 600000]);
+  const [bathrooms, setBathrooms] = useState(null);
+  const [metters, setMetters] = useState(null);
 
-  const aplicarFiltros = () => {
-    console.log({
-      estado,
-      propiedad,
-      ciudad,
-      rangoPrecio,
-      tamano,
-      habitaciones,
-    });
+  const handleClear = () => {
+    setRooms(null);
+    setCondition(null);
+    setPriceRange([0, Infinity]);
+    setBathrooms(null);
+    setMetters(null);
+  };
+
+  const handleApplyFilters = () => {
+    const filters = {
+      priceRange,
+      rooms: rooms ? parseInt(rooms) : null,
+      bathrooms: bathrooms ? parseInt(bathrooms) : null,
+      condition,
+      metters: metters ? parseInt(metters) : null,
+    };
+    applyFilters(filters);
+    toggleMenu();
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!visible);
   };
 
   return (
-    <ScrollView style={{ padding: 20, backgroundColor: '#fff', borderRadius: 10 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 10, alignSelf: 'center' }}>Filtros</Text>
-      
-      {/* Estado */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099" }}>Estado</Text>
-      <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 10 }}>
-        <TouchableOpacity
-          onPress={() => setEstado('Nuevo')}
-          style={{
-            borderColor: '##009245',
-            borderWidth: 1,
-            borderRadius: 20,
-            marginRight: 5,
-            alignItems: 'center',
-            width: 191,
-            height: 30,
-          }}>
-          <Text style={{ color: estado === 'Nuevo' ? '#fff' : '#4CAF50' }}>Nuevo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setEstado('Usado')}
-          style={{
-            borderColor: '##009245',
-            borderWidth: 1,
-            borderRadius: 20,
-            marginRight: 5,
-            alignItems: 'center',
-            width: 191,
-            height: 30,
-          }}>
-          <Text style={{ color: estado === 'Usado' ? '#fff' : '#4CAF50' }}>Usado</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Propiedad en */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Propiedad en</Text>
-      <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 10 }}>
-        <TouchableOpacity
-          onPress={() => setPropiedad('Arriendo y Venta')}
-          style={{
-            borderColor: '##009245',
-            borderWidth: 1,
-            borderRadius: 20,
-            marginRight: 5,
-            alignItems: 'center',
-            width: 191,
-            height: 30,
-          }}>
-          <Text style={{ color: propiedad === 'Arriendo y Venta' ? '#fff' : '#4CAF50' }}>Arriendo y Venta</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setPropiedad('Arriendo')}
-          style={{
-            borderColor: '##009245',
-            borderWidth: 1,
-            borderRadius: 20,
-            marginRight: 5,
-            alignItems: 'center',
-            width: 191,
-            height: 30,
-          }}>
-          <Text style={{ color: propiedad === 'Arriendo' ? '#fff' : '#4CAF50' }}>Arriendo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setPropiedad('Venta')}
-          style={{
-            borderColor: '##009245',
-            borderWidth: 1,
-            borderRadius: 20,
-            marginRight: 5,
-            alignItems: 'center',
-            width: 191,
-            height: 30,
-          }}>
-          <Text style={{ color: propiedad === 'Venta' ? '#fff' : '#4CAF50' }}>Venta</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Ciudad */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Ciudad</Text>
-      <Picker
-        selectedValue={ciudad}
-        onValueChange={(itemValue) => setCiudad(itemValue)}
-        style={{width:301, height: 33, marginBottom: 10, borderRadius: 20}}
+    <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={toggleMenu}
       >
-        <Picker.Item label="Seleccione una ciudad" value="" />
-        <Picker.Item label="Ciudad 1" value="Ciudad 1" />
-        <Picker.Item label="Ciudad 2" value="Ciudad 2" />
-      </Picker>
+        {/* Detect touch outside */}
+        <TouchableWithoutFeedback onPress={toggleMenu}>
+          <View style={styles.modalOverlay}>
+            {/* Prevent close on touch inside */}
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                {/* Estado */}
+                <Text style={styles.label}>Estado</Text>
+                <View style={styles.segmentedControl}>
+                  <TouchableOpacity onPress={() => setCondition("Nuevo")}>
+                    <Text
+                      style={
+                        condition === "Nuevo"
+                          ? styles.activeSegment
+                          : styles.segment
+                      }
+                    >
+                      Nuevo
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setCondition("Usado")}>
+                    <Text
+                      style={
+                        condition === "Usado"
+                          ? styles.activeSegment
+                          : styles.segment
+                      }
+                    >
+                      Usado
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-      {/* Rango de precio */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Rango de precio</Text>
-      <Slider
-        style={{ width: 342, height: 18}}
-        thumbTintColor='#009245'
-        minimumTrackTintColor='#009245'
-        minimumValue={230000}
-        maximumValue={600000}
-        value={rangoPrecio[1]}
-        onValueChange={(value) => setRangoPrecio([230000, value])}
-        step={1000}
-      />
-      <Text>{`$${rangoPrecio[0]} - $${rangoPrecio[1]}`}</Text>
+                {/* Rango de precio */}
+                <Text style={styles.label}>Rango de precio</Text>
+                <View style={styles.segmentedControl}>
+                  {[
+                    { label: "1000", value: [0, 1000] },
+                    { label: "2000", value: [1001, 2000] },
+                    { label: "3000", value: [3001, Infinity] },
+                  ].map((option, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => setPriceRange(option.value)}
+                    >
+                      <Text
+                        style={
+                          priceRange[0] === option.value[0] &&
+                          priceRange[1] === option.value[1]
+                            ? styles.activeSegment
+                            : styles.segment
+                        }
+                      >
+                        {option.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
 
-      {/* Tamaño */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Tamaño</Text>
-      <TextInput
-        placeholder="Ingrese un valor (m2)"
-        value={tamano}
-        onChangeText={setTamano}
-        keyboardType="numeric"
-        style={{
-          borderWidth: 1,
-          borderColor: '#989898',
-          borderRadius: 20,
-          width: 216,
-          height: 33,
-          marginBottom: 10,
-        }}
-      />
+                {/* Tamaño */}
+                <Text style={styles.label}>Metros Cuadrados Totales</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ingrese un valor"
+                  keyboardType="numeric"
+                  value={metters}
+                  onChangeText={(text) => setMetters(text)}
+                />
 
-      {/* Habitaciones */}
-      <Text style={{ fontSize: 20, marginBottom: 5, color:"#00000099"}}>Habitaciones</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-        {[1, 2, 3, 4, 5].map((num) => (
-          <TouchableOpacity
-            key={num}
-            onPress={() => setHabitaciones(num)}
-            style={{
-              backgroundColor: habitaciones === num ? '#4CAF50' : '#fff',
-              borderColor: '#4CAF50',
-              borderWidth: 1,
-              borderRadius: 5,
-              padding: 10,
-              flex: 1,
-              marginRight: num !== 5 ? 5 : 0,
-              alignItems: 'center'
-            }}>
-            <Text style={{ color: habitaciones === num ? '#fff' : '#4CAF50' }}>{num}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+                {/* Habitaciones */}
+                <Text style={styles.label}>Habitaciones</Text>
+                <View style={styles.segmentedControl}>
+                  {[1, 2, 3, 4, 5].map((room) => (
+                    <TouchableOpacity key={room} onPress={() => setRooms(room)}>
+                      <Text
+                        style={
+                          rooms === room ? styles.activeSegment : styles.segment
+                        }
+                      >
+                        {room >= 5 ? "5+" : room}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
 
-      {/* Botones */}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TouchableOpacity
-          onPress={() => console.log('Cancelar')}
-          style={{
-            backgroundColor: '#f44336',
-            padding: 15,
-            borderRadius: 5,
-            alignItems: 'center',
-            flex: 1,
-            marginRight: 5
-          }}>
-          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Cancelar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={aplicarFiltros}
-          style={{
-            backgroundColor: '#4CAF50',
-            padding: 15,
-            borderRadius: 5,
-            alignItems: 'center',
-            flex: 1
-          }}>
-          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Aplicar filtros</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+                {/* Baños */}
+                <Text style={styles.label}>Baños</Text>
+                <View style={styles.segmentedControl}>
+                  {[1, 2, 3, 4, 5].map((bath) => (
+                    <TouchableOpacity
+                      key={bath}
+                      onPress={() => setBathrooms(bath)}
+                    >
+                      <Text
+                        style={
+                          bathrooms === bath
+                            ? styles.activeSegment
+                            : styles.segment
+                        }
+                      >
+                        {bath === 5 ? "5+" : bath}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <View style={styles.buttons}>
+                  {/* Apply button */}
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleApplyFilters}
+                  >
+                    <Text style={styles.buttonText}>Aplicar Filtros</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.button, styles.clearButton]}
+                    onPress={() => {
+                      handleClear();
+                      applyFilters({});
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Limpiar Filtros</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    alignSelf: "center",
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  button: {
+    padding: 10,
+    backgroundColor: "green",
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  segmentedControl: {
+    flexDirection: "row",
+    marginBottom: 10,
+    justifyContent: "space-around",
+  },
+  segment: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    textAlign: "center",
+  },
+  activeSegment: {
+    padding: 10,
+    backgroundColor: "green",
+    color: "white",
+    borderRadius: 5,
+    textAlign: "center",
+  },
+  clearButton: {
+    backgroundColor: "red",
+  },
+});
 
 export default FilterMenu;

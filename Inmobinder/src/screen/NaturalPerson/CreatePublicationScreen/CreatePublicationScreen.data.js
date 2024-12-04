@@ -4,33 +4,39 @@ export function initialValues(propertyType) {
   const baseValues = {
     nameProperty: "",
     state: "",
-    metters: "",
+    metters: 0,
     address: "",
-    price: "",
+    price: 0,
     description: "",
     location: null,
     gallery: [],
     video: [],
+    contact1Name: "",
+    contact1Phone: "",
+    contact1PhoneFormatted: "",
+    contact2Name: "",
+    contact2Phone: "",
+    contact2PhoneFormatted: "",
   };
 
   if (propertyType === "Casa") {
     return {
       ...baseValues,
-      commonExpenses: "",
+      commonExpenses: 0,
       condition: "",
-      rooms: "",
-      bathrooms: "",
-      mettersProperty: "",
+      rooms: 0,
+      bathrooms: 0,
+      mettersProperty: 0,
     };
   }
 
   if (propertyType === "Departamento") {
     return {
       ...baseValues,
-      commonExpenses: "",
+      commonExpenses: 0,
       condition: "",
-      rooms: "",
-      bathrooms: "",
+      rooms: 0,
+      bathrooms: 0,
     };
   }
 
@@ -72,6 +78,12 @@ export function validationSchema(propertyType) {
     video: Yup.array().max(1, "Solo puede subir un video"),
 
     location: Yup.object().required("La ubicación es requerida"),
+
+    contact1Name: Yup.string().required("Campo obligatorio"),
+
+    contact1Phone: Yup.string()
+      .matches(/^\d{9}$/, "Debe tener exactamente 9 caracteres numéricos")
+      .required("Campo obligatorio"),
   });
 
   const HomeSchema = Yup.object().shape({
@@ -91,7 +103,7 @@ export function validationSchema(propertyType) {
 
     rooms: Yup.number()
       .notOneOf(["Habitaciones"], 'No puede ser igual a "Habitaciones"')
-      .min(2, "Debe tener al menos 2 habitaciones")
+      .min(1, "Debe tener al menos 2 habitaciones")
       .required("Campo obligatorio"),
 
     bathrooms: Yup.number()

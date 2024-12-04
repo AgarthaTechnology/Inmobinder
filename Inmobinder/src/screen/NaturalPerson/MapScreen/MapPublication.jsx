@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   modal: {
-    width: 320,
+    width: 340,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 25,

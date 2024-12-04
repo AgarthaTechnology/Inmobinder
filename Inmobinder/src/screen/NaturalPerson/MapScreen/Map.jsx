@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { MapPublication } from "./MapPublication.jsx";
 
 const Map = () => {
+  const [filters, setFilters] = useState({});
   const [origin, setOrigin] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
   const [filter, setFilter] = useState(null);
@@ -33,6 +34,10 @@ const Map = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const mapRef = useRef();
+
+  const isInPriceRange = (price, [minPrice, maxPrice]) => {
+    return price >= minPrice && price <= maxPrice;
+  };
 
   useEffect(() => {
     getLocationPermission();
@@ -182,18 +187,33 @@ const Map = () => {
     }).start();
   };
 
-  const applyFilter = () => {
-    let filteredCoords = originalCoords.filter(isCoordVisible);
+  const applyFilters = (newFilters) => {
+    setFilters(newFilters);
+    const filteredCoords = originalCoords.filter((coord) => {
+      if (newFilters.priceRange) {
+        const [minPrice, maxPrice] = newFilters.priceRange;
+        if (!isInPriceRange(parseFloat(coord.price), [minPrice, maxPrice])) {
+          return false;
+        }
+      }
+      if (newFilters.rooms && parseInt(coord.rooms) !== newFilters.rooms) {
+        return false;
+      }
+      if (
+        newFilters.bathrooms &&
+        parseInt(coord.bathrooms) !== newFilters.bathrooms
+      ) {
+        return false;
+      }
+      if (newFilters.condition && coord.condition !== newFilters.condition) {
+        return false;
+      }
+      if (newFilters.metters && parseInt(coord.metters) < newFilters.metters) {
+        return false;
+      }
+      return true;
+    });
     setCoords(filteredCoords);
-  };
-
-  const clearFilter = () => {
-    setCoords(originalCoords);
-    setBathroomsFilter(null);
-    setBedroomsFilter(null);
-    setSquareMetersFilter(null);
-    setMinCommonExpensesFilter(0);
-    setMaxCommonExpensesFilter(100);
   };
 
   return (
@@ -264,25 +284,7 @@ const Map = () => {
         onSearch={handleSearch}
       />
 
-      {menuVisible && (
-        <FilterMenu
-          menuAnimation={menuAnimation}
-          minCommonExpensesFilter={minCommonExpensesFilter}
-          setMinCommonExpensesFilter={setMinCommonExpensesFilter}
-          maxCommonExpensesFilter={maxCommonExpensesFilter}
-          setMaxCommonExpensesFilter={setMaxCommonExpensesFilter}
-          bedroomsFilter={bedroomsFilter}
-          setBedroomsFilter={setBedroomsFilter}
-          bathroomsFilter={bathroomsFilter}
-          setBathroomsFilter={setBathroomsFilter}
-          squareMetersFilter={squareMetersFilter}
-          setSquareMetersFilter={setSquareMetersFilter}
-          toggleMenuVisibility={toggleMenuVisibility}
-          handleSearch={handleSearch}
-          applyFilter={applyFilter}
-          clearFilter={clearFilter}
-        />
-      )}
+      {menuVisible && <FilterMenu applyFilters={applyFilters} />}
 
       {modalVisible && selectedProperty && (
         <MapPublication
