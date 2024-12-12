@@ -8,14 +8,19 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { screen } from "../../../utils/screenName";
 
 const FilterMenu = ({ applyFilters }) => {
   const [visible, setMenuVisible] = useState(true);
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
   const [rooms, setRooms] = useState(null);
-  const [condition, setCondition] = useState(null);
-  const [priceRange, setPriceRange] = useState([230000, 600000]);
   const [bathrooms, setBathrooms] = useState(null);
+  const [condition, setCondition] = useState(null);
   const [metters, setMetters] = useState(null);
+
+  const navigation = useNavigation();
 
   const handleClear = () => {
     setRooms(null);
@@ -27,13 +32,21 @@ const FilterMenu = ({ applyFilters }) => {
 
   const handleApplyFilters = () => {
     const filters = {
-      priceRange,
+      priceRange: [
+        priceMin ? parseFloat(priceMin) : 0,
+        priceMax ? parseFloat(priceMax) : Infinity,
+      ],
       rooms: rooms ? parseInt(rooms) : null,
       bathrooms: bathrooms ? parseInt(bathrooms) : null,
       condition,
       metters: metters ? parseInt(metters) : null,
     };
-    applyFilters(filters);
+
+    navigation.navigate(screen.publication.stack, {
+      screen: screen.publication.publications,
+      params: { filters },
+    });
+
     toggleMenu();
   };
 
@@ -83,29 +96,26 @@ const FilterMenu = ({ applyFilters }) => {
                 </View>
 
                 {/* Rango de precio */}
-                <Text style={styles.label}>Rango de precio</Text>
-                <View style={styles.segmentedControl}>
-                  {[
-                    { label: "1000", value: [0, 1000] },
-                    { label: "2000", value: [1001, 2000] },
-                    { label: "3000", value: [3001, Infinity] },
-                  ].map((option, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => setPriceRange(option.value)}
-                    >
-                      <Text
-                        style={
-                          priceRange[0] === option.value[0] &&
-                          priceRange[1] === option.value[1]
-                            ? styles.activeSegment
-                            : styles.segment
-                        }
-                      >
-                        {option.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                <Text style={styles.label}>Rango de precios</Text>
+                <View style={styles.rangeInputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Minimo"
+                    keyboardType="numeric"
+                    value={priceMin}
+                    onChangeText={(text) =>
+                      setPriceMin(text.replace(/\D/g, ""))
+                    }
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Maximo"
+                    keyboardType="numeric"
+                    value={priceMax}
+                    onChangeText={(text) =>
+                      setPriceMax(text.replace(/\D/g, ""))
+                    }
+                  />
                 </View>
 
                 {/* Tamaño */}
@@ -161,15 +171,6 @@ const FilterMenu = ({ applyFilters }) => {
                     onPress={handleApplyFilters}
                   >
                     <Text style={styles.buttonText}>Aplicar Filtros</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.button, styles.clearButton]}
-                    onPress={() => {
-                      handleClear();
-                      applyFilters({});
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Limpiar Filtros</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -235,9 +236,6 @@ const styles = StyleSheet.create({
     color: "white",
     borderRadius: 5,
     textAlign: "center",
-  },
-  clearButton: {
-    backgroundColor: "red",
   },
 });
 

@@ -6,17 +6,19 @@ import { db } from "../../../utils/firebase";
 import DisplayPublication from "../../../components/NaturalPerson/DisplayPublication/DisplayPublication";
 import { LoadingModal } from "../../../components/Shared/LoadingModal";
 import { styles } from "./DisplayPublicationScreen.styles";
+import { useRoute } from "@react-navigation/native";
+import { useMemo } from "react";
 
 export function DisplayPublicationScreen() {
-  const [publications, setPublications] = useState(null);
+  const [publications, setPublications] = useState([]);
+  const [filteredPublications, setFilteredPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      // No se necesita establecer publicaciones aquí
-    });
-  }, []);
+  const route = useRoute(); // Obtener filtros desde la navegación
+  const filters = useMemo(
+    () => route.params?.filters || {},
+    [route.params?.filters]
+  );
 
   useEffect(() => {
     const q = query(collection(db, "publications"));
@@ -33,6 +35,51 @@ export function DisplayPublicationScreen() {
     });
   }, []);
 
+  useEffect(() => {
+    if (filters) {
+      const tolerance = 0.5;
+      const filtered = publications.filter((publication) => {
+        const { priceRange, rooms, bathrooms, condition, metters } = filters;
+
+        if (
+          priceRange &&
+          (parseFloat(publication.price) < priceRange[0] ||
+            parseFloat(publication.price) > priceRange[1])
+        ) {
+          return false;
+        }
+
+        if (rooms && parseInt(publication.rooms) !== rooms) {
+          return false;
+        }
+
+        if (bathrooms && parseInt(publication.bathrooms) !== bathrooms) {
+          return false;
+        }
+
+        if (condition && publication.condition !== condition) {
+          return false;
+        }
+
+        const dynamicTolerance = metters ? metters * tolerance : 0;
+        if (
+          metters &&
+          parseFloat(publication.metters) < metters - dynamicTolerance ||
+          metters &&
+          parseFloat(publication.metters) > metters + dynamicTolerance
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+
+      setFilteredPublications(filtered);
+    } else {
+      setFilteredPublications(publications);
+    }
+  }, [filters, publications]);
+
   return (
     <ImageBackground
       source={require("../../../images/fondo.png")}
@@ -41,7 +88,7 @@ export function DisplayPublicationScreen() {
       {loading ? (
         <LoadingModal show text="Cargando" />
       ) : (
-        <DisplayPublication publications={publications} />
+        <DisplayPublication publications={filteredPublications} />
       )}
     </ImageBackground>
   );

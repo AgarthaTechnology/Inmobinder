@@ -19,9 +19,9 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   galleryContainer: {
-    width: "100%",
+    width: '100%',
     height: 200,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   gallery: {
     marginTop: 10,
@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     width: 45,
     height: 45,
     flex: 2.5,
-    borderRadius: 25,
+    borderRadius: 25, 
     marginRight: 10,
   },
   editButton: {
@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#a02437",
     width: 45,
     height: 45,
-    borderRadius: 45 / 2,
+    borderRadius: 45 / 2, 
     alignItems: "center",
     justifyContent: "center",
   },

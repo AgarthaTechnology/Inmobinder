@@ -5,6 +5,8 @@ const PublicationStack = {
   form: "FormSelection",
   create: "CreatePublication",
   publicationMap: "PublicationMap",
+  view: "ViewPublication",
+  edit: "EditPublication",
 };
 
 const ProfileStack = {

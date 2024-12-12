@@ -187,35 +187,6 @@ const Map = () => {
     }).start();
   };
 
-  const applyFilters = (newFilters) => {
-    setFilters(newFilters);
-    const filteredCoords = originalCoords.filter((coord) => {
-      if (newFilters.priceRange) {
-        const [minPrice, maxPrice] = newFilters.priceRange;
-        if (!isInPriceRange(parseFloat(coord.price), [minPrice, maxPrice])) {
-          return false;
-        }
-      }
-      if (newFilters.rooms && parseInt(coord.rooms) !== newFilters.rooms) {
-        return false;
-      }
-      if (
-        newFilters.bathrooms &&
-        parseInt(coord.bathrooms) !== newFilters.bathrooms
-      ) {
-        return false;
-      }
-      if (newFilters.condition && coord.condition !== newFilters.condition) {
-        return false;
-      }
-      if (newFilters.metters && parseInt(coord.metters) < newFilters.metters) {
-        return false;
-      }
-      return true;
-    });
-    setCoords(filteredCoords);
-  };
-
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style="auto" />
@@ -284,7 +255,7 @@ const Map = () => {
         onSearch={handleSearch}
       />
 
-      {menuVisible && <FilterMenu applyFilters={applyFilters} />}
+      {menuVisible && <FilterMenu/>}
 
       {modalVisible && selectedProperty && (
         <MapPublication

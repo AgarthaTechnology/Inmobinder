@@ -12,10 +12,10 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { screen } from "../../../utils/screenName";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
-const DisplayPublication = (props) => {
+const DisplayPublication = (props, filters) => {
   const { publications } = props;
   const navigation = useNavigation();
-
+  
   // Navegar a la pantalla de detalles de la publicación
   const goTo = (publication) => {
     navigation.navigate("ViewPublication", { publication });
@@ -73,7 +73,6 @@ const DisplayPublication = (props) => {
   // Renderizar cada publicación en la lista
   const renderPublication = ({ item }) => {
     const publication = item;
-
     return (
       <View onPress={() => goTo(publication)}>
         {publication && (
