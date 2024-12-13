@@ -49,11 +49,28 @@ export function DisplayPublicationScreen() {
           return false;
         }
 
-        if (rooms && parseInt(publication.rooms) !== rooms) {
+        // Filtro por habitaciones
+        if (rooms && rooms === 5 && parseInt(publication.rooms) <= 5) {
+          return false; // Mostrar solo publicaciones con más de 5 habitaciones
+        } else if (
+          rooms &&
+          rooms < 5 &&
+          parseInt(publication.rooms) !== rooms
+        ) {
           return false;
         }
 
-        if (bathrooms && parseInt(publication.bathrooms) !== bathrooms) {
+        if (
+          bathrooms &&
+          bathrooms === 5 &&
+          parseInt(publication.bathrooms) <= 5
+        ) {
+          return false;
+        } else if (
+          bathrooms &&
+          bathrooms < 5 &&
+          parseInt(publication.bathrooms) !== bathrooms
+        ) {
           return false;
         }
 
@@ -63,10 +80,10 @@ export function DisplayPublicationScreen() {
 
         const dynamicTolerance = metters ? metters * tolerance : 0;
         if (
-          metters &&
-          parseFloat(publication.metters) < metters - dynamicTolerance ||
-          metters &&
-          parseFloat(publication.metters) > metters + dynamicTolerance
+          (metters &&
+            parseFloat(publication.metters) < metters - dynamicTolerance) ||
+          (metters &&
+            parseFloat(publication.metters) > metters + dynamicTolerance)
         ) {
           return false;
         }
