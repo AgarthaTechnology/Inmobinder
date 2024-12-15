@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { ImageBackground } from "react-native";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import DisplayPublication from "../../../components/NaturalPerson/DisplayPublication/DisplayPublication";

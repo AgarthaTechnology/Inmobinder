@@ -16,8 +16,21 @@ const ProfileStack = {
   changePass: "ChangePassword",
 };
 
+const LoginStack = {
+  stack: "LoginStack",
+  login: "Login",
+  register: "Register",
+  form_np: "Form_np",
+  form_Inmo: "Form_Inmo",
+  form_co: "Form_co",
+  form_ac: "Form_ac",
+  singin: "Singin",
+  verification: "Verification",
+};
+
 export const screen = {
   publication: PublicationStack,
   map: "Map",
   profile: ProfileStack,
+  login: LoginStack,
 };
