@@ -1,5 +1,3 @@
-// InfoForm.js
-
 import React, { useState, useRef } from "react";
 import {
   View,
@@ -13,7 +11,6 @@ import {
 import { useFormik } from "formik";
 import { MapForm } from "../MapForm";
 import { styles } from "./InfoForm.styles";
-import { UploadImage } from "../ImagePublication/UploadImage";
 import PhoneInput from "react-native-phone-number-input";
 
 // Definir la función formatPrice
@@ -23,7 +20,7 @@ const formatPrice = (value) => {
   return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-export function InfoForm({ formik, images, propertyType }) {
+export function InfoForm({ formik, images }) {
   // Estado para mostrar el mapa
   const [showMap, setShowMap] = useState(false);
   const phoneInput1 = useRef(null);
@@ -59,9 +56,6 @@ export function InfoForm({ formik, images, propertyType }) {
           {formik.touched.nameProperty && formik.errors.nameProperty && (
             <Text style={styles.errorText}>{formik.errors.nameProperty}</Text>
           )}
-
-          {/* Subida de imágenes */}
-          <UploadImage formik={formik} images={images} />
 
           {/* ESTADO DE LA PROPIEDAD */}
           <Text style={styles.sectionTitle}>Estado de la propiedad</Text>
@@ -235,6 +229,11 @@ export function InfoForm({ formik, images, propertyType }) {
             }}
             keyboardType="numeric"
           />
+          {formik.touched.metters && formik.errors.metters && (
+            <Text style={styles.errorText}>
+              {formik.errors.metters}
+            </Text>
+          )}
 
           {/* METROS TOTALES */}
           <Text style={styles.sectionTitle}>Metros totales</Text>
@@ -251,6 +250,11 @@ export function InfoForm({ formik, images, propertyType }) {
             }}
             keyboardType="numeric"
           />
+          {formik.touched.mettersProperty && formik.errors.mettersProperty && (
+            <Text style={styles.errorText}>
+              {formik.errors.mettersProperty}
+            </Text>
+          )}
 
           {/* DATOS DE CONTACTO */}
           <Text style={styles.sectionTitle}>Datos de Contacto 1</Text>

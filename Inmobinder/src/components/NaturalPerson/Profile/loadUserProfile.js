@@ -12,11 +12,11 @@ export function useLoadUserProfile(
   useEffect(() => {
     if (!userId) return;
 
-    const unsubscribe = onSnapshot(doc(db, "usuarios", userId), (doc) => {
+    const unsubscribe = onSnapshot(doc(db, "users", userId), (doc) => {
       if (doc.exists()) {
         const userData = doc.data();
-        setNombres(userData.nombres || "");
-        setApellidos(userData.apellidos || "");
+        setNombres(userData.nombre || "");
+        setApellidos(userData.apellido || "");
         setRut(userData.rut || "");
         setTelefono(userData.telefono || "");
       } else {

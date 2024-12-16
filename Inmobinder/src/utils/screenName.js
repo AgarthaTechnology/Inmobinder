@@ -1,12 +1,11 @@
-// screenName.js
 const PublicationStack = {
   stack: "PublicationStack",
   publications: "Publications",
-  form: "FormSelection",
   create: "CreatePublication",
   publicationMap: "PublicationMap",
   view: "ViewPublication",
   edit: "EditPublication",
+  publicationsfilter: "PublicationsFilter",
 };
 
 const ProfileStack = {

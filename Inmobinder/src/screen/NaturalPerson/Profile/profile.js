@@ -38,8 +38,8 @@ const ProfileScreen = () => {
         ) : (
           data.map((doc) => (
             <View key={doc.id}>
-              <Text style={styles.text}>Nombres: {doc.nombres}</Text>
-              <Text style={styles.text}>Apellidos: {doc.apellidos}</Text>
+              <Text style={styles.text}>Nombres: {doc.nombre}</Text>
+              <Text style={styles.text}>Apellidos: {doc.apellido}</Text>
               <Text style={styles.text}>RUT: {doc.rut}</Text>
               <Text style={styles.text}>Teléfono: {doc.telefono}</Text>
             </View>

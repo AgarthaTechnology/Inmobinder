@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export function initialValues(propertyType) {
+export function initialValues() {
   const baseValues = {
     nameProperty: "",
     state: "",
@@ -17,41 +17,21 @@ export function initialValues(propertyType) {
     contact2Name: "",
     contact2Phone: "",
     contact2PhoneFormatted: "",
+    commonExpenses: 0,
+    condition: "",
+    rooms: 0,
+    bathrooms: 0,
+    mettersProperty: 0,
   };
-
-  if (propertyType === "Casa") {
-    return {
-      ...baseValues,
-      commonExpenses: 0,
-      condition: "",
-      rooms: 0,
-      bathrooms: 0,
-      mettersProperty: 0,
-    };
-  }
-
-  if (propertyType === "Departamento") {
-    return {
-      ...baseValues,
-      commonExpenses: 0,
-      condition: "",
-      rooms: 0,
-      bathrooms: 0,
-    };
-  }
-
-  if (propertyType === "Terreno") {
-    return baseValues;
-  }
-
   return baseValues;
 }
 
-export function validationSchema(propertyType) {
+export function validationSchema() {
   const baseSchema = Yup.object().shape({
     nameProperty: Yup.string()
       .min(5, "Debe tener al menos 5 caracteres")
-      .required("Campo obligatorio"),
+      .required("Campo obligatorio")
+      .max(50, "Máximo 50 caracteres"),
 
     state: Yup.string()
       .oneOf(
@@ -63,19 +43,31 @@ export function validationSchema(propertyType) {
     metters: Yup.number()
       .integer("Debe ser un número entero")
       .min(1, "Mínimo 1 metro cuadrado")
-      .required("Campo obligatorio"),
+      .required("Campo obligatorio")
+      .test(
+        "is-less-than-mettersProperty",
+        "Debe ser menor que metros totales",
+        function (value) {
+          return value < this.parent.mettersProperty;
+        }
+      ),
 
     address: Yup.string()
-      .min(6, "La dirección debe tener al menos 6 caracteres")
-      .required("Campo obligatorio"),
+      .min(5, "La dirección debe tener al menos 6 caracteres")
+      .required("Campo obligatorio")
+      .max(100, "Máximo 100 caracteres"),
 
-    price: Yup.number().min(1, "Valor inválido").required("Campo obligatorio"),
+    price: Yup.number().min(0, "Valor inválido").required("Campo obligatorio"),
+
+    description: Yup.string()
+      .min(5, "Debe tener al menos 10 caracteres")
+      .required("Campo obligatorio")
+      .max(200, "Máximo 500 caracteres"),
 
     gallery: Yup.array()
       .min(1, "Se requiere al menos 1 imágen")
-      .required("Campo obligatorio"),
-
-    video: Yup.array().max(1, "Solo puede subir un video"),
+      .required("Campo obligatorio")
+      .max(9, "Máximo 9 imágenes"),
 
     location: Yup.object().required("La ubicación es requerida"),
 
@@ -84,9 +76,7 @@ export function validationSchema(propertyType) {
     contact1Phone: Yup.string()
       .matches(/^\d{9}$/, "Debe tener exactamente 9 caracteres numéricos")
       .required("Campo obligatorio"),
-  });
 
-  const HomeSchema = Yup.object().shape({
     commonExpenses: Yup.number()
       .integer("Los gastos comunes deben ser un número entero")
       .min(0, "Mínimo 0")
@@ -98,57 +88,23 @@ export function validationSchema(propertyType) {
 
     mettersProperty: Yup.number()
       .integer("Debe ser un número entero")
-      .min(0, "Mínimo 1 metro cuadrado")
-      .required("Campo obligatorio"),
-
-    rooms: Yup.number()
-      .notOneOf(["Habitaciones"], 'No puede ser igual a "Habitaciones"')
-      .min(1, "Debe tener al menos 2 habitaciones")
-      .required("Campo obligatorio"),
-
-    bathrooms: Yup.number()
-      .notOneOf(["Baños"], 'No puede ser igual a "Baños"')
-      .min(1, "Debe tener al menos 1 baño")
-      .required("Campo obligatorio"),
-  });
-
-  const DepSchema = Yup.object().shape({
-    commonExpenses: Yup.number()
-      .integer("Los gastos comunes deben ser un número entero")
-      .min(0, "Mínimo 0")
-      .required("Campo obligatorio"),
-
-    condition: Yup.string()
-      .notOneOf(["Condición"], 'No puede ser igual a "Condición"')
-      .required("Campo obligatorio"),
-
-    rooms: Yup.number()
-      .notOneOf(["Habitaciones"], 'No puede ser igual a "Habitaciones"')
-      .min(2, "Debe tener al menos 2 habitaciones")
-      .required("Campo obligatorio"),
-
-    bathrooms: Yup.number()
-      .notOneOf(["Baños"], 'No puede ser igual a "Baños"')
-      .min(1, "Debe tener al menos 1 baño")
-      .required("Campo obligatorio"),
-
-    allowmetters: Yup.number()
-      .integer("Debe ser un número entero")
       .min(1, "Mínimo 1 metro cuadrado")
+      .required("Campo obligatorio")
+      .test(
+        "is-greater-than-metters",
+        "Debe ser mayor que metros construidos",
+        function (value) {
+          return value > this.parent.metters;
+        }
+      ),
+
+    rooms: Yup.number()
+      .min(0, "Debe ser positivo")
+      .required("Campo obligatorio"),
+
+    bathrooms: Yup.number()
+      .min(0, "Debe ser positivo")
       .required("Campo obligatorio"),
   });
-
-  if (propertyType === "Casa") {
-    return baseSchema.concat(HomeSchema);
-  }
-
-  if (propertyType === "Departamento") {
-    return baseSchema.concat(DepSchema);
-  }
-
-  if (propertyType === "Terreno") {
-    return baseSchema;
-  }
-
   return baseSchema;
 }

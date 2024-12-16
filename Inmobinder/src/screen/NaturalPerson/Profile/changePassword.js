@@ -6,42 +6,46 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from "react-native";
-import firebase from "firebase/app";
-import "firebase/auth";
+import { auth } from "../../../utils/firebase";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+} from "firebase/auth";
 
 export default function ChangePasswordScreen({ navigation }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const reauthenticate = (currentPassword) => {
-    const user = firebase.auth().currentUser;
-    const cred = firebase.auth.EmailAuthProvider.credential(
-      user.email,
-      currentPassword
-    );
-    return user.reauthenticateWithCredential(cred);
-  };
-
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      Alert.alert("Error", "Las contraseñas no coinciden");
       return;
     }
 
-    reauthenticate(currentPassword)
-      .then(() => {
-        const user = firebase.auth().currentUser;
-        user
-          .updatePassword(newPassword)
-          .then(() => {
-            alert("Contraseña cambiada con éxito");
-            navigation.goBack();
-          })
-          .catch((error) => alert(error.message));
-      })
-      .catch((error) => alert("Contraseña actual incorrecta"));
+    const user = auth.currentUser;
+    if (!user) {
+      Alert.alert("Error", "No se encontró el usuario. Por favor, inicia sesión.");
+      return;
+    }
+
+    const cred = EmailAuthProvider.credential(user.email, currentPassword);
+
+    try {
+      await reauthenticateWithCredential(user, cred);
+      await updatePassword(user, newPassword);
+      Alert.alert("Éxito", "Contraseña cambiada con éxito");
+      navigation.goBack();
+    } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        Alert.alert("Error", "La contraseña actual es incorrecta");
+      } else {
+        Alert.alert("Error", error.message);
+      }
+    }
   };
 
   return (
@@ -50,7 +54,7 @@ export default function ChangePasswordScreen({ navigation }) {
       style={styles.background}
     >
       <View style={styles.container}>
-        <Text style={styles.title}> Cambiar Contraseña </Text>
+        <Text style={styles.title}>Cambiar Contraseña</Text>
         <TextInput
           style={styles.input}
           placeholder="Contraseña actual"

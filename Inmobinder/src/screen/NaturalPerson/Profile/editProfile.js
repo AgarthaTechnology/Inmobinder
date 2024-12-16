@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,31 +10,40 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
-import { useLoadUserProfile } from "../../../components/NaturalPerson/Profile/loadUserProfile";
 import { pickProfileImage } from "../../../components/NaturalPerson/Profile/profileImagePicker";
 import { updateUserProfile } from "../../../components/NaturalPerson/Profile/updateUserProfile";
 import { screen } from "../../../utils/screenName";
 
 export default function EditProfileScreen() {
-  const {
-    image,
-    setImage,
-    nombres,
-    setNombres,
-    apellidos,
-    setApellidos,
-    rut,
-    setRut,
-    telefono,
-    setTelefono,
-  } = useUserProfile();
-
   const navigation = useNavigation();
+  const { data, error } = useUserProfile();
 
-  useLoadUserProfile(setNombres, setApellidos, setRut, setTelefono);
+  const [image, setImage] = useState(null);
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [rut, setRut] = useState("");
+  const [telefono, setTelefono] = useState("");
+
+  // Cuando lleguen los datos, establece el estado de los inputs
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const userData = data[0];
+      // Ajusta estos campos según los que realmente existan en tu doc de Firestore
+      setNombres(userData.nombre || "");
+      setApellidos(userData.apellido || "");
+      setRut(userData.rut || "");
+      setTelefono(userData.telefono || "");
+      // Si tienes guardada una URL de imagen en Firestore, puedes setear también setImage(userData.image)
+    }
+  }, [data]);
 
   const handleUpdate = async () => {
-    const updated = await updateUserProfile(nombres, apellidos, rut, telefono);
+    if (!data || data.length === 0) return;
+
+    // Supongamos que la ID del documento del usuario es data[0].id
+    const userId = data[0].id;
+
+    const updated = await updateUserProfile(userId, nombres, apellidos, rut, telefono);
     if (updated) {
       alert("Los datos fueron actualizados correctamente");
       navigation.goBack();
@@ -53,16 +62,6 @@ export default function EditProfileScreen() {
       style={styles.background}
     >
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.image}
-          onPress={() => pickProfileImage(setImage)}
-        >
-          {image ? (
-            <Image source={{ uri: image }} style={styles.profileImage} />
-          ) : (
-            <Text>Elegir Imagen</Text>
-          )}
-        </TouchableOpacity>
         <TextInput
           style={styles.input}
           placeholder="Nombres"

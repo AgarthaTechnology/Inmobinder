@@ -3,16 +3,16 @@ import { db } from "../../../utils/firebase";
 
 export const updateUserProfile = async (
   userId,
-  nombres,
-  apellidos,
+  nombre,
+  apellido,
   rut,
   telefono
 ) => {
   try {
-    const userRef = doc(db, "usuarios", userId);
+    const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
-      nombres,
-      apellidos,
+      nombre,
+      apellido,
       rut,
       telefono,
     });

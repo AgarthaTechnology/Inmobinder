@@ -22,14 +22,6 @@ const FilterMenu = ({ applyFilters }) => {
 
   const navigation = useNavigation();
 
-  const handleClear = () => {
-    setRooms(null);
-    setCondition(null);
-    setPriceRange([0, Infinity]);
-    setBathrooms(null);
-    setMetters(null);
-  };
-
   const handleApplyFilters = () => {
     const filters = {
       priceRange: [
@@ -43,7 +35,7 @@ const FilterMenu = ({ applyFilters }) => {
     };
 
     navigation.navigate(screen.publication.stack, {
-      screen: screen.publication.publications,
+      screen: screen.publication.publicationsfilter,
       params: { filters },
     });
 

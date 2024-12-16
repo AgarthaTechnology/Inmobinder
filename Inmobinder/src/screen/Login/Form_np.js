@@ -91,12 +91,12 @@ export default function Form_np() {
   };
 
 const handleRutChange = (text) => {
-    const validText = text.replace(/[^0-9kK]/g, ""); // Permitir solo números y la letra k
-    if (validText.length <= 9) {
-        setRut(validText);
-    } else {
-        setRut(validText.slice(0, 9)); // Limitar a 9 caracteres
-    }
+  const validText = text.replace(/[^0-9kK]/g, ""); // Permitir solo números y la letra k
+  if (validText.length <= 8) {
+    setRut(validText);
+  } else {
+    setRut(validText.slice(0, 8) + validText.charAt(8).replace(/[^kK]/g, ""));
+  }
 };
 
   const handleTelefonoChange = (text) => {
@@ -106,6 +106,16 @@ const handleRutChange = (text) => {
       text = "+56" + text.slice(3, 10).replace(/[^0-9]/g, "");
     }
     setTelefono(text);
+  };
+
+  const handleInputNombres = (text) => {
+    const validText = text.replace(/[^a-zA-Z\s]/g, ""); // Permitir solo letras y espacios
+    setNombre(validText);
+  };
+
+  const handleInputApellidos = (text) => {
+    const validText = text.replace(/[^a-zA-Z\s]/g, ""); // Permitir solo letras y espacios
+    setApellido(validText);
   };
 
   return (
@@ -127,12 +137,11 @@ const handleRutChange = (text) => {
         <ScrollView style={styles.container}>
           <Text style={styles.title}>Registro</Text>
 
-          <Text style={styles.Text}>Nombre</Text>
           <TextInput
             style={styles.inputtext}
             placeholder="Ingrese su nombre"
             value={nombre}
-            onChangeText={setNombre}
+            onChangeText={handleInputNombres}
           />
 
           <Text style={styles.Text}>Apellidos</Text>
@@ -140,7 +149,7 @@ const handleRutChange = (text) => {
             style={styles.inputtext}
             placeholder="Ingrese su apellido"
             value={apellido}
-            onChangeText={setApellido}
+            onChangeText={handleInputApellidos}
           />
 
           <Text style={styles.Text}>Rut</Text>

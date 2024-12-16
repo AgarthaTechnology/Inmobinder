@@ -1,5 +1,3 @@
-// CreatePublicationScreen.js
-
 import React from "react";
 import {
   ScrollView,
@@ -17,24 +15,23 @@ import * as VideoThumbnails from "expo-video-thumbnails";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { InfoForm } from "../../../components/NaturalPerson/CreatePublication/InfoForm";
 import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
-import { UploadVideo } from "../../../components/NaturalPerson/CreatePublication/UploadVideo";
 import { db } from "../../../utils/firebase";
 import {
   initialValues,
   validationSchema,
 } from "./CreatePublicationScreen.data";
 import { styles } from "./CreatePublication.styles";
+import { auth} from "../../../utils/firebase";
 
 export function CreatePublicationScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const newPublicationId = uuid();
-
-  const { propertyType } = route.params;
+  const userId = auth.currentUser.uid || "";
 
   const formik = useFormik({
-    initialValues: initialValues(propertyType),
-    validationSchema: validationSchema(propertyType),
+    initialValues: initialValues(),
+    validationSchema: validationSchema(),
     validateOnChange: false,
     onSubmit: async (formValue) => {
       try {
@@ -79,6 +76,7 @@ export function CreatePublicationScreen() {
           video: uploadedVideos,
           id: newPublicationId,
           createdAt: new Date(),
+          userId: userId,
         };
 
         const myDB = doc(db, "publications", newPublicationId);
@@ -102,18 +100,13 @@ export function CreatePublicationScreen() {
 
   return (
     <ImageBackground
-      source={require("../../../../assets/img/fondo.png")}
+      source={require("../../../../src/images/fondo.png")}
       style={styles.background}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.formContainer}>
-          <InfoForm
-            formik={formik}
-            images={formik.values.gallery}
-            propertyType={propertyType}
-          />
+          <InfoForm formik={formik} images={formik.values.gallery} />
           <UploadImagesForm formik={formik} />
-          <UploadVideo formik={formik} />
           {/* Botón "Crear Publicación" */}
           <TouchableOpacity
             style={styles.button}

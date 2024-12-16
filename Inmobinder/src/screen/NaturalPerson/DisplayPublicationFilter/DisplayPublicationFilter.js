@@ -1,36 +1,25 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { ImageBackground } from "react-native";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { db, auth } from "../../../utils/firebase";
+import { db } from "../../../utils/firebase";
 import DisplayPublication from "../../../components/NaturalPerson/DisplayPublication/DisplayPublication";
 import { LoadingModal } from "../../../components/Shared/LoadingModal";
-import { styles } from "./DisplayPublicationScreen.styles";
+import { styles } from "./DisplayPublicationFilter.styles";
 import { useRoute } from "@react-navigation/native";
 
-export function DisplayPublicationScreen() {
+export function DisplayPublicationFilter() {
   const [publications, setPublications] = useState([]);
   const [filteredPublications, setFilteredPublications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const route = useRoute(); 
+  const route = useRoute();
   const filters = useMemo(
     () => route.params?.filters || {},
     [route.params?.filters]
   );
 
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      // Maneja el caso donde no hay usuario logueado
-      setLoading(false);
-      return;
-    }
-
-    // Filtra publicaciones por el userId del usuario actual
-    const q = query(
-      collection(db, "publications"),
-      where("userId", "==", currentUser.uid) // Filtra por userId
-    );
+    const q = query(collection(db, "publications"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const publicationsData = [];
@@ -61,12 +50,20 @@ export function DisplayPublicationScreen() {
         }
 
         if (rooms && rooms === 5 && parseInt(publication.rooms) <= 5) {
-          return false; 
-        } else if (rooms && rooms < 5 && parseInt(publication.rooms) !== rooms) {
+          return false;
+        } else if (
+          rooms &&
+          rooms < 5 &&
+          parseInt(publication.rooms) !== rooms
+        ) {
           return false;
         }
 
-        if (bathrooms && bathrooms === 5 && parseInt(publication.bathrooms) <= 5) {
+        if (
+          bathrooms &&
+          bathrooms === 5 &&
+          parseInt(publication.bathrooms) <= 5
+        ) {
           return false;
         } else if (
           bathrooms &&

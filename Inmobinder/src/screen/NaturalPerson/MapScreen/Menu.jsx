@@ -8,21 +8,23 @@ import {
   Image,
   Text,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { auth } from "../../../utils/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import BotonMenu from "../../../components/NaturalPerson/BotonMenu";
 import { screen } from "../../../utils/screenName";
+import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
 
 const MenuButton = () => {
+  const { data, error } = useUserProfile();
   const [isMenuVisible, setMenuVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      // Navega a la pantalla de login después de cerrar sesión
       navigation.navigate(screen.login.stack, {
         screen: screen.login.login,
       });
@@ -36,7 +38,7 @@ const MenuButton = () => {
   };
 
   const handleNavigation = (stackName, screenName) => {
-    toggleMenu(); // Cierra el menú
+    toggleMenu();
     navigation.navigate(stackName, {
       screen: screenName,
     });
@@ -61,16 +63,22 @@ const MenuButton = () => {
             <TouchableWithoutFeedback>
               <View style={styles.menu}>
                 <View style={styles.profileContainer}>
-                  <Image
-                    source={require("../../../../assets/images/perfil.png")}
-                    style={styles.profile}
-                  />
-                  <Text style={styles.titulo}>11.111.111-1</Text>
-                  <Text style={styles.titulo}>
-                    Nombre Nombre Apellido Apellido
-                  </Text>
+                <Image
+                  source={require("../../../../assets/images/perfil.png")}
+                  style={styles.profile}
+                />
+                  {data.length === 0 ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                  ) : (
+                    data.map((doc) => (
+                      <View key={doc.id} style={styles.profileDetails}>
+                        <Text style={styles.titulo}>{doc.nombre}</Text>
+                        <Text style={styles.titulo}> {doc.apellido}</Text>
+                      </View>
+                    ))
+                  )}
                 </View>
-                <View style={styles.menuItem}>
+                <View style={styles.menuItemsContainer}>
                   <BotonMenu
                     text="Mi Perfil"
                     onPress={() =>
@@ -135,6 +143,17 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
   },
+  profile:{
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderWidth: 3,
+    borderColor: "#fff",
+  },
+  profileDetails: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
@@ -153,9 +172,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   titulo: {
-    fontSize: 15,
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 5,
     color: "#000",
   },
   profile: {
