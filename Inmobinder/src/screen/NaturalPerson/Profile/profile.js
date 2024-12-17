@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
+import image from "../../../../assets/images/perfil.png";
 import { screen } from "../../../utils/screenName";
 
 const ProfileScreen = () => {
@@ -31,20 +32,12 @@ const ProfileScreen = () => {
     >
       <View style={styles.container}>
         <Text style={styles.title}>Perfil</Text>
+        <Image source={image} style={styles.profileImage} />
         {data.length === 0 ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           data.map((doc) => (
-            <View key={doc.id} style={{ alignItems: "center" }}>
-              {/* Imagen de perfil desde Firestore */}
-              <Image
-                source={
-                  doc.image
-                    ? { uri: doc.image } // URL de la imagen si existe
-                    : require("../../../../assets/images/perfil.png") // Imagen predeterminada
-                }
-                style={styles.profileImage}
-              />
+            <View key={doc.id}>
               <Text style={styles.text}>Nombres: {doc.nombre}</Text>
               <Text style={styles.text}>Apellidos: {doc.apellido}</Text>
               <Text style={styles.text}>RUT: {doc.rut}</Text>
@@ -53,6 +46,7 @@ const ProfileScreen = () => {
           ))
         )}
         <TouchableOpacity
+          title="Editar perfil"
           style={styles.button}
           onPress={navigateToEditProfile}
         >
