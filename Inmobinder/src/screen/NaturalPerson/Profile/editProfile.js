@@ -24,24 +24,36 @@ export default function EditProfileScreen() {
 
   const uploadProfileImage = async (uri) => {
     try {
+      console.log("Subiendo imagen desde URI:", uri); // Verificar la URI
       const auth = getAuth();
       const storage = getStorage();
       const response = await fetch(uri);
+  
+      if (!response.ok) throw new Error("Error al convertir URI a blob.");
+  
       const blob = await response.blob();
-
-      const userId = auth.currentUser.uid;
+      console.log("Blob generado correctamente");
+  
+      const userId = auth.currentUser?.uid;
+      if (!userId) throw new Error("El usuario no está autenticado.");
+  
       const imageID = uuid();
-      const imagePath = `profile-images/${userId}/${imageID}`; 
+      const imagePath = `profile-images/${userId}/${imageID}`;
+      console.log("Subiendo a Firebase Storage en:", imagePath);
+  
       const storageRef = ref(storage, imagePath);
-
       await uploadBytes(storageRef, blob);
-      return await getDownloadURL(storageRef);
+  
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log("Imagen subida correctamente. URL:", downloadURL);
+  
+      return downloadURL;
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
-      Alert.alert("Error", "No se pudo subir la imagen.");
+      console.error("Error al subir la imagen:", error.message);
+      Alert.alert("Error", `No se pudo subir la imagen: ${error.message}`);
       return null;
     }
-  };
+  };  
 
   const formik = useFormik({
     initialValues: {

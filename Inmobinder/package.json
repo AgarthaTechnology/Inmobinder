@@ -4,8 +4,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -23,13 +23,14 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.7.2",
-    "expo": "52.0.18",
+    "expo": "52.0.19",
     "expo-app-loading": "^1.0.3",
     "expo-clipboard": "7.0.0",
     "expo-document-picker": "^13.0.1",
     "expo-image-picker": "16.0.3",
     "expo-location": "18.0.4",
     "expo-status-bar": "2.0.0",
+    "expo-system-ui": "~4.0.6",
     "expo-video-thumbnails": "9.0.2",
     "find-yarn-workspace-root": "^2.0.0",
     "firebase": "^11.1.0",
