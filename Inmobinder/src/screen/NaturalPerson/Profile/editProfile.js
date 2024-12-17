@@ -1,60 +1,109 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
-  Text,
   TextInput,
-  Image,
   TouchableOpacity,
+  Text,
   ImageBackground,
   StyleSheet,
+  Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFormik } from "formik";
+import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublication/UploadImagesForm";
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
-import { pickProfileImage } from "../../../components/NaturalPerson/Profile/profileImagePicker";
-import { updateUserProfile } from "../../../components/NaturalPerson/Profile/updateUserProfile";
-import { screen } from "../../../utils/screenName";
+import { useNavigation } from "@react-navigation/native";
+import { doc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db } from "../../../utils/firebase";
+import { v4 as uuid } from "uuid";
+import { getAuth } from "firebase/auth";
 
 export default function EditProfileScreen() {
   const navigation = useNavigation();
-  const { data, error } = useUserProfile();
+  const { data } = useUserProfile();
 
-  const [image, setImage] = useState(null);
-  const [nombres, setNombres] = useState("");
-  const [apellidos, setApellidos] = useState("");
-  const [rut, setRut] = useState("");
-  const [telefono, setTelefono] = useState("");
+  const uploadProfileImage = async (uri) => {
+    try {
+      const auth = getAuth();
+      const storage = getStorage();
+      const response = await fetch(uri);
+      const blob = await response.blob();
 
-  // Cuando lleguen los datos, establece el estado de los inputs
+      const userId = auth.currentUser.uid;
+      const imageID = uuid();
+      const imagePath = `profile-images/${userId}/${imageID}`; 
+      const storageRef = ref(storage, imagePath);
+
+      await uploadBytes(storageRef, blob);
+      return await getDownloadURL(storageRef);
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      Alert.alert("Error", "No se pudo subir la imagen.");
+      return null;
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      nombres: "",
+      apellidos: "",
+      rut: "",
+      telefono: "",
+      gallery: [],
+    },
+    onSubmit: async (values) => {
+      if (!data || data.length === 0) return;
+
+      const userId = data[0].id;
+      let imageURL = formik.values.gallery[0] || null;
+
+      if (formik.values.gallery.length > 0) {
+        const uploadedImageUrl = await uploadProfileImage(
+          formik.values.gallery[0]
+        );
+        if (uploadedImageUrl) {
+          imageURL = uploadedImageUrl;
+        }
+      }
+
+      try {
+        const userRef = doc(db, "users", userId);
+        await updateDoc(userRef, {
+          nombre: values.nombres,
+          apellido: values.apellidos,
+          rut: values.rut,
+          telefono: values.telefono,
+          image: imageURL,
+        });
+
+        Alert.alert("Perfil actualizado correctamente");
+        navigation.goBack();
+      } catch (error) {
+        console.error("Error al actualizar Firestore:", error);
+        Alert.alert("Error", "No se pudo actualizar el perfil.");
+      }
+    },
+  });
+
   useEffect(() => {
     if (data && data.length > 0) {
       const userData = data[0];
-      // Ajusta estos campos según los que realmente existan en tu doc de Firestore
-      setNombres(userData.nombre || "");
-      setApellidos(userData.apellido || "");
-      setRut(userData.rut || "");
-      setTelefono(userData.telefono || "");
-      // Si tienes guardada una URL de imagen en Firestore, puedes setear también setImage(userData.image)
+      formik.setValues({
+        nombres: userData.nombre || "",
+        apellidos: userData.apellido || "",
+        rut: userData.rut || "",
+        telefono: userData.telefono || "",
+        gallery: userData.image ? [userData.image] : [],
+      });
     }
   }, [data]);
 
-  const handleUpdate = async () => {
-    if (!data || data.length === 0) return;
-
-    // Supongamos que la ID del documento del usuario es data[0].id
-    const userId = data[0].id;
-
-    const updated = await updateUserProfile(userId, nombres, apellidos, rut, telefono);
-    if (updated) {
-      alert("Los datos fueron actualizados correctamente");
-      navigation.goBack();
-    } else {
-      alert("Error al actualizar los datos");
+  useEffect(() => {
+    if (formik.values.gallery.length > 1) {
+      alert("Por favor, solo suba una imagen.");
+      formik.setFieldValue("gallery", [formik.values.gallery[0]]);
     }
-  };
-
-  const navigateToChangePassword = () => {
-    navigation.navigate(screen.profile.changePass);
-  };
+  }, [formik.values.gallery]);
 
   return (
     <ImageBackground
@@ -62,45 +111,35 @@ export default function EditProfileScreen() {
       style={styles.background}
     >
       <View style={styles.container}>
+        <UploadImagesForm formik={formik} />
+
         <TextInput
           style={styles.input}
           placeholder="Nombres"
-          value={nombres}
-          onChangeText={setNombres}
+          value={formik.values.nombres}
+          onChangeText={(text) => formik.setFieldValue("nombres", text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Apellidos"
-          value={apellidos}
-          onChangeText={setApellidos}
+          value={formik.values.apellidos}
+          onChangeText={(text) => formik.setFieldValue("apellidos", text)}
         />
         <TextInput
           style={styles.input}
           placeholder="RUT"
-          value={rut}
-          onChangeText={setRut}
+          value={formik.values.rut}
+          onChangeText={(text) => formik.setFieldValue("rut", text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Teléfono"
-          value={telefono}
-          onChangeText={setTelefono}
+          value={formik.values.telefono}
+          onChangeText={(text) => formik.setFieldValue("telefono", text)}
         />
 
-        <TouchableOpacity
-          title="Guardar Cambios"
-          onPress={handleUpdate}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={formik.handleSubmit} style={styles.button}>
           <Text style={styles.buttonText}>Guardar Cambios</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          title="Cambiar Contraseña"
-          onPress={navigateToChangePassword}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Cambiar Contraseña</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -118,12 +157,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
     borderRadius: 10,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
   },
   input: {
     width: "90%",
@@ -149,15 +182,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-  },
-  image: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    alignContent: "center",
-    alignSelf: "center",
-    height: 150,
-    width: 150,
-    backgroundColor: "#f0f0f0",
   },
 });

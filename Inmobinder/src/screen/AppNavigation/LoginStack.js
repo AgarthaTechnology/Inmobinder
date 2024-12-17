@@ -8,7 +8,6 @@ import FormInmo from "../../screen/Login/Form_Inmo";
 import FormCO from "../../screen/Login/Form_co";
 import FormAC from "../../screen/Login/Form_ac";
 import SingIn from "../../screen/Login/Singin";
-import Verification from "../../screen/Login/Verification";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +21,6 @@ export function LoginStack() {
       <Stack.Screen name={screen.login.form_co} component={FormCO}/>
       <Stack.Screen name={screen.login.form_ac} component={FormAC}/>
       <Stack.Screen name={screen.login.singin} component={SingIn}/>
-      <Stack.Screen name={screen.login.verification} component={Verification}/>
     </Stack.Navigator>
   );
 }
