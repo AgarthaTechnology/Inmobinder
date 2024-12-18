@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import VentaImage from '../../../../assets/images/Venta.png';
 import ArriendoImage from '../../../../assets/images/Arriendo.png';
 import { useNavigation } from '@react-navigation/native';
+import { screen } from '../../../utils/screenName';
 
 export function MapPublication({ isVisible, property, onClose }) {
   const navigation = useNavigation();
@@ -12,9 +13,12 @@ export function MapPublication({ isVisible, property, onClose }) {
   if (!property) return null;
 
   const goTo = () => {
-    navigation.navigate("ViewPublication", { publication: property });
+    navigation.navigate(screen.publication.stack, {
+      screen: screen.publication.view, 
+      params: { publication: property }, 
+    });
   };
-
+  
   return (
     <Modal
       animationType='slide'
@@ -26,11 +30,17 @@ export function MapPublication({ isVisible, property, onClose }) {
         <View style={styles.container}>
           <View style={styles.modal}>
             <View style={styles.row}>
-              <Image source={property.state === 'Venta' ? VentaImage : ArriendoImage} style={{ height: 30, width: 30 }} />
+              <Image 
+                source={property.state === 'Venta' ? VentaImage : ArriendoImage} 
+                style={{ height: 30, width: 30 }} 
+              />
               <Text style={styles.title}>Propiedad en {property.state}</Text>
             </View>
-            {property.gallery && property.gallery.length > 0 && (
+
+            {property.gallery && property.gallery.length > 0 ? (
               <Image source={{ uri: property.gallery[0] }} style={styles.image} />
+            ) : (
+              <Text style={styles.noImageText}>No hay imágenes</Text>
             )}
 
             <View style={styles.row}>
@@ -44,7 +54,11 @@ export function MapPublication({ isVisible, property, onClose }) {
               <Text style={styles.modalText}>{property.metters} m²</Text>
             </View>
 
-            <Button title='Ir a la Publicación' buttonStyle={styles.button} onPress={goTo} />
+            <Button 
+              title='Ir a la Publicación' 
+              buttonStyle={styles.button} 
+              onPress={() => goTo(property)} 
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -57,12 +71,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   image: {
     width: 300,
     height: 180,
     resizeMode: 'cover',
+    marginVertical: 10,
+  },
+  noImageText: {
+    fontSize: 14,
+    color: 'gray',
     marginVertical: 10,
   },
   modal: {
