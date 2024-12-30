@@ -4,8 +4,6 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
@@ -13,6 +11,7 @@ import {
   Keyboard,
   Platform,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -95,31 +94,15 @@ export default function Singin() {
       ]);
 
       if (!usersSnapshot.empty) {
-        console.log(
-          "Documento encontrado en 'users':",
-          usersSnapshot.docs[0].data()
-        );
         Alert.alert("Éxito", "Bienvenido persona natural.");
         handleNavigation(screen.map);
       } else if (!inmobiliariaSnapshot.empty) {
-        console.log(
-          "Documento encontrado en 'inmobiliaria':",
-          inmobiliariaSnapshot.docs[0].data()
-        );
         Alert.alert("Éxito", "Bienvenido inmobiliaria.");
         handleNavigation(screen.map);
       } else if (!corredorSnapshot.empty) {
-        console.log(
-          "Documento encontrado en 'corredor':",
-          corredorSnapshot.docs[0].data()
-        );
         Alert.alert("Éxito", "Bienvenido corredor.");
         handleNavigation(screen.map);
       } else if (!agenciacorretajeSnapshot.empty) {
-        console.log(
-          "Documento encontrado en 'agenciacorretaje':",
-          agenciacorretajeSnapshot.docs[0].data()
-        );
         Alert.alert("Éxito", "Bienvenido agencia de corretaje.");
         handleNavigation(screen.map);
       } else {
@@ -141,68 +124,61 @@ export default function Singin() {
       <ImageBackground
         style={styles.background}
         source={require("../../images/fondo.png")}
-      />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          style={styles.containerAvoiding}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View>
-              <Image
-                style={styles.logo}
-                source={require("../../../assets/images/INMOBINDER-03.png")}
-              />
-            </View>
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView
+            style={styles.containerAvoiding}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              <View style={styles.container}>
+                <Text style={styles.title}>Ingresar</Text>
 
-            <View style={styles.container}>
-              <Text style={styles.title}>Iniciar sesión</Text>
-
-              <TextInput
-                style={styles.inputtext}
-                placeholder="Ingrese su correo"
-                value={correo}
-                onChangeText={setCorreo}
-              />
-
-              <View style={styles.passwordContainer}>
                 <TextInput
-                  style={styles.passwordInput}
-                  placeholder="Ingrese su contraseña"
-                  secureTextEntry={!showPassword}
-                  value={contraseña}
-                  onChangeText={setContraseña}
+                  style={styles.inputtext}
+                  placeholder="Ingrese su correo"
+                  value={correo}
+                  onChangeText={setCorreo}
                 />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={styles.eyeButton}
-                >
-                  <Icon
-                    name={showPassword ? "eye" : "eye-off"}
-                    size={24}
-                    color="#000000"
+
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Ingrese su contraseña"
+                    secureTextEntry={!showPassword}
+                    value={contraseña}
+                    onChangeText={setContraseña}
                   />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.eyeButton}
+                  >
+                    <Icon
+                      name={showPassword ? "eye" : "eye-off"}
+                      size={24}
+                      color="#000000"
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity style={styles.buton} onPress={handleLogin}>
+                  <Text style={styles.buttonText}>Ingresar</Text>
                 </TouchableOpacity>
               </View>
-
-              <TouchableOpacity style={styles.buton} onPress={handleLogin}>
-                <Text>Ingresar</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
-    position: "absolute",
+    flex: 1,
     width: "100%",
     height: "100%",
     resizeMode: "cover",
-    top: "23%",
   },
   containerAvoiding: {
     flex: 1,
@@ -215,47 +191,46 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    padding: "10%",
+    padding: "6%",
     borderRadius: 30,
     backgroundColor: "#FFFFFF",
-    height: "60%",
-    margintop: "-10%",
-  },
-  logo: {
-    height: 260,
-    width: 260,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    top: "-1%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Sombra
+    width: "90%",
   },
   inputtext: {
-    height: 40,
-    borderRadius: 30,
-    top: "-5%",
+    height: 50,
+    borderRadius: 10,
     borderWidth: 1,
+    borderColor: "#ccc",
     backgroundColor: "#FFFFFF",
-    width: 300,
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 5,
     paddingHorizontal: 15,
+    fontSize: 16,
   },
   title: {
     fontSize: 30,
     fontWeight: "bold",
     color: "#25272B",
     textAlign: "center",
-    top: "-20%",
-    margin: 5,
+    marginBottom: 20,
   },
   passwordContainer: {
     flexDirection: "row",
     alignItems: "center",
-    margintbutton: "10%",
-    top: "2%",
     borderWidth: 1,
-    borderRadius: 30,
+    borderColor: "#ccc",
+    borderRadius: 10,
     paddingHorizontal: 15,
     backgroundColor: "#FFFFFF",
     width: "90%",
+    alignSelf: "center",
+    marginTop: 5,
   },
   eyeButton: {
     marginLeft: 10,
@@ -264,18 +239,30 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    height: 50,
     backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 10,
+    paddingLeft: 10,
+    fontSize: 16,
   },
   buton: {
-    borderRadius: 30,
+    borderRadius: 50,
     backgroundColor: "#009245",
-    width: 236,
-    height: 40,
+    width: 126,
+    height: 50,
     justifyContent: "center",
     alignItems: "center",
-    top: "10%",
-    marginTop: "5%",
+    alignSelf: "center",
+    marginTop: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

@@ -1,3 +1,4 @@
+// EditProfileScreen.js
 import React, { useEffect } from "react";
 import {
   View,
@@ -13,7 +14,7 @@ import { UploadImagesForm } from "../../../components/NaturalPerson/CreatePublic
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
 import { useNavigation } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db } from "../../../utils/firebase";
 import { v4 as uuid } from "uuid";
 import { getAuth } from "firebase/auth";
@@ -21,6 +22,23 @@ import { getAuth } from "firebase/auth";
 export default function EditProfileScreen() {
   const navigation = useNavigation();
   const { data } = useUserProfile();
+
+  // Función para eliminar una imagen existente en Firebase Storage
+  const deleteProfileImage = async (imageUrl) => {
+    try {
+      const storage = getStorage();
+      // Extraer la ruta relativa de la URL de la imagen
+      const imagePath = decodeURIComponent(
+        imageUrl.split("/o/")[1].split("?")[0]
+      );
+      const imageRef = ref(storage, imagePath);
+      await deleteObject(imageRef);
+      console.log("Imagen de perfil antigua eliminada correctamente.");
+    } catch (error) {
+      console.error("Error al eliminar la imagen de perfil antigua:", error);
+      // Opcional: Manejar el error según tus necesidades
+    }
+  };
 
   const uploadProfileImage = async (uri) => {
     try {
@@ -32,7 +50,7 @@ export default function EditProfileScreen() {
       if (!response.ok) throw new Error("Error al convertir URI a blob.");
   
       const blob = await response.blob();
-      console.log("Blob generado correctamente");
+      console.log("Blob generado correctamente.");
   
       const userId = auth.currentUser?.uid;
       if (!userId) throw new Error("El usuario no está autenticado.");
@@ -69,7 +87,16 @@ export default function EditProfileScreen() {
       const userId = data[0].id;
       let imageURL = formik.values.gallery[0] || null;
 
+      // Obtener la URL de la imagen existente
+      const existingImageUrl = data[0].image || null;
+
       if (formik.values.gallery.length > 0) {
+        // Eliminar la imagen existente si existe
+        if (existingImageUrl) {
+          await deleteProfileImage(existingImageUrl);
+        }
+
+        // Subir la nueva imagen
         const uploadedImageUrl = await uploadProfileImage(
           formik.values.gallery[0]
         );

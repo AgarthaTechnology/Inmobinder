@@ -7,9 +7,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../utils/firebase";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Entypo from "@expo/vector-icons/Entypo";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { screen } from "../../../utils/screenName";
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 const DisplayPublication = (props, filters) => {

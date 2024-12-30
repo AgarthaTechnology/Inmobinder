@@ -1,23 +1,25 @@
+// useUserProfile.js
 import { useEffect, useState } from "react";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { db, auth } from "../../../utils/firebase";
 
 export function useUserProfile() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); // Inicializa como un array vacío
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Verificamos si el usuario está autenticado
+        // Verificar si el usuario está autenticado
         const currentUser = auth.currentUser;
         if (!currentUser) {
-          // Si no hay usuario autenticado, puedes manejar el caso, ejemplo:
           setError(new Error("No hay un usuario autenticado."));
+          setIsLoading(false);
           return;
         }
 
-        // Creamos una consulta que filtre por uid
+        // Crear una consulta que filtre por uid
         const q = query(
           collection(db, "users"),
           where("uid", "==", currentUser.uid)
@@ -33,10 +35,13 @@ export function useUserProfile() {
       } catch (error) {
         setError(error);
         console.error("Error al obtener los datos del usuario", error);
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
-  return { data, error };
+  return { data, isLoading, error };
 }

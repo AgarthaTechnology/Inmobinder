@@ -4,7 +4,6 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
-  Image,
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -22,17 +21,10 @@ const Register = () => {
   return (
     <ImageBackground
       style={styles.background}
-      source={require("../../images/fondo.png")}
+      source={require("../../../assets/img/fondo.png")}
     >
-      <View>
-        <Image
-          style={styles.logo}
-          source={require("../../../assets/images/INMOBINDER-03.png")}
-        />
-      </View>
-
       <View style={styles.container}>
-        <Text style={styles.title}> Registrarse como </Text>
+        <Text style={styles.title}> Elije tu perfil:</Text>
 
         <TouchableOpacity
           style={styles.buton}
@@ -65,19 +57,19 @@ const Register = () => {
           style={styles.buton}
           onPress={() => handleNavigation(screen.login.stack, screen.login.form_ac)}
         >
-          <Text style={styles.Text}>Agencia de Corretaje</Text>
+          <Text style={styles.Text}>Ag. de Corretaje</Text>
         </TouchableOpacity>
 
         <View style={styles.row}>
-          <Text style={styles.transparentText}>¿Ya tienes cuena?</Text>
-          <TouchableOpacity
-            onPress={() =>
-              handleNavigation(screen.login.stack, screen.login.singin)
-            }
-          >
-            <Text style={styles.texto3}>Inicia sesión</Text>
-          </TouchableOpacity>
+          <Text style={styles.transparentText}>¿Ya tienes cuenta?</Text>
         </View>
+        <TouchableOpacity
+          onPress={() =>
+            handleNavigation(screen.login.stack, screen.login.singin)
+          }
+        >
+          <Text style={styles.texto3}>Inicia sesión</Text>
+        </TouchableOpacity>
       </View>
     </ImageBackground>
   );
@@ -88,89 +80,59 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    marginTop: "50%",
     resizeMode: "cover",
   },
   container: {
-    height: "65%",
-    width: "80%",
-    top: "-20%",
-    left: "10%",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "6%",
     borderRadius: 30,
     backgroundColor: "#FFFFFF",
-  },
-  logo: {
-    height: 260,
-    width: 260,
-    justifyContent: "center",
-    alignItems: "center",
-    left: "16.5%",
-    top: "-60%",
-  },
-  input: {
-    marginTop: "10%",
-    height: 40,
-    borderRadius: 30,
-    margin: 12,
-    borderWidth: 1,
-    backgroundColor: "#dcdcdc",
-    width: "90%",
-  },
-  tamlogo: {
-    justifyContent: "center",
-    alignItems: "center",
-    top: "-20%",
-    height: "20%",
-    width: "10",
-    marginLeft: "40%",
-
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Sombra
+    width: "80%",
+    alignSelf: "center",
+    marginVertical: 150, // Añadir margen vertical para controlar la altura
   },
   buton: {
     borderRadius: 30,
     backgroundColor: "#009245",
-    width: 236,
-    height: 40,
+    width: 200,
+    height: 47,
     justifyContent: "center",
     alignItems: "center",
-    left: "15%",
-    marginTop: "5%",
+    marginTop: 20,
   },
-
   Text: {
     color: "#F8F8FF",
     fontSize: 20,
+    fontWeight: "bold",
   },
-
   title: {
-    fontSize: 30, // Tamaño de la fuente
+    fontSize: 28, // Tamaño de la fuente
     fontWeight: "bold", // Peso de la fuente
     color: "#25272B", // Color del texto
     textAlign: "center", // Alineación del texto
     margin: 5, // Margen vertical
   },
-
-  texto2: {
-    top: "40%",
-    left: "30%",
-  },
-
-  texto3: {
-    left: "65%",
-  },
-
   row: {
     flexDirection: "row",
     alignItems: "center",
-    margin: "10%",
-    left: "-5%",
-    top: "10%",
+    marginTop: 20,
   },
-
   transparentText: {
     color: "rgba(0, 0, 0, 0.5)", // Texto transparente
     fontSize: 16,
-    left: "18%",
+  },
+  texto3: {
+    marginTop: 10, // Añadir margen superior para separar del texto anterior
+    color: "#009245",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

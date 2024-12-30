@@ -4,7 +4,7 @@
     "slug": "Inmobinder",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/INMOBINDER-03.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -20,17 +20,22 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/INMOBINDER-03.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.Inmobinder"
+      "package": "com.anonymous.Inmobinder",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDHcpKQJ_MAgJ3DKNaf9BhLfF0-CnchY2k"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "61f179d1-234a-4f6c-83e4-06f51da8bf97"
+        "projectId": "09f7f305-6767-44ab-adde-dbc30904f084"
       }
     }
   }
