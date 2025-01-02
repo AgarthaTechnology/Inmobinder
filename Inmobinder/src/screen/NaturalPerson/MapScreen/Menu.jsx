@@ -18,8 +18,13 @@ import { screen } from "../../../utils/screenName";
 import { useUserProfile } from "../../../components/NaturalPerson/Profile/useUserProfile";
 
 const MenuButton = () => {
-  const { data, error } = useUserProfile();
+  // Traemos la info del perfil desde Firestore
+  const { data, isLoading, error } = useUserProfile();
+
+  // Control de la visibilidad del modal
   const [isMenuVisible, setMenuVisible] = useState(false);
+
+  // Para la navegación
   const navigation = useNavigation();
 
   const handleSignOut = async () => {
@@ -44,14 +49,30 @@ const MenuButton = () => {
     });
   };
 
+  const user = data && data.length > 0 ? data[0] : null;
+
   return (
     <>
       <TouchableOpacity onPress={toggleMenu} style={styles.button}>
-        <Image
-          source={require("../../../../assets/images/perfil.png")}
-          style={styles.profileIcon}
-        />
+        {isLoading ? (
+          <ActivityIndicator
+            size="small"
+            color="#0000ff"
+            style={styles.loader}
+          />
+        ) : (
+          <Image
+            source={
+              user && user.image && user.image.trim() !== ""
+                ? { uri: user.image }
+                : require("../../../../assets/images/perfil.png")
+            }
+            style={styles.profileIcon}
+            onError={() => console.log("Error al cargar la imagen de perfil")}
+          />
+        )}
       </TouchableOpacity>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -63,21 +84,37 @@ const MenuButton = () => {
             <TouchableWithoutFeedback>
               <View style={styles.menu}>
                 <View style={styles.profileContainer}>
-                <Image
-                  source={require("../../../../assets/images/perfil.png")}
-                  style={styles.profile}
-                />
-                  {data.length === 0 ? (
+                  {isLoading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
-                  ) : (
-                    data.map((doc) => (
-                      <View key={doc.id} style={styles.profileDetails}>
-                        <Text style={styles.titulo}>{doc.nombre}</Text>
-                        <Text style={styles.titulo}> {doc.apellido}</Text>
+                  ) : user ? (
+                    <>
+                      <Image
+                        source={
+                          user.image && user.image.trim() !== ""
+                            ? { uri: user.image }
+                            : require("../../../../assets/images/perfil.png")
+                        }
+                        style={styles.profile}
+                        onError={() =>
+                          console.log("Error al cargar la imagen de perfil")
+                        }
+                      />
+                      <View style={styles.profileDetails}>
+                        <Text style={styles.titulo}>{user.nombre}</Text>
+                        <Text style={styles.titulo}> {user.apellido}</Text>
                       </View>
-                    ))
+                    </>
+                  ) : (
+                    <>
+                      <Image
+                        source={require("../../../../assets/images/perfil.png")}
+                        style={styles.profile}
+                      />
+                      <Text style={styles.titulo}>Usuario Desconocido</Text>
+                    </>
                   )}
                 </View>
+
                 <View style={styles.menuItemsContainer}>
                   <BotonMenu
                     text="Mi Perfil"
@@ -106,11 +143,6 @@ const MenuButton = () => {
                       )
                     }
                   />
-                  <BotonMenu text="Agenda" />
-                  <BotonMenu text="Configuración" />
-                  <BotonMenu text="Centro de Ayuda" />
-                  <BotonMenu text="Agencia" />
-                  <BotonMenu text="Mis Clientes" />
                   <BotonMenu
                     text="Cerrar Sesión"
                     onPress={() => handleSignOut()}
@@ -134,25 +166,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     elevation: 3,
   },
-  iconContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  loader: {
+    margin: 8,
   },
   profileIcon: {
     width: 38,
     height: 38,
-  },
-  profile:{
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 3,
-    borderColor: "#fff",
-  },
-  profileDetails: {
-    flexDirection: "row",
-    marginBottom: 20,
+    borderRadius: 19,
   },
   modalOverlay: {
     flex: 1,
@@ -165,10 +185,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 20,
-    marginBottom: 80,
+    marginBottom: 180,
   },
   profileContainer: {
     alignItems: "center",
+    marginBottom: 20,
+  },
+  profileDetails: {
+    flexDirection: "row",
     marginBottom: 20,
   },
   titulo: {
@@ -184,17 +208,8 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     marginBottom: 10,
   },
-  closeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-  },
-  menuItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    marginBottom: 10,
-    borderRadius: 10,
+  menuItemsContainer: {
+    marginTop: 10,
   },
 });
 

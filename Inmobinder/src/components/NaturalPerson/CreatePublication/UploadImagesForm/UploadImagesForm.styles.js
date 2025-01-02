@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   containerImage: {
     flexDirection: "row",
     marginHorizontal: 20,
-    width: 305,
+    width: 290,
     backgroundColor: "#fff",
   },
   Icon: {

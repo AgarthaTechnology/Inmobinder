@@ -54,10 +54,8 @@ const FilterMenu = ({ applyFilters }) => {
         visible={visible}
         onRequestClose={toggleMenu}
       >
-        {/* Detect touch outside */}
         <TouchableWithoutFeedback onPress={toggleMenu}>
           <View style={styles.modalOverlay}>
-            {/* Prevent close on touch inside */}
             <TouchableWithoutFeedback>
               <View style={styles.modalContainer}>
                 {/* Estado */}
@@ -157,7 +155,6 @@ const FilterMenu = ({ applyFilters }) => {
                   ))}
                 </View>
                 <View style={styles.buttons}>
-                  {/* Apply button */}
                   <TouchableOpacity
                     style={styles.button}
                     onPress={handleApplyFilters}

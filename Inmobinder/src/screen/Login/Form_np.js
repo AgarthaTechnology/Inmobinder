@@ -26,7 +26,6 @@ import PhoneInput from "react-native-phone-number-input";
 export default function Form_np() {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
-  // Aquí guardamos SIEMPRE el RUT sin formatear en tiempo real
   const [rut, setRut] = useState("");
 
   const [correo, setCorreo] = useState("");
@@ -85,10 +84,9 @@ export default function Form_np() {
   };
 
   const formatRutForSave = (rut) => {
-    // Limpiar el RUT: eliminar puntos y guiones si existen
     let limpio = rut.replace(/[^0-9kK]/g, "").toUpperCase();
 
-    console.log("RUT Limpio:", limpio); // Log del RUT limpio
+    console.log("RUT Limpio:", limpio);
 
     if (limpio.length < 2) {
       console.log("RUT demasiado corto para formatear.");
@@ -101,7 +99,6 @@ export default function Form_np() {
     let formateado = "";
 
     if (cuerpo.length === 7) {
-      // Formato para 7 dígitos: 1.234.567
       formateado =
         cuerpo.slice(0, 1) +
         "." +
@@ -109,7 +106,6 @@ export default function Form_np() {
         "." +
         cuerpo.slice(4, 7);
     } else if (cuerpo.length === 8) {
-      // Formato para 8 dígitos: 12.345.678
       formateado =
         cuerpo.slice(0, 2) +
         "." +
@@ -117,12 +113,11 @@ export default function Form_np() {
         "." +
         cuerpo.slice(5, 8);
     } else {
-      // Para otros casos, aunque no son comunes en RUTs chilenos
       formateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
     const rutFormateado = formateado + "-" + dv;
-    console.log("RUT Formateado para Guardar:", rutFormateado); // Log del RUT formateado
+    console.log("RUT Formateado para Guardar:", rutFormateado);
 
     return rutFormateado;
   };
@@ -262,7 +257,7 @@ export default function Form_np() {
             <Text style={styles.label}>RUT</Text>
             <TextInput
               style={styles.inputtext}
-              placeholder="Ingrese su RUT (ej: 12345678K)"
+              placeholder="(ej: 12345678K)"
               value={rut}
               onChangeText={(text) => {
                 const cleanText = text.replace(/[^0-9kK]/g, "").toUpperCase();
@@ -277,7 +272,7 @@ export default function Form_np() {
             <Text style={styles.label}>Correo electrónico</Text>
             <TextInput
               style={styles.inputtext}
-              placeholder="Ingrese su correo electrónico"
+              placeholder="Ingrese su correo"
               value={correo}
               onChangeText={setCorreo}
               keyboardType="email-address"
@@ -313,7 +308,7 @@ export default function Form_np() {
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}
-                placeholder="Ingrese su contraseña"
+                placeholder="Ingrese contraseña"
                 value={contraseña}
                 onChangeText={setContraseña}
                 secureTextEntry={!showPassword}
